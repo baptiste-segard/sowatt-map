@@ -1,0 +1,935 @@
+{
+ "families": {
+  "faire": {
+   "label": "Faire ensemble",
+   "icon": "✦",
+   "desc": "Des matières et des savoir-faire qui se répondent : textile, céramique, image, son."
+  },
+  "public": {
+   "label": "Mêmes publics",
+   "icon": "◉",
+   "desc": "Des structures qui s’adressent aux mêmes personnes : familles, entreprises, artistes."
+  },
+  "transition": {
+   "label": "Transition",
+   "icon": "❋",
+   "desc": "Réparer, réemployer, transformer les organisations : le fil rouge du tiers-lieu."
+  },
+  "lieu": {
+   "label": "Vie du lieu",
+   "icon": "⌂",
+   "desc": "Ce qui fait tourner le Sowatt au quotidien et ce qui pourrait y naître."
+  }
+ },
+ "convergences": [
+  {
+   "id": "reparer",
+   "family": "transition",
+   "title": "Réparer, réemployer, prolonger",
+   "summary": "Textile, objets tech, vêtements : quatre structures réparent ou prolongent la vie des choses, trois autres fabriquent à partir de l'existant.",
+   "potential": "Un « samedi de la réparation » commun au Foyer (repair-café + retouches + tech), une boutique-dépôt de l'upcycling au RDC, une communication unique « Sowatt répare ».",
+   "members": [
+    {
+     "id": "madeleine",
+     "role": "repair-café"
+    },
+    {
+     "id": "refill",
+     "role": "retouches, remaillage"
+    },
+    {
+     "id": "laseconde",
+     "role": "objets tech"
+    },
+    {
+     "id": "sunday",
+     "role": "upcycling, sérigraphie"
+    },
+    {
+     "id": "artkive",
+     "role": "denim upcyclé"
+    },
+    {
+     "id": "selvamaris",
+     "role": "vestiaire conscient"
+    },
+    {
+     "id": "diy",
+     "role": "zéro déchet"
+    },
+    {
+     "id": "bonallure",
+     "role": "livraison écologique"
+    }
+   ]
+  },
+  {
+   "id": "transfo",
+   "family": "transition",
+   "title": "Transformer les organisations",
+   "summary": "Gouvernance horizontale, transition écologique, RH, coaching systémique : une offre complète d'accompagnement des entreprises et collectivités, dispersée sur trois étages.",
+   "potential": "Un collectif « transition des organisations » avec une porte d'entrée unique, des ateliers découverte ouverts aux entreprises du Sowatt, un programme commun avec Intermède.",
+   "members": [
+    {
+     "id": "ouichange",
+     "role": "animation de la transformation"
+    },
+    {
+     "id": "opale",
+     "role": "gouvernance"
+    },
+    {
+     "id": "antego",
+     "role": "stratégie RH & transitions"
+    },
+    {
+     "id": "akynoxe",
+     "role": "coaching systémique"
+    },
+    {
+     "id": "intermede",
+     "role": "coopérative du lieu"
+    },
+    {
+     "id": "aprobio",
+     "role": "alimentation durable"
+    },
+    {
+     "id": "vif",
+     "role": "santé publique"
+    },
+    {
+     "id": "confidentialistes",
+     "role": "écoute en entreprise"
+    },
+    {
+     "id": "likeafree",
+     "role": "rapports ESG"
+    }
+   ]
+  },
+  {
+   "id": "image",
+   "family": "faire",
+   "title": "Image, son & production",
+   "summary": "Photo, vidéo, drone, motion, scénographie numérique, studio son, studio d'enregistrement, cinéma : une chaîne de production audiovisuelle complète sur place.",
+   "potential": "Un plateau partagé (lumière, fond, son), des productions croisées pour les occupant·e·s (portraits, teasers, podcasts), une projection annuelle au Kino.",
+   "members": [
+    {
+     "id": "bacprod",
+     "role": "photo, vidéo, drone"
+    },
+    {
+     "id": "holy",
+     "role": "vidéo, motion"
+    },
+    {
+     "id": "polaifos",
+     "role": "studio photo"
+    },
+    {
+     "id": "caudron",
+     "role": "photographie"
+    },
+    {
+     "id": "leflower",
+     "role": "scénographie numérique"
+    },
+    {
+     "id": "lafabric",
+     "role": "identités sonores, podcasts"
+    },
+    {
+     "id": "coalline",
+     "role": "studio d'enregistrement"
+    },
+    {
+     "id": "studiocad",
+     "role": "production digitale"
+    },
+    {
+     "id": "sneuf",
+     "role": "photo, graphisme"
+    },
+    {
+     "id": "kino",
+     "role": "cinéma"
+    },
+    {
+     "id": "sinode",
+     "role": "audiovisuel, jeux"
+    },
+    {
+     "id": "igwap",
+     "role": "musique"
+    },
+    {
+     "id": "dauchy",
+     "role": "podcasts"
+    }
+   ]
+  },
+  {
+   "id": "marque",
+   "family": "faire",
+   "title": "Communication & marque",
+   "summary": "Social media, conseil, branding, design éditorial, rédaction, sites et production : les briques d'une agence complète, réparties entre sept structures.",
+   "potential": "Réponses groupées à des appels d'offres, une offre « lancement de marque » pour les créateurs du lieu (artisans, artistes), un annuaire de compétences.",
+   "members": [
+    {
+     "id": "buddy",
+     "role": "social media"
+    },
+    {
+     "id": "lafoule",
+     "role": "conseil"
+    },
+    {
+     "id": "likeafree",
+     "role": "branding, éditorial"
+    },
+    {
+     "id": "vingtdeux",
+     "role": "stratégie & visuel"
+    },
+    {
+     "id": "studiocad",
+     "role": "digital"
+    },
+    {
+     "id": "dauchy",
+     "role": "rédaction, animation"
+    },
+    {
+     "id": "holy",
+     "role": "motion"
+    },
+    {
+     "id": "bacprod",
+     "role": "image"
+    },
+    {
+     "id": "sneuf",
+     "role": "graphisme, illustration"
+    },
+    {
+     "id": "maze",
+     "role": "formation"
+    }
+   ]
+  },
+  {
+   "id": "scene",
+   "family": "faire",
+   "title": "Scène, récit & événement",
+   "summary": "Conte, marionnettes, cirque, musique, murder parties, maquillage FX, perruques, accessoires : de quoi monter un spectacle de A à Z sans sortir du bâtiment.",
+   "potential": "Une création collective annuelle, un pôle « arts de la scène » visible, des prestations événementielles groupées pour les entreprises.",
+   "members": [
+    {
+     "id": "errances",
+     "role": "conte, marionnettes"
+    },
+    {
+     "id": "familyforme",
+     "role": "cirque, danse"
+    },
+    {
+     "id": "igwap",
+     "role": "musiciens"
+    },
+    {
+     "id": "coalline",
+     "role": "musique"
+    },
+    {
+     "id": "lafabric",
+     "role": "musique originale"
+    },
+    {
+     "id": "sinode",
+     "role": "murder parties"
+    },
+    {
+     "id": "ema",
+     "role": "maquillage FX"
+    },
+    {
+     "id": "mishou",
+     "role": "perruques"
+    },
+    {
+     "id": "caenen",
+     "role": "accessoires de scène"
+    },
+    {
+     "id": "dauchy",
+     "role": "écriture, animation"
+    },
+    {
+     "id": "enluminance",
+     "role": "parole, éducation populaire"
+    },
+    {
+     "id": "kino",
+     "role": "projections"
+    },
+    {
+     "id": "leflower",
+     "role": "installations visuelles"
+    },
+    {
+     "id": "consignerie",
+     "role": "traiteur événementiel"
+    },
+    {
+     "id": "astreos",
+     "role": "sécurité événementielle"
+    }
+   ]
+  },
+  {
+   "id": "enfance",
+   "family": "public",
+   "title": "Enfance, familles & pédagogie créative",
+   "summary": "LEGO, numérique, art-science-philo, céramique, aquarelle, couture, cirque, repair-café : une quinzaine d'ateliers pour enfants et familles, sans programmation commune.",
+   "potential": "Un programme « mercredis du Sowatt » et des stages vacances mutualisés, un partenariat écoles / centres sociaux porté ensemble, une billetterie commune.",
+   "members": [
+    {
+     "id": "bricknum",
+     "role": "LEGO & numérique"
+    },
+    {
+     "id": "craienco",
+     "role": "moments créatifs"
+    },
+    {
+     "id": "artorium",
+     "role": "art, science, philo"
+    },
+    {
+     "id": "familyforme",
+     "role": "cirque, danse"
+    },
+    {
+     "id": "giselleetrose",
+     "role": "illustration jeunesse"
+    },
+    {
+     "id": "caenen",
+     "role": "céramique enfants"
+    },
+    {
+     "id": "diy",
+     "role": "DIY zéro déchet"
+    },
+    {
+     "id": "wierre",
+     "role": "aquarelle"
+    },
+    {
+     "id": "atk",
+     "role": "aquarelle"
+    },
+    {
+     "id": "helcou",
+     "role": "couture"
+    },
+    {
+     "id": "verhaege",
+     "role": "interventions scolaires"
+    },
+    {
+     "id": "knapfla",
+     "role": "interventions artistiques"
+    },
+    {
+     "id": "hamaide",
+     "role": "pratiques artistiques"
+    },
+    {
+     "id": "vif",
+     "role": "prévention santé"
+    },
+    {
+     "id": "errances",
+     "role": "spectacles jeune public"
+    },
+    {
+     "id": "casamia",
+     "role": "goûters céramique"
+    },
+    {
+     "id": "dupont",
+     "role": "ateliers Poëtic Brindilles"
+    }
+   ]
+  },
+  {
+   "id": "textile",
+   "family": "faire",
+   "title": "Mode, textile & accessoires",
+   "summary": "Couture, retouches, sérigraphie, denim, sous-vêtements, accessoires, bijoux, perruques : un pôle mode-textile de fait, du vêtement à la photo de mode.",
+   "potential": "Un défilé / marché des créateurs du Sowatt, un atelier machines partagé, des shootings communs avec les photographes du lieu.",
+   "members": [
+    {
+     "id": "helcou",
+     "role": "couture, broderie"
+    },
+    {
+     "id": "refill",
+     "role": "retouches"
+    },
+    {
+     "id": "sunday",
+     "role": "sérigraphie, upcycling"
+    },
+    {
+     "id": "selvamaris",
+     "role": "vestiaire"
+    },
+    {
+     "id": "maranta",
+     "role": "accessoires tissu"
+    },
+    {
+     "id": "lesgus",
+     "role": "sous-vêtements"
+    },
+    {
+     "id": "artkive",
+     "role": "denim"
+    },
+    {
+     "id": "licols",
+     "role": "corderie"
+    },
+    {
+     "id": "mishou",
+     "role": "perruques"
+    },
+    {
+     "id": "dahmani",
+     "role": "bijoux 3D"
+    },
+    {
+     "id": "originalbijoux",
+     "role": "joaillerie"
+    },
+    {
+     "id": "aqualunia",
+     "role": "bijoux pierres"
+    },
+    {
+     "id": "polaifos",
+     "role": "photo mode"
+    },
+    {
+     "id": "madeleine",
+     "role": "ateliers couture"
+    }
+   ]
+  },
+  {
+   "id": "beaute",
+   "family": "public",
+   "title": "Beauté, nail art & arts du corps",
+   "summary": "Quatre nail artists, une maquilleuse FX et une perruquière : le corps comme support de création, à la frontière de l'artisanat et de l'art.",
+   "potential": "Un bar à ongles / studio beauté partagé avec vitrine commune, des collaborations avec les photographes et artistes du lieu, des formations croisées.",
+   "members": [
+    {
+     "id": "joonailz",
+     "role": "nail art"
+    },
+    {
+     "id": "nininails",
+     "role": "nail art"
+    },
+    {
+     "id": "unasdebruja",
+     "role": "nail art"
+    },
+    {
+     "id": "zeste",
+     "role": "prothésie ongulaire"
+    },
+    {
+     "id": "ema",
+     "role": "maquillage"
+    },
+    {
+     "id": "mishou",
+     "role": "perruques"
+    },
+    {
+     "id": "aqualunia",
+     "role": "bien-être"
+    }
+   ]
+  },
+  {
+   "id": "sante",
+   "family": "public",
+   "title": "Santé, corps & bien-être",
+   "summary": "Thérapies par la parole, naturopathie, énergétique, art-thérapie, sport-santé, prévention : un parcours bien-être complet, du cabinet à la collectivité.",
+   "potential": "Une « maison du bien-être » lisible au sein du Sowatt, des ateliers santé pour les occupant·e·s, une offre QVT groupée pour les entreprises du lieu.",
+   "members": [
+    {
+     "id": "thinkvitality",
+     "role": "naturopathie, MTC"
+    },
+    {
+     "id": "confidentialistes",
+     "role": "psychopratique"
+    },
+    {
+     "id": "therapie",
+     "role": "thérapie analytique"
+    },
+    {
+     "id": "urbin",
+     "role": "énergétique"
+    },
+    {
+     "id": "familyforme",
+     "role": "sport-santé"
+    },
+    {
+     "id": "vif",
+     "role": "prévention"
+    },
+    {
+     "id": "hamaide",
+     "role": "art-thérapie"
+    },
+    {
+     "id": "akynoxe",
+     "role": "coaching"
+    },
+    {
+     "id": "exocer",
+     "role": "prévention TMS"
+    }
+   ]
+  },
+  {
+   "id": "batiment",
+   "family": "faire",
+   "title": "Bâtiment, espace & immobilier",
+   "summary": "Propriétaire, gestionnaire, rénovation, architecture intérieure, design d'intérieur, relevé 3D, annuaire d'artisans, recrutement BTP : toute la chaîne de l'espace bâti.",
+   "potential": "Un groupe projet pour l'évolution du site lui-même (Foyer, terrasse, signalétique), une offre « aménagement » pour les occupant·e·s, des chantiers démonstrateurs.",
+   "members": [
+    {
+     "id": "capstone",
+     "role": "foncière"
+    },
+    {
+     "id": "intermede",
+     "role": "gestion du lieu"
+    },
+    {
+     "id": "amv",
+     "role": "rénovation"
+    },
+    {
+     "id": "hibourouge",
+     "role": "architecture ERP"
+    },
+    {
+     "id": "letertre",
+     "role": "design d'intérieur"
+    },
+    {
+     "id": "pland",
+     "role": "dessin, relevé 3D"
+    },
+    {
+     "id": "bilik",
+     "role": "annuaire d'artisans"
+    },
+    {
+     "id": "harch",
+     "role": "recrutement BTP"
+    },
+    {
+     "id": "exocer",
+     "role": "manutention"
+    }
+   ]
+  },
+  {
+   "id": "rh",
+   "family": "public",
+   "title": "RH, recrutement & accompagnement",
+   "summary": "Recrutement, stratégie RH, coaching, gouvernance, écoute : six structures autour des mêmes DRH et dirigeants.",
+   "potential": "Un cycle de petits-déjeuners RH co-animés, une offre « transition RH » combinant recrutement, organisation et accompagnement humain.",
+   "members": [
+    {
+     "id": "antego",
+     "role": "stratégie RH"
+    },
+    {
+     "id": "willrh",
+     "role": "recrutement"
+    },
+    {
+     "id": "harch",
+     "role": "recrutement BTP"
+    },
+    {
+     "id": "akynoxe",
+     "role": "coaching"
+    },
+    {
+     "id": "opale",
+     "role": "gouvernance"
+    },
+    {
+     "id": "ouichange",
+     "role": "animation"
+    },
+    {
+     "id": "confidentialistes",
+     "role": "écoute"
+    },
+    {
+     "id": "vingtdeux",
+     "role": "stratégie"
+    }
+   ]
+  },
+  {
+   "id": "numerique",
+   "family": "faire",
+   "title": "Numérique, IA & innovation",
+   "summary": "Adoption de l'IA, ESN, production digitale, scénographie interactive, 3D, exosquelettes, réemploi tech : le numérique sous toutes ses formes, du conseil à l'objet.",
+   "potential": "Des ateliers IA / numérique pour les artistes et artisans du lieu, un fablab léger (3D, prototypage) adossé à Plan D et Fatima Dahmani, une veille partagée.",
+   "members": [
+    {
+     "id": "cyremia",
+     "role": "IA"
+    },
+    {
+     "id": "soluxan",
+     "role": "ESN"
+    },
+    {
+     "id": "studiocad",
+     "role": "digital"
+    },
+    {
+     "id": "leflower",
+     "role": "interactif"
+    },
+    {
+     "id": "bricknum",
+     "role": "numérique ludique"
+    },
+    {
+     "id": "exocer",
+     "role": "robotique"
+    },
+    {
+     "id": "pland",
+     "role": "3D"
+    },
+    {
+     "id": "dahmani",
+     "role": "conception 3D"
+    },
+    {
+     "id": "laseconde",
+     "role": "réemploi tech"
+    },
+    {
+     "id": "bilik",
+     "role": "plateforme"
+    }
+   ]
+  },
+  {
+   "id": "finance",
+   "family": "public",
+   "title": "Assurance, patrimoine & gestion",
+   "summary": "Courtage, gestion de patrimoine, expertise comptable, vitrage auto agréé assurances : les services « de confiance » dont tous les occupant·e·s ont besoin.",
+   "potential": "Des permanences conseil pour les créateurs du lieu (statuts, assurance pro, compta), un guide « s'installer au Sowatt ».",
+   "members": [
+    {
+     "id": "assureetmoi",
+     "role": "assurance"
+    },
+    {
+     "id": "aeg",
+     "role": "patrimoine"
+    },
+    {
+     "id": "parez",
+     "role": "comptabilité"
+    },
+    {
+     "id": "rcc",
+     "role": "vitrage, assurances"
+    },
+    {
+     "id": "nexus",
+     "role": "à préciser"
+    }
+   ]
+  },
+  {
+   "id": "ateliers-art",
+   "family": "faire",
+   "title": "Collectif d'ateliers d'artistes",
+   "summary": "Vingt-cinq artistes plasticien·ne·s, deux collectifs, une organisation de formation aux arts visuels : la plus grande communauté du lieu, surtout au 1er étage.",
+   "potential": "Portes ouvertes des ateliers, une résidence croisée avec les communicants et artisans, un parcours de formation / professionnalisation avec Maze, une galerie au Foyer.",
+   "members": [
+    {
+     "id": "maillart",
+     "role": "collectif"
+    },
+    {
+     "id": "bouillon",
+     "role": "collectif"
+    },
+    {
+     "id": "maze",
+     "role": "formation"
+    },
+    {
+     "id": "nivelle",
+     "role": ""
+    },
+    {
+     "id": "rowehy",
+     "role": ""
+    },
+    {
+     "id": "knapfla",
+     "role": ""
+    },
+    {
+     "id": "caudron",
+     "role": ""
+    },
+    {
+     "id": "dupont",
+     "role": ""
+    },
+    {
+     "id": "coulon",
+     "role": ""
+    },
+    {
+     "id": "corman",
+     "role": ""
+    },
+    {
+     "id": "wagner",
+     "role": ""
+    },
+    {
+     "id": "lebars",
+     "role": ""
+    },
+    {
+     "id": "sneuf",
+     "role": ""
+    },
+    {
+     "id": "hamaide",
+     "role": ""
+    },
+    {
+     "id": "eugene",
+     "role": ""
+    },
+    {
+     "id": "analeina",
+     "role": ""
+    },
+    {
+     "id": "jalk",
+     "role": ""
+    },
+    {
+     "id": "meyer",
+     "role": ""
+    },
+    {
+     "id": "verhaege",
+     "role": ""
+    },
+    {
+     "id": "boccia",
+     "role": ""
+    },
+    {
+     "id": "slawa",
+     "role": ""
+    },
+    {
+     "id": "wierre",
+     "role": ""
+    },
+    {
+     "id": "caenen",
+     "role": ""
+    },
+    {
+     "id": "giselleetrose",
+     "role": ""
+    },
+    {
+     "id": "lemahieu",
+     "role": ""
+    },
+    {
+     "id": "enluminance",
+     "role": ""
+    },
+    {
+     "id": "atk",
+     "role": "ateliers"
+    }
+   ]
+  },
+  {
+   "id": "table",
+   "family": "lieu",
+   "title": "Table, café & convivialité",
+   "summary": "Café, traiteur engagé, alimentation durable, goûters céramique, pâtisserie fine : la table comme lien quotidien du lieu.",
+   "potential": "Une cantine / café du Foyer tournante, des événements « table ouverte » mensuels, un marché alimentaire avec A PRO BIO.",
+   "members": [
+    {
+     "id": "litha",
+     "role": "café"
+    },
+    {
+     "id": "consignerie",
+     "role": "traiteur"
+    },
+    {
+     "id": "aprobio",
+     "role": "alimentation durable"
+    },
+    {
+     "id": "casamia",
+     "role": "goûters, apéros"
+    },
+    {
+     "id": "dupont",
+     "role": "pâtisserie fine"
+    },
+    {
+     "id": "diy",
+     "role": "cosmétique maison"
+    },
+    {
+     "id": "vif",
+     "role": "nutrition"
+    }
+   ]
+  },
+  {
+   "id": "faire-tourner",
+   "family": "lieu",
+   "title": "Faire tourner le lieu",
+   "summary": "Propriétaire, gestionnaire, site web, livraison, stockage, sécurité, café : les fonctions support du Sowatt, aujourd'hui assurées par des occupant·e·s.",
+   "potential": "Formaliser une « équipe du lieu » (conciergerie, logistique, communication) en s'appuyant sur les structures déjà présentes.",
+   "members": [
+    {
+     "id": "capstone",
+     "role": "propriétaire"
+    },
+    {
+     "id": "intermede",
+     "role": "gestion"
+    },
+    {
+     "id": "studiocad",
+     "role": "site web"
+    },
+    {
+     "id": "bonallure",
+     "role": "livraisons"
+    },
+    {
+     "id": "kpro",
+     "role": "stockage"
+    },
+    {
+     "id": "astreos",
+     "role": "sécurité"
+    },
+    {
+     "id": "litha",
+     "role": "machines à café"
+    },
+    {
+     "id": "consignerie",
+     "role": "événements"
+    }
+   ]
+  }
+ ],
+ "notes": {
+  "intermede": "Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.",
+  "maze": "Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.",
+  "studiocad": "Digital + communication + image : fait le pont entre les communicants, les producteurs d'image et le numérique, et réalise le site du lieu.",
+  "dauchy": "Rédacteur, podcasteur, animateur : relie spectacle vivant, communication et culture ; un animateur naturel des rencontres du lieu.",
+  "ouichange": "30 animateur·rice·s de la transformation écologique et sociale : la méthode pour faire travailler ensemble les autres convergences.",
+  "leflower": "Scénographie numérique : point de contact entre artistes, producteurs d'image, événementiel et numérique.",
+  "hamaide": "Artiste, art-thérapeute, formatrice : à la jonction des arts plastiques, du bien-être et de la transmission.",
+  "vif": "Santé publique, enfance, alimentation, collectivités : un relais institutionnel pour les ateliers et le bien-être.",
+  "familyforme": "Cirque, danse, sport-santé pour tous les âges : relie enfance, spectacle et bien-être — mais isolé dans le bâtiment B.",
+  "consignerie": "Traiteur engagé : convivialité, événementiel et transition dans la même assiette.",
+  "refill": "Atelier de retouches et lieu-ressource textile : le point d'entrée naturel d'un pôle réparation + mode.",
+  "diy": "Ateliers zéro déchet pour particuliers, familles et entreprises : transition, enfance et transmission à la fois."
+ },
+ "relations": [
+  {
+   "a": "capstone",
+   "b": "intermede",
+   "why": "propriétaire du site / coopérative gestionnaire"
+  },
+  {
+   "a": "maillart",
+   "b": "maze",
+   "why": "formation d'artistes plasticiens"
+  },
+  {
+   "a": "dupont",
+   "b": "atk",
+   "why": "ateliers créatifs voisins"
+  },
+  {
+   "a": "polaifos",
+   "b": "lesgus",
+   "why": "présentés ensemble sur le site Sowatt"
+  },
+  {
+   "a": "litha",
+   "b": "consignerie",
+   "why": "café + traiteur : offre événementielle du RDC"
+  },
+  {
+   "a": "refill",
+   "b": "madeleine",
+   "why": "réparation textile : atelier + repair-café"
+  },
+  {
+   "a": "laseconde",
+   "b": "madeleine",
+   "why": "réparation : objets tech + repair-café"
+  },
+  {
+   "a": "ouichange",
+   "b": "intermede",
+   "why": "transformation écologique et sociale"
+  },
+  {
+   "a": "studiocad",
+   "b": "intermede",
+   "why": "site web du tiers-lieu"
+  }
+ ]
+}

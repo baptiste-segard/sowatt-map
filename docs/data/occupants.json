@@ -1,0 +1,3650 @@
+[
+ {
+  "id": "aeg",
+  "name": "AEG Patrimoine",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Finance, assurance & gestion"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Elodie Gallois",
+  "desc": "Courtier en Assurances et Gestionnaire de patrimoine: Je vous accompagne dans tous vos projets à travers l'épargne, l'assurance de personne, comment défiscaliser, préparer votre retraite ou encore comment développer votre trésorerie d'entreprise",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "236",
+  "page": 2,
+  "px": 353,
+  "py": 731,
+  "approx": false,
+  "website": "https://aegpatrimoine.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "buddy",
+  "name": "Agence Buddy",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Communication & marque",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Jules Coignet et Melvin Buseniers",
+  "desc": "Agence social media",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "213",
+  "page": 2,
+  "px": 485,
+  "py": 273,
+  "approx": false,
+  "website": "https://www.agencebuddy.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "akynoxe",
+  "name": "aKynoxe",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "RH, organisation & gouvernance",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Karine Fremaux",
+  "desc": "Intervenante systémicienne, Coach, Formatrice",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "133",
+  "page": 1,
+  "px": 323,
+  "py": 850,
+  "approx": false,
+  "website": "https://www.linkedin.com/company/akynoxe",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 9.75,
+   "n": 3,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "urbin",
+  "name": "Albane Urbin",
+  "cat": "BIENETRE",
+  "catLabel": "Bien-être & soin",
+  "themes": [
+   "Santé & bien-être"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Albane Urbin",
+  "desc": "Praticienne énergétique.",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "052",
+  "page": 0,
+  "px": 413,
+  "py": 1025,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "nivelle",
+  "name": "Alexis Nivelle",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Alexis Nivelle",
+  "desc": "Peintre et dessinateur",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "203",
+  "page": 2,
+  "px": 414,
+  "py": 250,
+  "approx": false,
+  "website": "https://alexisnivelle.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "amv",
+  "name": "AMV",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Arnaud Morel",
+  "desc": "Entreprise de rénovation",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "005-006-007",
+  "page": 0,
+  "px": 452,
+  "py": 289,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "analeina",
+  "name": "Analeïna (Adelaïde François)",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Adelaïde François",
+  "desc": "Artiste",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "112",
+  "page": 1,
+  "px": 486,
+  "py": 198,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "antego",
+  "name": "Antego",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "RH, organisation & gouvernance",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Olivier Dourdent - Alice Le Neindre - Laetitia Desmulier - Julie Dourdent - Nicolas Caron",
+  "desc": "Entreprise de conseil en stratégie RH/ accompagnement des transitions (écologique, numérique...)",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "235",
+  "page": 2,
+  "px": 340,
+  "py": 794,
+  "approx": false,
+  "website": "https://www.antego.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "aprobio",
+  "name": "A PRO BIO",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Alimentation & restauration",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Collectivités & associations",
+   "Entreprises",
+   "Particuliers"
+  ],
+  "people": "François Meresse et toute son équipe",
+  "desc": "Association interprofessionnelle engagée, qui oeuvre pour l'accès à tous à une alimentation de qualité",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "aile gauche (165)",
+  "page": 1,
+  "px": 210,
+  "py": 1040,
+  "approx": false,
+  "website": "https://www.aprobio.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "aqualunia",
+  "name": "Aqualunia",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Céramique, bijoux & matières",
+   "Santé & bien-être"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Sophie Thibaut",
+  "desc": "Aqualunia est une boutique spécialisée dans les bijoux en pierres naturelles, les encens et les articles dédiés au bien-être, alliant élégance, authenticité et inspiration naturelle.",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "053",
+  "page": 0,
+  "px": 449,
+  "py": 1023,
+  "approx": false,
+  "website": "https://aqualunia.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "artkive",
+  "name": "Ar(tk)ive",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Logan Persent",
+  "desc": "Vêtements upcyclés en denim",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "313",
+  "page": 3,
+  "px": 487,
+  "py": 266,
+  "approx": false,
+  "website": "https://artkive.shop",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "artorium",
+  "name": "Artorium",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Ateliers & transmission",
+   "Enfance & familles",
+   "Arts visuels"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Scolaires"
+  ],
+  "people": "Jamila Bouâli",
+  "desc": "Ateliers créatifs mêlant art, science et philosophie",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "215",
+  "page": 2,
+  "px": 467,
+  "py": 387,
+  "approx": false,
+  "website": "https://artorium.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "assureetmoi",
+  "name": "Assure & moi",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Finance, assurance & gestion"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Marie-Sarah De Breyne, Arnaud Fontaine, Léo Sorez, Guillaume Groux, Philippe Pailhes",
+  "desc": "Courtier en Assurances : nous trouvons le contrat d'assurance idéal parmi 50 compagnies (RC pro, multirisque pro, auto, habitation, mutuelle, prévoyance, retraite, assurance vie, épargne ...)",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "134",
+  "page": 1,
+  "px": 333,
+  "py": 804,
+  "approx": false,
+  "website": "https://assureetmoi.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "astreos",
+  "name": "Astreos Security",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Logistique, sécurité & mobilité",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Omar Mokadem et Kévin Vienne",
+  "desc": "ASTREOS est une société de sécurité privée, spécialisée dans la protection des biens et des personnes.\nElle propose des prestations de surveillance humaine, de gardiennage, de sécurité événementielle ainsi que des solutions de \nprévention et de sécurité incendie.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "274",
+  "page": 2,
+  "px": 780,
+  "py": 1024,
+  "approx": false,
+  "website": "https://www.astreos.net/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "bouillon",
+  "name": "Atelier Bouillon",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Image, vidéo & son",
+   "Céramique, bijoux & matières"
+  ],
+  "publics": [
+   "Particuliers",
+   "Artistes & créatifs"
+  ],
+  "people": "Estelle Demangeat Julie Machin, Fanny Pentel Hadrien Tequi, Joo Yongkwan",
+  "desc": "Collectif d’artistes plasticien.ne.s (art numérique, film, photo, céramique, installation, peinture).",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "106-107-108",
+  "page": 1,
+  "px": 374,
+  "py": 401,
+  "approx": false,
+  "website": "https://tierslieu-aufildesoi.org",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "helcou",
+  "name": "Atelier Helcou",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Mode, textile & upcycling",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Héloïse Corteville",
+  "desc": "Ateliers couture, personnalisation (broderie & flex), articles fait main.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "212",
+  "page": 2,
+  "px": 500,
+  "py": 213,
+  "approx": false,
+  "website": "https://atelierhelcou.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "diy",
+  "name": "Ateliers DIY",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Ateliers & transmission",
+   "Transition écologique & sociale",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises",
+   "Enfants & familles"
+  ],
+  "people": "Cathy Plancke",
+  "desc": "Ateliers créatifs et zéro déchet dans les domaines de la cosmétique homemade, des produits ménagers écologiques et des créations manuelles. Interventions auprès des particuliers, entreprises et collectivités",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "217",
+  "page": 2,
+  "px": 444,
+  "py": 445,
+  "approx": false,
+  "website": "https://www.ateliersdiy.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 14.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
+   "note": "Ateliers zéro déchet pour particuliers, familles et entreprises : transition, enfance et transmission à la fois.",
+   "top": true,
+   "rank": 4
+  }
+ },
+ {
+  "id": "bacprod",
+  "name": "BAC Prod",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Image, vidéo & son",
+   "Communication & marque"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Aymeric Berenger",
+  "desc": "Photographe, Vidéaste, Pilote de drone",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "103",
+  "page": 1,
+  "px": 414,
+  "py": 241,
+  "approx": false,
+  "website": "https://bacprod.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 6.4,
+   "n": 2,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "bilik",
+  "name": "Bilik",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Andréa Quignon",
+  "desc": "Bilik réalise une sélection de professionnels du bâtiment et les fait connaître auprès des particuliers qui sont en recherche d'artisans de confiance.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "237",
+  "page": 2,
+  "px": 364,
+  "py": 686,
+  "approx": false,
+  "website": "https://bilik.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "bonallure",
+  "name": "Bon'Allure",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Logistique, sécurité & mobilité",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Stanislas Mulle",
+  "desc": "Société de services de livraisons 🚛📦🌿⚡️écologique",
+  "floor": "COUR",
+  "floorLabel": "Cour extérieure",
+  "room": "cour extérieure",
+  "page": null,
+  "px": null,
+  "py": null,
+  "approx": false,
+  "website": "https://www.bonallure.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur",
+  "logo": null,
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "bricknum",
+  "name": "Brick&Num",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Enfance & familles",
+   "Ateliers & transmission",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Scolaires"
+  ],
+  "people": "Guillaume Canonne",
+  "desc": "Ateliers ludiques et amusants à base de LEGO ou de numérique",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "3e étage (plan) · 204 au tableur",
+  "page": 3,
+  "px": 368,
+  "py": 444,
+  "approx": false,
+  "website": "https://www.brickandnum.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "parez",
+  "name": "Cabinet Parez",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Finance, assurance & gestion"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Matthieu Parez",
+  "desc": "Expert-comptable",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "064",
+  "page": 0,
+  "px": 561,
+  "py": 1036,
+  "approx": false,
+  "website": "https://cabinet-parez.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "litha",
+  "name": "Café n°3 · Litha Espresso",
+  "cat": "RESTO",
+  "catLabel": "Restauration & alimentation",
+  "themes": [
+   "Alimentation & restauration"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Ludwig Créteur",
+  "desc": "Service de location de machines à café à capsules et à grains, et consommables.",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "069",
+  "page": 0,
+  "px": 407,
+  "py": 1094,
+  "approx": false,
+  "website": "https://www.litha-espresso.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.45,
+   "n": 2,
+   "fams": 1,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "capstone",
+  "name": "Capstone",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Lorette Bellier, Rémi Richelet",
+  "desc": "Foncière immobilière propriétaire du site",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "014",
+  "page": 0,
+  "px": 355,
+  "py": 1024,
+  "approx": false,
+  "website": "http://capstone.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "casamia",
+  "name": "Casa Mia Créations",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Céramique, bijoux & matières",
+   "Ateliers & transmission",
+   "Alimentation & restauration"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Lisa Noel",
+  "desc": "Céramiste. Ateliers céramique (goûters et apéros)",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "302 + 312",
+  "page": 3,
+  "px": 462,
+  "py": 212,
+  "approx": false,
+  "website": "https://www.instagram.com/casamia.creations",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "corman",
+  "name": "Clément Corman",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Clément Corman",
+  "desc": "Artiste plasticien - Création d'oeuvres originales sur differents supports ( Mur, toile, etc..) - Créateur de l'identité \"Art of Soul\"",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "202",
+  "page": 2,
+  "px": 429,
+  "py": 194,
+  "approx": false,
+  "website": "https://clement-corman.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "coalline",
+  "name": "Coal Line Entertainment",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Image, vidéo & son",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Artistes & créatifs"
+  ],
+  "people": "Loredana Podda (notre présidente), Lucas Sohier, Maxence Evangelista, Samuel Vanoverschelde",
+  "desc": "COAL LINE STUDIO est un espace de création dédié à la musique et à la mise en valeur des talents émergents issus des cultures urbaines. Notre approche allie exigence artistique et engagement social, en proposant à la fois un studio d’enregistrement professionnel, un laboratoire de développement artistique, et un lieu d’échange entre créateur",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "172",
+  "page": 1,
+  "px": 757,
+  "py": 961,
+  "approx": false,
+  "website": "https://www.instagram.com/coallineentertainment",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "errances",
+  "name": "Collectif errances",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Spectacle vivant & événementiel",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Collectivités & associations"
+  ],
+  "people": "Mélody Blocquel, Lilou Clipet",
+  "desc": "Le Collectif errances propose des spectacles mêlant oralité, musique, marionnettes et arts associés.\nMélody Blocquel est autrice, artiste de la parole et marionnettiste.\nLilou Clipet est chargée de diffusion et de production.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "136",
+  "page": 1,
+  "px": 354,
+  "py": 720,
+  "approx": false,
+  "website": "https://www.collectiferrances.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "hamaide",
+  "name": "Coralie Hamaide",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission",
+   "Santé & bien-être",
+   "Céramique, bijoux & matières"
+  ],
+  "publics": [
+   "Particuliers",
+   "Scolaires",
+   "Collectivités & associations"
+  ],
+  "people": "Coralie Hamaide",
+  "desc": "Artiste - Intervenante en pratiques artistiques : Dessin / Peinture / Céramique - Art-thérapeute certifiée RNCP - Praticienne en atelier de croissance personnelle - Formatrice - Métropole européenne de Lille",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "315",
+  "page": 3,
+  "px": 424,
+  "py": 531,
+  "approx": false,
+  "website": "https://www.coraliehamaide.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 12.75,
+   "n": 3,
+   "fams": 2,
+   "cats": 5,
+   "note": "Artiste, art-thérapeute, formatrice : à la jonction des arts plastiques, du bien-être et de la transmission.",
+   "top": true,
+   "rank": 8
+  }
+ },
+ {
+  "id": "craienco",
+  "name": "Craie'n'Co",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Ateliers & transmission",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Enfants & familles"
+  ],
+  "people": "Coralie Vico",
+  "desc": "Moments de vie créatifs - tout âge",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "049",
+  "page": 0,
+  "px": 114,
+  "py": 920,
+  "approx": false,
+  "website": "https://craienco.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "cyremia",
+  "name": "Cyremia",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Numérique & IA",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Aymeric Dhalluin, Matteo Falzone",
+  "desc": "Cyremia accompagne les entreprises dans l'adoption concrète de l'intelligence artificielle. Conseil, formation et mise en place d'automatisations et d'agents IA, en complément de services informatiques, cloud et télécom. Notre objectif, rendre l'IA réellement utile et accessible au quotidien des entreprises.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "125",
+  "page": 1,
+  "px": 326,
+  "py": 752,
+  "approx": false,
+  "website": "https://cyremia.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 5.1,
+   "n": 1,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "rowehy",
+  "name": "Edouard Rowehy",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Edouard Rowehy",
+  "desc": "Illustrateur",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "218",
+  "page": 2,
+  "px": 435,
+  "py": 495,
+  "approx": false,
+  "website": "https://ed-ou-art.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "ema",
+  "name": "Ema Make-up Artist",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Beauté & soin",
+   "Spectacle vivant & événementiel",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Artistes & créatifs",
+   "Particuliers"
+  ],
+  "people": "Ema Simon",
+  "desc": "Artiste maquilleuse spécialisée en effets spéciaux et formatrice.",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "317",
+  "page": 3,
+  "px": 443,
+  "py": 454,
+  "approx": false,
+  "website": "https://emamakeupartist.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 8.45,
+   "n": 2,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "enluminance",
+  "name": "Enluminance (Eric Gouwy)",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Spectacle vivant & événementiel",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Collectivités & associations"
+  ],
+  "people": "Eric Gouwy",
+  "desc": "Artiste, Homme de parole(s) et d'écrit. Philo po & éduc. pop.",
+  "floor": "SS",
+  "floorLabel": "Sous-sol",
+  "room": "011",
+  "page": null,
+  "px": null,
+  "py": null,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur",
+  "logo": null,
+  "acu": {
+   "score": 7.45,
+   "n": 2,
+   "fams": 1,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "exocer",
+  "name": "Exocer",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Numérique & IA",
+   "Logistique, sécurité & mobilité"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Jérémy Boyer",
+  "desc": "Concepteur d'exosquelettes, assistance 20 à 50 kilos et plus",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "001 + 002",
+  "page": 0,
+  "px": 517,
+  "py": 150,
+  "approx": false,
+  "website": "https://exocer.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 10.8,
+   "n": 3,
+   "fams": 2,
+   "cats": 8,
+   "note": null,
+   "top": true,
+   "rank": 11
+  }
+ },
+ {
+  "id": "familyforme",
+  "name": "Family Forme",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Santé & bien-être",
+   "Spectacle vivant & événementiel",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Particuliers"
+  ],
+  "people": "Karine Gouot et Steve Butstraen",
+  "desc": "Association proposant des cours de danse et arts du cirque (jonglerie, équilibres, acrobaties et voltiges) du yoga et de la gym douce de 3 ans à 77 ans ainsi que de l'éveil corporel et spectacles à partir de 3 mois.",
+  "floor": "B",
+  "floorLabel": "Bâtiment B",
+  "room": "bâtiment B",
+  "page": null,
+  "px": null,
+  "py": null,
+  "approx": false,
+  "website": "https://familyforme.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur",
+  "logo": null,
+  "acu": {
+   "score": 13.8,
+   "n": 3,
+   "fams": 2,
+   "cats": 8,
+   "note": "Cirque, danse, sport-santé pour tous les âges : relie enfance, spectacle et bien-être — mais isolé dans le bâtiment B.",
+   "top": true,
+   "rank": 5
+  }
+ },
+ {
+  "id": "dahmani",
+  "name": "Fatima Dahmani",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Céramique, bijoux & matières",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Fatima Dahmani",
+  "desc": "Designer - conceptrice 3D bijouterie joaillerie.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "244",
+  "page": 2,
+  "px": 80,
+  "py": 1010,
+  "approx": false,
+  "website": "https://fatimadahmani.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "wierre",
+  "name": "Florence Wierre",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Florence Wierre",
+  "desc": "Artiste plasticienne - Création et ateliers aquarelle tout-terrain (adultes et enfants à partir de 15 ans).",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "211",
+  "page": 2,
+  "px": 511,
+  "py": 164,
+  "approx": false,
+  "website": "https://www.instagram.com/flo_wierre",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "giselleetrose",
+  "name": "Giselle et Rose",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Entreprises"
+  ],
+  "people": "Esther Roussel",
+  "desc": "Illustratrice jeunesse",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "315",
+  "page": 3,
+  "px": 465,
+  "py": 360,
+  "approx": false,
+  "website": "https://giselleetrose.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "harch",
+  "name": "Harch",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "RH, organisation & gouvernance",
+   "Bâtiment, espace & immobilier"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Marine Rémy",
+  "desc": "Cabinet de recrutement spécialisé dans la construction, l'architecture et l'immobilier.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "126",
+  "page": 1,
+  "px": 298,
+  "py": 704,
+  "approx": false,
+  "website": "https://harch-rh.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "hibourouge",
+  "name": "Hibou Rouge",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Hélène Ronchetti, Noémie Hecquet",
+  "desc": "Agence d'architecture intérieure spécialisée dans les Etablissements recevant du Public",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "275",
+  "page": 2,
+  "px": 765,
+  "py": 1070,
+  "approx": false,
+  "website": "https://www.hibou-rouge.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "holy",
+  "name": "Holy Studio",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Image, vidéo & son",
+   "Communication & marque"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Olivier Minet",
+  "desc": "Photographe, vidéaste, motion designer",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "202",
+  "page": 2,
+  "px": 522,
+  "py": 120,
+  "approx": false,
+  "website": "https://www.olivierminet.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 6.4,
+   "n": 2,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "igwap",
+  "name": "IGWAP",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Image, vidéo & son",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Collectif",
+  "desc": "Collectif de musiciens",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "salle vidéo (sous-sol au tableur)",
+  "page": 0,
+  "px": 214,
+  "py": 900,
+  "approx": false,
+  "website": "https://igwap.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "intermede",
+  "name": "Intermède",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Transition écologique & sociale",
+   "Bâtiment, espace & immobilier",
+   "RH, organisation & gouvernance"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Marie Picquet, Zoé Ducrocq",
+  "desc": "Coopérative gestionnaire du tiers-lieu",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "014",
+  "page": 0,
+  "px": 542,
+  "py": 1023,
+  "approx": false,
+  "website": "https://intermede.co",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 14.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
+   "note": "Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.",
+   "top": true,
+   "rank": 3
+  }
+ },
+ {
+  "id": "boccia",
+  "name": "Jérôme Boccia",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Jérôme Boccia",
+  "desc": "Artiste (bureau 205). Pas de descriptif dans le tableur.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "205",
+  "page": 2,
+  "px": 396,
+  "py": 330,
+  "approx": true,
+  "website": "https://jeromeboccia.net",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "joonailz",
+  "name": "Joonailz",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Beauté & soin",
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Joséphine Clowez",
+  "desc": "Peintre et nail artist spécialisée dans les motifs complexes et ornements maximalistes.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "135",
+  "page": 1,
+  "px": 342,
+  "py": 761,
+  "approx": false,
+  "website": "https://www.instagram.com/joonailz",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.7,
+   "n": 1,
+   "fams": 1,
+   "cats": 2,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "kpro",
+  "name": "K-pro services",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Logistique, sécurité & mobilité"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Karim Bouyahiaoui",
+  "desc": "Stockage",
+  "floor": "SS",
+  "floorLabel": "Sous-sol",
+  "room": "015",
+  "page": null,
+  "px": null,
+  "py": null,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur",
+  "logo": null,
+  "acu": {
+   "score": 4.75,
+   "n": 1,
+   "fams": 1,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "kino",
+  "name": "Kino Ciné",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Image, vidéo & son",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Particuliers",
+   "Scolaires"
+  ],
+  "people": "Patrice Gostijanovic",
+  "desc": "Association qui gère le cinéma Art & Essai Kino, au sein de l'université de Lille (campus Pont-de-Bois).",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "067",
+  "page": 0,
+  "px": 543,
+  "py": 1093,
+  "approx": false,
+  "website": "https://kino-cine.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "knapfla",
+  "name": "Knapfla",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Géraldine Federspiel",
+  "desc": "Illustratrice et intervenante artistique.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "117",
+  "page": 1,
+  "px": 443,
+  "py": 437,
+  "approx": false,
+  "website": "https://www.instagram.com/knapfla/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "sunday",
+  "name": "L'atelier Sunday · Sunday Surfers",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling",
+   "Transition écologique & sociale",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Hippolyte Delbarre",
+  "desc": "Atelier de Sérigraphie et de confection textile, marque de vêtements, upcycling de bleus de travail, pièces uniques à l'esprit surf et écoresponsable.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "207",
+  "page": 2,
+  "px": 366,
+  "py": 440,
+  "approx": false,
+  "website": "https://sundaysurfers.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "consignerie",
+  "name": "La Consignerie",
+  "cat": "RESTO",
+  "catLabel": "Restauration & alimentation",
+  "themes": [
+   "Alimentation & restauration",
+   "Transition écologique & sociale",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Pierre Devred, Franck Royer",
+  "desc": "Service traiteur engagé pour vos événements d'entreprise",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "059",
+  "page": 0,
+  "px": 695,
+  "py": 990,
+  "approx": false,
+  "website": "https://consignerie.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 13.8,
+   "n": 3,
+   "fams": 2,
+   "cats": 8,
+   "note": "Traiteur engagé : convivialité, événementiel et transition dans la même assiette.",
+   "top": true,
+   "rank": 6
+  }
+ },
+ {
+  "id": "lafabric",
+  "name": "La Fabric",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Image, vidéo & son",
+   "Communication & marque"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Fred Candeille",
+  "desc": "Studio de production sonore spécialisé en identités sonores, musiques originales, podcasts et voix off pour les marques et les médias.",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "3e étage",
+  "page": 3,
+  "px": 521,
+  "py": 1046,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "lafoule",
+  "name": "La Foule",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Communication & marque"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Charlotte Jallageas",
+  "desc": "Conseil en communication",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "219",
+  "page": 2,
+  "px": 421,
+  "py": 545,
+  "approx": false,
+  "website": "https://lafoule.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "madeleine",
+  "name": "La petite Madeleine",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Transition écologique & sociale",
+   "Ateliers & transmission",
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Luc Degeuse, Frédéric Muys",
+  "desc": "Association qui propose des repair-café (concept d’atelier où les participants apprennent à réparer leur objet cassé) et des ateliers couture.",
+  "floor": "SS",
+  "floorLabel": "Sous-sol",
+  "room": "013",
+  "page": null,
+  "px": null,
+  "py": null,
+  "approx": false,
+  "website": "https://lapetitemadeleine.org/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur",
+  "logo": null,
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "laseconde",
+  "name": "La Seconde",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Transition écologique & sociale",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Hippolyte Labat, Alexis Bruslé",
+  "desc": "Récupération, réparation et et revente  d’objets technologiques",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "047",
+  "page": 0,
+  "px": 121,
+  "py": 1094,
+  "approx": false,
+  "website": "https://la-seconde.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 8.1,
+   "n": 2,
+   "fams": 2,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "verhaege",
+  "name": "Laurent Verhaege",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Scolaires",
+   "Collectivités & associations",
+   "Particuliers"
+  ],
+  "people": "Laurent Verhaege",
+  "desc": "Artiste Peintre et intervenant pour les scolaires et associations",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "308",
+  "page": 3,
+  "px": 360,
+  "py": 490,
+  "approx": false,
+  "website": "https://www.instagram.com/laurent_verhaege_/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "leflower",
+  "name": "Leflower Studio",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Image, vidéo & son",
+   "Numérique & IA",
+   "Spectacle vivant & événementiel"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Victor Levasseur, Lila Leutreau",
+  "desc": "Scénographie numérique, installation visuelles intéractives, production audiovisuelle",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "127",
+  "page": 1,
+  "px": 308,
+  "py": 660,
+  "approx": false,
+  "website": "https://leflower-studio.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 12.8,
+   "n": 3,
+   "fams": 1,
+   "cats": 8,
+   "note": "Scénographie numérique : point de contact entre artistes, producteurs d'image, événementiel et numérique.",
+   "top": true,
+   "rank": 7
+  }
+ },
+ {
+  "id": "jalk",
+  "name": "Leidy Jalk-Barrios",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Collectivités & associations"
+  ],
+  "people": "Leidy Jalkbarrios",
+  "desc": "Artiste plasticienne et chercheuse. Elle a une pratique notamment du dessin et mène des projets de recherche dans lesquels participent des personnes de milieux divers (l'université, des milieux sociaux divers et la santé). Ses thèmes de recherche les plus récents concernent : l'accueil de migrants par la pratique artistique, le dessin nomade et le végétal.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "112",
+  "page": 1,
+  "px": 514,
+  "py": 198,
+  "approx": false,
+  "website": "https://leidyjalk.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "lesgus",
+  "name": "Les Gus",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Louis Garez",
+  "desc": "Marque française de sous-vêtements pour hommes spécialisée dans les caleçons colorés et décontractés",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "123",
+  "page": 1,
+  "px": 267,
+  "py": 838,
+  "approx": false,
+  "website": "https://lesgus.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "licols",
+  "name": "Licols And Co",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Alice Montmayeur",
+  "desc": "Matériel en corde pour chevaux",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "129",
+  "page": 1,
+  "px": 332,
+  "py": 571,
+  "approx": false,
+  "website": "https://licolsandco.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "likeafree",
+  "name": "Like a Free",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Communication & marque",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Eric Deregnaucourt",
+  "desc": "Branding & communication visuelle ⚡️ Identités visuelles • Design éditorial • Rapports annuels & ESG • Print & Digital⚡️ Insta : @likeafree.design",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "3e étage",
+  "page": 3,
+  "px": 615,
+  "py": 941,
+  "approx": false,
+  "website": "https://likeafree.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "meyer",
+  "name": "Luis Meyer",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Scolaires"
+  ],
+  "people": "Luis Meyer",
+  "desc": "Artiste plasticien ( Ville, mur, urbain, carte, parcours, territoire, imaginaires) Recherche-création et pratiques pédagogiques.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "112",
+  "page": 1,
+  "px": 500,
+  "py": 214,
+  "approx": false,
+  "website": "http://luismeyerp.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "maillart",
+  "name": "Maill'Art",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Artistes & créatifs"
+  ],
+  "people": "François Noreille, Jean Pierre Maïa, Beatrice Rigot, Catherine Bouvier, Christine Williame, Sylvie Detoc, Nathalie Cavrois",
+  "desc": "Collectif d’artistes plasticiens.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "111 + 115 + 119",
+  "page": 1,
+  "px": 436,
+  "py": 332,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "selvamaris",
+  "name": "Maison Selva Maris",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Emilie Gaillard",
+  "desc": "Vestiaire conscient & poétique, inspiré par l’histoire",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "208",
+  "page": 2,
+  "px": 357,
+  "py": 487,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "maranta",
+  "name": "Maranta Couture",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Jaïlys Colier",
+  "desc": "Créatrice d'accessoires en tissus.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "175",
+  "page": 1,
+  "px": 686,
+  "py": 1058,
+  "approx": false,
+  "website": "https://marantacouture.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "caudron",
+  "name": "Marina Caudron",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Image, vidéo & son",
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Marina Caudron",
+  "desc": "Photographe",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "104",
+  "page": 1,
+  "px": 426,
+  "py": 185,
+  "approx": false,
+  "website": "https://marinacaudron.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 6.75,
+   "n": 2,
+   "fams": 1,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "dauchy",
+  "name": "Mathieu Dauchy",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Spectacle vivant & événementiel",
+   "Communication & marque",
+   "Image, vidéo & son"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations",
+   "Artistes & créatifs"
+  ],
+  "people": "Mathieu Dauchy",
+  "desc": "Rédacteur pour le spectacle vivant, animation de podcasts, tables rondes autour de la culture",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "137",
+  "page": 1,
+  "px": 363,
+  "py": 677,
+  "approx": false,
+  "website": "https://www.mathieudauchy.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 12.1,
+   "n": 3,
+   "fams": 1,
+   "cats": 6,
+   "note": "Rédacteur, podcasteur, animateur : relie spectacle vivant, communication et culture ; un animateur naturel des rencontres du lieu.",
+   "top": true,
+   "rank": 9
+  }
+ },
+ {
+  "id": "maze",
+  "name": "Maze",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Ateliers & transmission",
+   "Arts visuels"
+  ],
+  "publics": [
+   "Artistes & créatifs"
+  ],
+  "people": "Mathilde Ehret-Zoghi et Camille Brouillard",
+  "desc": "Organisme de formation spécialisé dans les arts visuels",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "227",
+  "page": 2,
+  "px": 305,
+  "py": 693,
+  "approx": false,
+  "website": "https://www.maze-conseils.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 9.05,
+   "n": 2,
+   "fams": 1,
+   "cats": 3,
+   "note": "Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.",
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "mishou",
+  "name": "Mishou Wigs",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Beauté & soin",
+   "Spectacle vivant & événementiel",
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Artistes & créatifs",
+   "Particuliers"
+  ],
+  "people": "Margot Thomazeau",
+  "desc": "WigMaker/Perruquière Artistique, pour Mode, DragQueen, Cosplay",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "216",
+  "page": 2,
+  "px": 456,
+  "py": 397,
+  "approx": false,
+  "website": "https://www.instagram.com/mishou.wigs/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 10.8,
+   "n": 3,
+   "fams": 2,
+   "cats": 8,
+   "note": null,
+   "top": true,
+   "rank": 10
+  }
+ },
+ {
+  "id": "dupont",
+  "name": "Natasha Dupont · Poëtic Brindilles",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission",
+   "Alimentation & restauration"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Natasha Dupont",
+  "desc": "Artiste plasticienne. Sous le nom Poëtic Brindilles, ateliers créatifs sur des thèmes variés, associés à la pâtisserie fine de Julie Dillies (sowatt-tierslieu.fr).",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "113",
+  "page": 1,
+  "px": 488,
+  "py": 243,
+  "approx": false,
+  "website": "https://www.instagram.com/natasha_dupont_nm/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 10.75,
+   "n": 3,
+   "fams": 3,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "coulon",
+  "name": "Nathalie Coulon",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Nathalie Coulon",
+  "desc": "Artiste plasticienne",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "114",
+  "page": 1,
+  "px": 478,
+  "py": 287,
+  "approx": false,
+  "website": "https://nathaliecoulon.ultra-book.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "nexus",
+  "name": "Nexus · NSP",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Cyril Fontaine",
+  "desc": "Activité non renseignée (Nexus Synergh Partners d'après le logo du plan).",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "060",
+  "page": 0,
+  "px": 743,
+  "py": 977,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "nininails",
+  "name": "Nininails",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Beauté & soin"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Marie Delahaye",
+  "desc": "Nail artist et pose de strass dentaires",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "138",
+  "page": 1,
+  "px": 387,
+  "py": 583,
+  "approx": false,
+  "website": "https://www.instagram.com/nininails____",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.7,
+   "n": 1,
+   "fams": 1,
+   "cats": 2,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "originalbijoux",
+  "name": "Original Bijoux",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Céramique, bijoux & matières"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Rachid Harik",
+  "desc": "Maître artisan créateur de bijoux d'exception",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "139",
+  "page": 1,
+  "px": 375,
+  "py": 634,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "ouichange",
+  "name": "Oui Change Corp",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Transition écologique & sociale",
+   "Ateliers & transmission",
+   "RH, organisation & gouvernance"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Collectif",
+  "desc": "Collectif de 30 animatrices et animateurs de la transformation écologique et sociale.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "155",
+  "page": 1,
+  "px": 491,
+  "py": 999,
+  "approx": false,
+  "website": "https://ouichangecorp.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 10.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": "30 animateur·rice·s de la transformation écologique et sociale : la méthode pour faire travailler ensemble les autres convergences.",
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "caenen",
+  "name": "Pauline Caenen",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Céramique, bijoux & matières",
+   "Ateliers & transmission",
+   "Spectacle vivant & événementiel",
+   "Enfance & familles"
+  ],
+  "publics": [
+   "Enfants & familles",
+   "Particuliers",
+   "Artistes & créatifs"
+  ],
+  "people": "Pauline Caenen",
+  "desc": "Pratiques artistiques céramique/papier/textile. Ateliers arts plastiques enfants/acdultes. Décor et accessoires spectacle vivant.",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "3e étage (plan) · 217 au tableur",
+  "page": 3,
+  "px": 523,
+  "py": 119,
+  "approx": false,
+  "website": "https://www.instagram.com/pauline.caenen",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 10.45,
+   "n": 3,
+   "fams": 2,
+   "cats": 7,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "pland",
+  "name": "Plan D",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier",
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Stéphane Delcroix, Christophe Speters, Pascal Routier",
+  "desc": "Bureau dessin en bâtiment et relevé 3D",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "057",
+  "page": 0,
+  "px": 633,
+  "py": 960,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "polaifos",
+  "name": "Polaifos",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Image, vidéo & son",
+   "Mode, textile & upcycling"
+  ],
+  "publics": [
+   "Entreprises",
+   "Artistes & créatifs"
+  ],
+  "people": "Sofian Claise",
+  "desc": "Studio photo",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "313",
+  "page": 3,
+  "px": 569,
+  "py": 278,
+  "approx": false,
+  "website": "https://www.polaifos.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 6.75,
+   "n": 2,
+   "fams": 1,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "rcc",
+  "name": "RCC Groupe · France Pare-Brise",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Logistique, sécurité & mobilité",
+   "Finance, assurance & gestion"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Laurent Colin et son équipe",
+  "desc": "Réparartion et remplacement de vitrage automobile, agréé assurances",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "241-242-243",
+  "page": 2,
+  "px": 115,
+  "py": 1076,
+  "approx": false,
+  "website": "https://franceparebrise.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "refill",
+  "name": "Refill Atelier",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Mode, textile & upcycling",
+   "Transition écologique & sociale",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Mélanie Ramon",
+  "desc": "Atelier de retouches/réparations/remaillage/upcycling. Lieu ressource d'informations, de sensibilisation, de conseil et de transmission en faveur de l'allongement de la durée de vie des textiles. Proposition de collectes sur site en entreprises et d'ateliers couture.",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "060",
+  "page": 0,
+  "px": 693,
+  "py": 1072,
+  "approx": false,
+  "website": "https://www.instagram.com/refill_atelier",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 10.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": "Atelier de retouches et lieu-ressource textile : le point d'entrée naturel d'un pôle réparation + mode.",
+   "top": true,
+   "rank": 12
+  }
+ },
+ {
+  "id": "wagner",
+  "name": "Rita Wagner",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Rita Wagner",
+  "desc": "Artiste plasticienne",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "118",
+  "page": 1,
+  "px": 432,
+  "py": 480,
+  "approx": false,
+  "website": "https://www.instagram.com/ritawagner_art",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "eugene",
+  "name": "Romain Eugène",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Romain Eugène",
+  "desc": "Artiste Peintre, professeur de dessin et peinture.",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "315",
+  "page": 3,
+  "px": 418,
+  "py": 557,
+  "approx": false,
+  "website": "https://www.instagram.com/romain_eugene_art",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "lebars",
+  "name": "Rosy Le Bars",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Scolaires"
+  ],
+  "people": "Rosy Le Bars",
+  "desc": "Artiste-plasticienne (sculpture, installation et dessin) et intervenante",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "104",
+  "page": 1,
+  "px": 400,
+  "py": 297,
+  "approx": false,
+  "website": "https://www.rosylebars.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "confidentialistes",
+  "name": "Les Confidentialistes",
+  "cat": "BIENETRE",
+  "catLabel": "Bien-être & soin",
+  "themes": [
+   "Santé & bien-être",
+   "RH, organisation & gouvernance"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Denis Rahli",
+  "desc": "Psychopraticien : La parole est un droit, être entendu est une nécessité.  Spécialiste en Écoute Active et  Relation d'Aide",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "221",
+  "page": 2,
+  "px": 247,
+  "py": 940,
+  "approx": false,
+  "website": "https://lesconfidentialistes.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 9.75,
+   "n": 3,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "sinode",
+  "name": "Sinode Baba",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Spectacle vivant & événementiel",
+   "Image, vidéo & son"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Franck et son équipe",
+  "desc": "Sinode Baba est une association de production et de promotion artistique spécialisée dans l'audiovisuel et le ludique",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "131",
+  "page": 1,
+  "px": 298,
+  "py": 943,
+  "approx": false,
+  "website": "https://sinodebaba.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.1,
+   "n": 2,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "slawa",
+  "name": "Slawa (Manon Danappe)",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Manon Danappe",
+  "desc": "Artiste peintre contemporaine, explore les émotions et les liens humains.",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "318",
+  "page": 3,
+  "px": 470,
+  "py": 470,
+  "approx": true,
+  "website": "https://www.instagram.com/slawa_fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "sneuf",
+  "name": "Sneuf",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels",
+   "Image, vidéo & son",
+   "Communication & marque"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Stéphanie Deldicque",
+  "desc": "Artiste Visuelle - Peinture, street-art - Photographie - Graphisme, illustration",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "105",
+  "page": 1,
+  "px": 391,
+  "py": 336,
+  "approx": false,
+  "website": "https://sneuf-art.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 8.75,
+   "n": 3,
+   "fams": 1,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "opale",
+  "name": "Sociétés Opale",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "RH, organisation & gouvernance",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Tom Duclos et Sarah Berthé",
+  "desc": "Accompagnement de structures vers des modes de gouvernance et d'organisation plus horizontaux et respectueux de l'être humain :)",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "047",
+  "page": 0,
+  "px": 118,
+  "py": 1077,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "soluxan",
+  "name": "Soluxan",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "Numérique & IA"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Aymeric Vroomhout",
+  "desc": "Entreprise de Services du Numérique : Chez Soluxan, nous accompagnons aussi bien les PME et les grands comptes dans la concrétisation de leurs projets numériques. Nous facilitons cette démarche en mettant en relation nos clients avec des consultants compétents, partageant leurs valeurs et réellement investis dans chaque mission",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "228",
+  "page": 2,
+  "px": 320,
+  "py": 629,
+  "approx": false,
+  "website": "https://www.soluxan.com/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 5.1,
+   "n": 1,
+   "fams": 1,
+   "cats": 6,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "letertre",
+  "name": "Sophie Letertre",
+  "cat": "BAT",
+  "catLabel": "Bâtiment & immobilier",
+  "themes": [
+   "Bâtiment, espace & immobilier"
+  ],
+  "publics": [
+   "Particuliers",
+   "Entreprises"
+  ],
+  "people": "Sophie Letertre",
+  "desc": "Designer d'intérieur",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "219",
+  "page": 2,
+  "px": 408,
+  "py": 560,
+  "approx": true,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "atk",
+  "name": "Studio ATK",
+  "cat": "ATELIER",
+  "catLabel": "Ateliers créatifs",
+  "themes": [
+   "Arts visuels",
+   "Ateliers & transmission"
+  ],
+  "publics": [
+   "Particuliers",
+   "Enfants & familles"
+  ],
+  "people": "Axelle",
+  "desc": "Ateliers artistiques et illustrations à l’aquarelle.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "116",
+  "page": 1,
+  "px": 450,
+  "py": 401,
+  "approx": false,
+  "website": "https://www.studioatk.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "studiocad",
+  "name": "Studio CAD",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Numérique & IA",
+   "Communication & marque",
+   "Image, vidéo & son"
+  ],
+  "publics": [
+   "Entreprises",
+   "Collectivités & associations"
+  ],
+  "people": "Baptiste Ségard, Florian Bourgeois, Gaetan Caroen, Cléa Portolan",
+  "desc": "Studio de production digitale",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "061 + 062",
+  "page": 0,
+  "px": 793,
+  "py": 1034,
+  "approx": false,
+  "website": "https://studiocad.fr/",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 15.8,
+   "n": 4,
+   "fams": 2,
+   "cats": 8,
+   "note": "Digital + communication + image : fait le pont entre les communicants, les producteurs d'image et le numérique, et réalise le site du lieu.",
+   "top": true,
+   "rank": 2
+  }
+ },
+ {
+  "id": "therapie",
+  "name": "Thérapie Analytique",
+  "cat": "BIENETRE",
+  "catLabel": "Bien-être & soin",
+  "themes": [
+   "Santé & bien-être"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Fanny Chaudron, Chang Shen-Descheemaeker",
+  "desc": "Cabinet de thérapie analytique, accompagnement par la parole, l'écoute et le lien thérapeutique pour dénouer les blocages psychiques.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "121",
+  "page": 1,
+  "px": 242,
+  "py": 929,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": null,
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "thinkvitality",
+  "name": "Think Vitality",
+  "cat": "BIENETRE",
+  "catLabel": "Bien-être & soin",
+  "themes": [
+   "Santé & bien-être"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Nadia Assaoui",
+  "desc": "Thérapie fonctionnelle/ naturopathie/M.T.C-TuiNa- drainage lymphatique-hypnotherapie",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "110",
+  "page": 1,
+  "px": 523,
+  "py": 107,
+  "approx": false,
+  "website": "https://think-vitality-therapeute.fr",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "unasdebruja",
+  "name": "Uñas de Bruja",
+  "cat": "ARTISANAT",
+  "catLabel": "Artisanat & création",
+  "themes": [
+   "Beauté & soin",
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "Charlotte Meunier",
+  "desc": "Prothésiste ongulaire spécialisée dans le nail art abstrait, texturé, entre le design expérimental et conceptuel.",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "132",
+  "page": 1,
+  "px": 311,
+  "py": 896,
+  "approx": false,
+  "website": "https://www.instagram.com/unas.de.bruja",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 3.7,
+   "n": 1,
+   "fams": 1,
+   "cats": 2,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "vingtdeux",
+  "name": "Vingt-deux de Cœur",
+  "cat": "COM",
+  "catLabel": "Communication & image",
+  "themes": [
+   "Communication & marque",
+   "RH, organisation & gouvernance"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "Marion Ringeval",
+  "desc": "Développement stratégique et communication visuelle",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "124",
+  "page": 1,
+  "px": 276,
+  "py": 796,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 7.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "vif",
+  "name": "Vivons en Forme",
+  "cat": "ASSO",
+  "catLabel": "Associations & collectifs",
+  "themes": [
+   "Santé & bien-être",
+   "Enfance & familles",
+   "Alimentation & restauration",
+   "Transition écologique & sociale"
+  ],
+  "publics": [
+   "Collectivités & associations"
+  ],
+  "people": "Sophie McGannan et son équipe",
+  "desc": "Association engagée pour la promotion de la santé, Vivons en Forme accompagne les collectivités locales et leurs partenaires dans la conception, la mise en œuvre et l'évaluation d'actions de prévention favorisant des habitudes de vie saines et durables pour tous.",
+  "floor": "RDC",
+  "floorLabel": "Rez-de-chaussée",
+  "room": "049 + 044",
+  "page": 0,
+  "px": 145,
+  "py": 1020,
+  "approx": false,
+  "website": "https://vivonsenforme.org",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 16.45,
+   "n": 4,
+   "fams": 3,
+   "cats": 7,
+   "note": "Santé publique, enfance, alimentation, collectivités : un relais institutionnel pour les ateliers et le bien-être.",
+   "top": true,
+   "rank": 1
+  }
+ },
+ {
+  "id": "willrh",
+  "name": "Will RH",
+  "cat": "SERV",
+  "catLabel": "Services aux entreprises",
+  "themes": [
+   "RH, organisation & gouvernance"
+  ],
+  "publics": [
+   "Entreprises"
+  ],
+  "people": "François Davoine et son équipe",
+  "desc": "Agence de recrutement CDD/CDI",
+  "floor": "R3",
+  "floorLabel": "3e étage",
+  "room": "341",
+  "page": 3,
+  "px": 747,
+  "py": 1009,
+  "approx": false,
+  "website": "https://will-rh.com",
+  "mails": [],
+  "phone": "",
+  "source": "tableur + plan",
+  "logo": "plan",
+  "acu": {
+   "score": 4.4,
+   "n": 1,
+   "fams": 1,
+   "cats": 4,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "zeste",
+  "name": "Zeste d'Amande",
+  "cat": "BIENETRE",
+  "catLabel": "Bien-être & soin",
+  "themes": [
+   "Beauté & soin"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "",
+  "desc": "Prothésiste ongulaire (sowatt-tierslieu.fr).",
+  "floor": "R1",
+  "floorLabel": "1er étage",
+  "room": "170 (plan)",
+  "page": 1,
+  "px": 770,
+  "py": 1013,
+  "approx": false,
+  "website": "https://www.instagram.com/zestedamande_bar_a_ongles",
+  "mails": [],
+  "phone": "",
+  "source": "site + plan",
+  "logo": null,
+  "acu": {
+   "score": 3.35,
+   "n": 1,
+   "fams": 1,
+   "cats": 1,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ },
+ {
+  "id": "lemahieu",
+  "name": "Henri Lemahieu",
+  "cat": "ART",
+  "catLabel": "Artistes",
+  "themes": [
+   "Arts visuels"
+  ],
+  "publics": [
+   "Particuliers"
+  ],
+  "people": "",
+  "desc": "Présent sur le plan du 20 octobre 2026, pas encore dans le tableur ni sur le site.",
+  "floor": "R2",
+  "floorLabel": "2e étage",
+  "room": "à côté du 203 (plan)",
+  "page": 2,
+  "px": 402,
+  "py": 298,
+  "approx": false,
+  "website": "",
+  "mails": [],
+  "phone": "",
+  "source": "plan",
+  "logo": null,
+  "acu": {
+   "score": 4.05,
+   "n": 1,
+   "fams": 1,
+   "cats": 3,
+   "note": null,
+   "top": false,
+   "rank": null
+  }
+ }
+]

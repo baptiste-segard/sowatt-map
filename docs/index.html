@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Carte interactive des occupant·e·s du Sowatt, tiers-lieu de Saint-André-lez-Lille : qui est là, où, avec qui, et où converger.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>html{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Sowatt · carte des occupant·e·s</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Sowatt map — app shell : barre haute / [filtres | canevas | fiche]. Fond blanc, orange Sowatt en accent, une couleur par catégorie. Dérivé du prototype eco-map (Studio CAD). */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --surface2:#F5F3EF; --fg:#1F1B17; --muted:#6B625A; --line:#E8E3DC; --line-strong:#D2CAC0;
+  --accent:#F05A28; --accent-soft:#FDEBE3; --accent-ink:#B23B12; --dim:#B0A79D;
+  --c-ART:#E2572B; --c-ATELIER:#F2B01E; --c-ARTISANAT:#C2559B; --c-ASSO:#16A34A; --c-COM:#2F80ED; --c-SERV:#0E8C8C; --c-BIENETRE:#7C5CBF; --c-BAT:#6B7280; --c-RESTO:#A8622D;
+  --font-ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-display:"Outfit","Figtree",system-ui,sans-serif;
+  --font-data:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --radius:14px;
+}
+:root, :root[data-theme="dark"]{ color-scheme:light }
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--font-ui);display:flex;flex-direction:column;overflow:hidden}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+a{color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;padding-block:9px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  border-bottom:1px solid var(--line);background:var(--surface)}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{font:600 17px var(--font-display);margin:0;letter-spacing:-.01em;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand-btn{all:unset;cursor:pointer;font:inherit;color:inherit}
+.brand-btn:hover{color:var(--accent)}
+.brand h1::before{content:"";width:14px;height:14px;background:var(--accent);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.brand .tag{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-strong);border-radius:4px;padding:2px 6px}
+.controls{display:flex;align-items:center;gap:8px;margin-left:auto;justify-self:end;min-width:0}
+.view-seg{justify-self:center}
+.icon-btn{width:34px;height:34px;border-radius:50%;border:0;background:var(--surface2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.icon-btn svg{width:16px;height:16px;stroke:var(--fg);fill:none;stroke-width:2}
+.search-toggle{display:none}
+.search{position:relative}
+.pop-anchor{position:relative}
+.popover{position:absolute;right:0;top:calc(100% + 8px);width:340px;max-width:calc(100vw - 24px);z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(40,25,15,.14);padding:14px;display:grid;gap:12px;font-size:12.5px}
+.popover[hidden]{display:none}
+.popover p{margin:0 0 6px}
+.eyebrow{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.desc.clamp{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.readmore{background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0;font-weight:600;font-size:12.5px;margin:-6px 0 4px}
+.legend-pill{position:absolute;left:12px;bottom:12px;background:var(--surface);border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px 6px 9px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;z-index:3}
+.legend-pill .dots{display:inline-flex;gap:2px}
+.legend-pill .dots i{width:7px;height:7px;border-radius:50%}
+.legend[hidden],.legend-pill[hidden]{display:none}
+.legend .lclose{float:right;background:none;border:0;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;padding:0 2px;margin:-2px -4px 0 8px}
+.mobile-bar{display:none}
+.hint select{font:inherit;font-weight:600;color:var(--fg);border:0;background:var(--surface2);border-radius:999px;padding:3px 8px;cursor:pointer}
+.hint .crumb.zero{border-color:var(--accent);color:var(--fg)}
+.search input{width:230px;max-width:50vw;padding:7px 10px 7px 30px;border:1px solid transparent;border-radius:999px;background:var(--surface2)}
+.search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2}
+.seg{display:inline-flex;background:var(--surface2);border-radius:999px;padding:3px;gap:2px}
+.seg button{background:transparent;border:0;padding:5px 12px;cursor:pointer;color:var(--muted);border-radius:999px;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.btn{background:var(--surface);border:1px solid var(--line-strong);border-radius:999px;padding:7px 12px;cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+
+main{flex:1;display:grid;grid-template-columns:240px 1fr 350px;min-height:0;position:relative}
+aside{background:var(--surface);min-width:0;overflow:auto}
+aside.filters{border-right:1px solid var(--line);padding:12px 14px 20px;padding-left:max(16px,env(safe-area-inset-left,0px))}
+.sheet-close{display:none}
+aside.detail{border-left:1px solid var(--line);padding:16px;padding-right:max(16px,env(safe-area-inset-right,0px))}
+.canvas{position:relative;min-width:0;min-height:0;background:var(--bg);overflow:hidden}
+svg.map{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+svg.map:active{cursor:grabbing}
+canvas.gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+canvas.gl:active{cursor:grabbing}
+body:not(.lieu) canvas.gl{display:none}
+body.lieu svg.map{visibility:hidden}
+
+.fgroup{border-top:1px solid var(--line);margin:0}
+.fgroup:first-child{border-top:0}
+.fgroup summary{list-style:none;display:flex;align-items:center;gap:7px;padding:9px 0;cursor:pointer;user-select:none;
+  font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-radius:6px}
+.fgroup summary::-webkit-details-marker{display:none}
+.fgroup summary:hover{color:var(--fg)}
+.fgroup summary .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fgroup summary .cnt{font:600 10px var(--font-data);letter-spacing:0;color:#fff;background:var(--accent);border-radius:999px;min-width:16px;height:16px;padding:0 5px;display:inline-flex;align-items:center;justify-content:center}
+.fgroup summary .gclear{background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0 2px;font:500 11px var(--font-ui);text-transform:none;letter-spacing:0}
+.fgroup summary .chev{width:12px;height:12px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.fgroup[open] summary .chev{transform:rotate(180deg)}
+.fgroup[open] summary{color:var(--fg)}
+.fgroup .chips{padding:0 0 11px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--surface2);border-radius:999px;padding:4px 9px 4px 8px;cursor:pointer;font-size:12px;line-height:1.25;color:var(--fg);max-width:100%;text-align:left}
+.chip:hover{background:color-mix(in srgb,var(--surface2) 55%,var(--line))}
+.chip .n{font:500 10.5px var(--font-data);color:var(--muted)}
+.chip .sw{width:9px;height:9px;border-radius:50%;flex:none}
+.chip[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 45%,transparent);font-weight:600}
+.chip[aria-pressed="true"] .n{color:var(--accent-ink);opacity:.75}
+.chip.more{background:transparent;color:var(--accent-ink);font-weight:600;padding-left:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.status{font:500 11.5px var(--font-data);color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:26px}
+.status b{color:var(--fg)}
+.status:not(.filtered) .st-shown{display:none}
+.status.filtered .st-suffix{display:none}
+.status:not(.filtered) #countAll{color:var(--fg);font-weight:600}
+.status .reset{display:none;background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:3px 8px;border-radius:999px;font:600 12px var(--font-ui)}
+.status.filtered .reset{display:inline-block}
+
+.legend{position:absolute;left:12px;bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;font-size:12px;max-width:270px;z-index:3}
+.legend h4{margin:0 0 6px;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.legend ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.legend li{display:flex;align-items:center;gap:7px}
+.legend .sw{width:10px;height:10px;border-radius:50%}
+.legend p{margin:8px 0 0;color:var(--muted);font-size:11.5px}
+.hint{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;pointer-events:none;z-index:3}
+.hint .crumb{pointer-events:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px;display:flex;gap:6px 8px;align-items:center;flex-wrap:wrap}
+.hint .crumb button{background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0;font-weight:600}
+.hint .crumb button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:3px}
+.zoomctl{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:4px;z-index:3}
+.zoomctl button{width:32px;height:32px;border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;cursor:pointer;font-size:16px;line-height:1}
+.tooltip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);padding:5px 9px;border-radius:6px;font-size:12px;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .1s;z-index:4}
+.tooltip .sub{opacity:.7;font-size:11px}
+.tooltip .row{display:flex;align-items:center;gap:6px}
+
+/* marques SVG */
+.node,.link,.group-circle{vector-effect:non-scaling-stroke}
+.group-circle{fill:var(--surface2);stroke:var(--surface2);stroke-width:1.2;cursor:pointer;transition:stroke .15s}
+.group-circle:hover,.group-circle.focus{stroke:var(--accent);stroke-width:1.8}
+.group-circle.conv{fill:var(--surface);stroke:var(--line-strong)}
+.group-circle.fam{fill:var(--surface2);stroke:var(--surface2)}
+.group-label{font:600 13px var(--font-display);fill:var(--fg);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+.group-label.conv{font:500 10px var(--font-ui);fill:var(--muted)}
+.group-label tspan.n{font:500 11px var(--font-data);fill:var(--muted)}
+.nback{fill:#fff;pointer-events:none}
+.nlogo{clip-path:circle(50%);cursor:pointer}
+.halo{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.7;pointer-events:none;vector-effect:non-scaling-stroke}
+@keyframes bloom{from{r:calc(4px * var(--ik,1));opacity:.9}to{r:calc(22px * var(--ik,1));opacity:0}}
+.halo.pulse{animation:bloom 1.8s ease-out infinite}
+@media (prefers-reduced-motion: reduce){ .halo.pulse{animation:none;opacity:.5} }
+.node{stroke:var(--surface);stroke-width:1;cursor:pointer;transition:opacity .2s}
+.node.off{opacity:.12}
+.node.sel{stroke:var(--fg);stroke-width:2}
+.acu-ring{fill:none;stroke:var(--accent);stroke-width:1.2;stroke-dasharray:2 2;pointer-events:none;vector-effect:non-scaling-stroke;opacity:.9}
+.node-label{font:500 10px var(--font-ui);fill:var(--fg);pointer-events:none;paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.link{stroke:var(--accent);fill:none;stroke-linecap:round;opacity:.55}
+.link.aff{stroke:var(--dim);stroke-dasharray:3 4;opacity:.5}
+.link.decl{stroke:var(--fg);opacity:.6}
+
+/* fiche */
+.detail .empty{color:var(--muted)}
+.detail .empty h2{font-size:15px;margin:0 0 8px;color:var(--fg)}
+.detail .empty ol{padding-left:18px;margin:8px 0;display:grid;gap:6px}
+.detail h2{font:600 17px/1.25 var(--font-display);margin:0 0 8px;text-wrap:balance}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;border-radius:999px;padding:3px 9px;background:var(--surface2)}
+.pill .sw{width:9px;height:9px;border-radius:50%}
+.pill.acu{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.meta{display:grid;gap:12px;margin:14px 0}
+.meta dt{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.meta dd{margin:0}
+.desc{color:var(--fg);font-size:13.5px;max-width:62ch}
+.rel{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.rel li{min-width:0}
+.rel li button{width:100%;min-width:0;text-align:left;background:transparent;border:1px solid var(--line);border-radius:8px;padding:7px 9px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.rel li button:hover{border-color:var(--accent)}
+.rel li button .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rel .why{margin-left:auto;font:500 10.5px var(--font-data);color:var(--muted);white-space:nowrap}
+.rel.aff li button{opacity:.75}
+.close{float:right;background:none;border:0;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px}
+.lg{width:28px;height:28px;border-radius:7px;object-fit:contain;background:#fff;border:1px solid var(--line);flex:none;padding:2px;box-sizing:border-box}
+.lg-dot{width:28px;height:28px;border-radius:7px;border:0;padding:0;opacity:.85}
+.lg.big{width:64px;height:64px;border-radius:14px;padding:5px}
+.lg.tip{width:22px;height:22px;border-radius:5px;padding:1px;vertical-align:middle;margin-right:6px}
+.rel li button .lg{width:24px;height:24px;border-radius:6px}
+.ksec{margin-top:16px}
+.ksec dt{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ksec dt .n{font-weight:400;text-transform:none;letter-spacing:0}
+.kempty{font-size:12px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:8px;padding:8px 10px;margin:0}
+.reslist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rescard{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:9px 11px;background:var(--surface)}
+.rescard .rt{display:flex;gap:6px;align-items:center;font:500 10.5px var(--font-data);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rescard .ri{color:var(--accent);font-size:12px}
+.rescard .rtitle{font-weight:600;font-size:13px;margin:3px 0 4px;cursor:pointer;line-height:1.3}
+.rescard .rtitle:hover{color:var(--accent-ink)}
+.rescard .rsum{margin:0 0 8px;font-size:12.5px;color:var(--fg)}
+.rescard .rpot{margin:0 0 8px;font-size:12.5px;color:var(--fg);background:var(--accent-soft);border-radius:8px;padding:7px 9px}
+.rescard .rpot b{color:var(--accent-ink)}
+.rescard .rorgs{display:flex;flex-wrap:wrap;gap:4px}
+.rescard .rorgs .chip{font-size:11.5px;padding:2px 8px 2px 3px}
+.rescard .rorgs .chip .lg{width:18px;height:18px;border-radius:4px;margin-right:4px;padding:1px}
+.contact{font-size:12.5px;display:grid;gap:3px;margin:8px 0 0}
+.contact a{word-break:break-all}
+.acu-note{font-size:12.5px;background:var(--accent-soft);border-radius:8px;padding:8px 10px;margin:8px 0}
+.acu-list li button .rank{font:600 11px var(--font-data);color:var(--accent-ink);min-width:18px}
+.toggle-filters{display:none}
+.floorbar{display:flex;gap:4px;flex-wrap:wrap}
+
+@media (max-width:980px){
+  header.top{display:flex;gap:8px;flex-wrap:nowrap}
+  .brand{flex:1;min-width:0}
+  .brand .tag{display:none}
+  .controls{flex:none}
+  .search-toggle{display:inline-flex}
+  .search{width:0;overflow:hidden;transition:width .2s}
+  .search input{width:100%;max-width:none;padding-left:30px}
+  header.top.search-open .search{width:min(60vw,320px)}
+  header.top.search-open .brand{display:none}
+  .mobile-bar{display:flex;position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));gap:8px;align-items:center;justify-content:center;z-index:5;pointer-events:none}
+  .mobile-bar>*{pointer-events:auto}
+  .mobile-bar .toggle-filters{box-shadow:0 4px 14px rgba(40,25,15,.12);background:var(--surface);flex:none}
+  .hint .crumb .sub{display:none}
+  .mobile-bar .seg{box-shadow:0 4px 14px rgba(40,25,15,.12);background:var(--surface);border:1px solid var(--line)}
+  .mobile-bar .seg button{padding:6px 10px;font-size:13px}
+  .zoomctl{bottom:calc(max(12px,env(safe-area-inset-bottom,0px)) + 48px)}
+  main{grid-template-columns:1fr;grid-template-rows:1fr}
+  aside.filters{position:absolute;top:0;bottom:0;left:0;z-index:6;width:min(320px,88vw);border-right:1px solid var(--line);box-shadow:12px 0 40px rgba(40,25,15,.14);padding-top:10px;padding-right:14px;grid-row:1/-1}
+  aside.filters[hidden]{display:none}
+  .toggle-filters{display:inline-block}
+  .sheet-close{display:flex;position:absolute;top:8px;right:8px;width:30px;height:30px;align-items:center;justify-content:center;z-index:2;background:var(--surface2);border:0;border-radius:50%;cursor:pointer;color:var(--muted);font-size:18px;line-height:1}
+  .filters .status{padding-right:36px}
+  aside.detail{position:absolute;left:0;right:0;bottom:0;z-index:7;max-height:60vh;overflow:auto;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -10px 40px rgba(40,25,15,.14);padding:22px 16px 20px;padding-bottom:max(20px,env(safe-area-inset-bottom,0px))}
+  aside.detail::before{content:"";position:sticky;top:-22px;display:block;width:36px;height:4px;border-radius:2px;background:var(--line-strong);margin:-12px auto 10px}
+  aside.detail[hidden]{display:none}
+  aside.detail .close{display:none}
+  body.detail-open .mobile-bar{display:none}
+  .legend,.legend-pill{display:none}
+  .popover{position:fixed;right:12px;left:12px;top:56px;width:auto}
+}
+
+/* ---------- onboarding ---------- */
+body.onboarding header.top .controls, body.onboarding #viewSeg, body.onboarding aside, body.onboarding .legend, body.onboarding .legend-pill, body.onboarding .hint, body.onboarding .zoomctl, body.onboarding .mobile-bar{display:none!important}
+body.onboarding main{grid-template-columns:1fr}
+body.onboarding svg.map{pointer-events:none}
+body.onboarding .node-label{display:none!important}
+.canvas::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .6s;
+  background:radial-gradient(40% 40% at 20% 25%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%),
+             radial-gradient(35% 35% at 80% 20%,color-mix(in srgb,var(--c-ATELIER) 16%,transparent),transparent 70%),
+             radial-gradient(45% 45% at 70% 85%,color-mix(in srgb,var(--c-COM) 12%,transparent),transparent 70%)}
+body.onboarding .canvas::before{opacity:1}
+.onb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:8;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px;pointer-events:none}
+.onb[hidden]{display:none}
+.onb .card{pointer-events:auto;max-width:600px;width:100%;max-height:calc(100dvh - 32px);overflow:auto;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(6px);border:1px solid transparent;border-radius:24px;padding:28px 28px 22px;box-shadow:0 10px 40px rgba(40,25,15,.08)}
+.onb .step{font:500 10.5px var(--font-data);letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:10px}
+.onb h2{font:600 clamp(24px,4vw,34px)/1.1 var(--font-display);margin:0 0 12px;letter-spacing:-.02em;text-wrap:balance}
+.onb p{color:var(--muted);margin:0 auto 18px;max-width:48ch;font-size:15px}
+.onb .choices{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:18px;max-height:34vh;overflow:auto;padding:2px}
+.onb .chip{font-size:13px;padding:6px 12px}
+.onb .chip .lg{width:18px;height:18px;border-radius:4px;padding:1px}
+.onb .nav{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.onb .primary{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 35%,transparent)}
+.onb .primary:disabled{opacity:.45;cursor:default;box-shadow:none}
+.onb .ghost{background:none;border:0;color:var(--muted);cursor:pointer;padding:10px 12px}
+.onb .dots{display:flex;gap:6px;justify-content:center;margin-top:18px}
+.onb .dots i{width:6px;height:6px;border-radius:50%;background:var(--line-strong)}
+.onb .dots i.on{background:var(--accent)}
+.onb .kbd{margin-top:10px;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.onb .big{font:600 clamp(44px,8vw,72px)/1 var(--font-display);letter-spacing:-.03em;margin:0 0 6px;background:linear-gradient(90deg,var(--accent),var(--c-ATELIER));-webkit-background-clip:text;background-clip:text;color:transparent}
+.onb .mesearch{width:min(100%,360px);padding:8px 12px;border:1px solid var(--line-strong);border-radius:999px;margin:0 0 10px;background:var(--surface)}
+.profile-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:12px;background:var(--accent-soft)}
+.profile-bar b{font-size:12.5px}
+.profile-bar button{background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0;font-weight:600;font-size:12.5px}
+.foryou h3{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.pop-sec .pop-summary{font-size:13px;line-height:1.4;margin-bottom:10px}
+.pop-actions{display:flex;flex-wrap:wrap;gap:6px}
+.pop-actions .btn{padding:5px 11px;font-size:12.5px}
+.popover details summary{cursor:pointer;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.btn.has-profile{background:var(--accent-soft);border-color:var(--accent)}
+@media (max-width:980px){ .onb{justify-content:flex-start;padding-block:16px} .onb .card{padding:22px 18px 18px} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="brand">
+    <h1><button id="brandHome" class="brand-btn" title="Revenir au début">Sowatt · occupant·e·s</button></h1>
+    <span class="tag">prototype · oct. 2026</span>
+  </div>
+  <div class="seg view-seg" id="viewSeg" role="group" aria-label="Vue"><button id="viewClusters" aria-pressed="true">Grappes</button><button id="viewLieu" aria-pressed="false">Le lieu 3D</button><button id="viewConv" aria-pressed="false">Convergences</button></div>
+  <div class="controls">
+    <button class="icon-btn search-toggle" id="searchToggle" aria-label="Rechercher" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" type="search" placeholder="Une structure, une personne, un mot" aria-label="Rechercher une structure, une personne ou une convergence"></label>
+    <div class="pop-anchor">
+      <button class="btn" id="aboutBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="aboutPop">Votre vue</button>
+      <div class="popover" id="aboutPop" role="dialog" aria-label="Votre vue" hidden>
+        <div class="pop-sec"><div class="eyebrow">Profil</div><div id="profileSummary" class="pop-summary"></div>
+          <div class="pop-actions"><button class="btn" id="profileBtn">Modifier le profil</button><button class="btn" id="popForYou" hidden>Ma sélection</button><button class="btn" id="popShowAll">Tout afficher</button><button class="btn" id="popReplay">Revoir l'introduction</button></div></div>
+        <details><summary>À propos des données</summary>
+        <div style="margin-top:8px"><div class="eyebrow">Sources</div><p>Tableur « LISTE OCCUPANT.E.S » (onglet Actuels, lu le 23 oct. 2026), page <a href="https://sowatt-tierslieu.fr/les-occupant-e-s/" target="_blank" rel="noopener">sowatt-tierslieu.fr</a>, plans A3 des étages (MAJ 20 oct. 2026).</p></div>
+        <div><div class="eyebrow">Méthode</div><p>Les thèmes, publics et convergences ont été attribués à la lecture des descriptifs : ce sont des hypothèses à faire valider par les occupant·e·s. Les positions sur le plan viennent des logos du plan ; les structures marquées « position approximative » n'y figurent pas.</p></div>
+        <div><div class="eyebrow">Points d'acupuncture</div><p>Score = nombre de convergences auxquelles la structure participe, pondéré par la diversité des catégories qu'elle relie. Les douze premières sont marquées d'un anneau pointillé.</p></div>
+        <div><div class="eyebrow">Réalisation</div><p>Studio CAD · prototype dérivé de l'Ecosystem Map. Données embarquées, aucune requête externe sauf les polices.</p></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <aside class="filters" id="filters">
+    <div class="status" id="status" aria-live="polite"><span><span class="st-shown"><b id="countShown">0</b> sur </span><span id="countAll">0</span><span class="st-suffix"> structures</span></span><button class="reset" id="clearAll">Réinitialiser</button></div>
+    <button class="sheet-close" id="closeFilters" aria-label="Fermer les filtres">×</button>
+    <div id="filterGroups"></div>
+  </aside>
+
+  <section class="canvas" id="canvas">
+    <svg class="map" id="map" aria-label="Carte des structures du Sowatt"></svg>
+    <canvas class="gl" id="gl" aria-label="Vue 3D du bâtiment"></canvas>
+    <div class="hint" id="hint"></div>
+    <div class="legend" id="legend"></div>
+    <div class="zoomctl"><button id="zin" aria-label="Zoomer">+</button><button id="zout" aria-label="Dézoomer">−</button><button id="zreset" aria-label="Vue d'ensemble" title="Vue d'ensemble">⌂</button></div>
+    <div class="tooltip" id="tip"></div>
+    <div class="mobile-bar" id="mobileBar"><button class="btn toggle-filters" id="toggleFilters" aria-pressed="false" aria-controls="filters">Filtres</button></div>
+    <div class="onb" id="onb" hidden><div class="card" id="onbCard"></div></div>
+  </section>
+
+  <aside class="detail" id="detail"><button class="sheet-close" id="closeDetailSheet" aria-label="Fermer" >×</button><div id="detailBody"></div></aside>
+</main>
+
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+<script src="vendor/d3.min.js"></script>
+<script id="data" type="application/json">[{"id":"aeg","name":"AEG Patrimoine","cat":"SERV","catLabel":"Services aux entreprises","themes":["Finance, assurance & gestion"],"publics":["Particuliers","Entreprises"],"people":"Elodie Gallois","desc":"Courtier en Assurances et Gestionnaire de patrimoine: Je vous accompagne dans tous vos projets à travers l'épargne, l'assurance de personne, comment défiscaliser, préparer votre retraite ou encore comment développer votre trésorerie d'entreprise","floor":"R2","floorLabel":"2e étage","room":"236","page":2,"px":353,"py":731,"approx":false,"website":"https://aegpatrimoine.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"buddy","name":"Agence Buddy","cat":"COM","catLabel":"Communication & image","themes":["Communication & marque","Numérique & IA"],"publics":["Entreprises"],"people":"Jules Coignet et Melvin Buseniers","desc":"Agence social media","floor":"R2","floorLabel":"2e étage","room":"213","page":2,"px":485,"py":273,"approx":false,"website":"https://www.agencebuddy.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"akynoxe","name":"aKynoxe","cat":"SERV","catLabel":"Services aux entreprises","themes":["RH, organisation & gouvernance","Ateliers & transmission"],"publics":["Entreprises"],"people":"Karine Fremaux","desc":"Intervenante systémicienne, Coach, Formatrice","floor":"R1","floorLabel":"1er étage","room":"133","page":1,"px":323,"py":850,"approx":false,"website":"https://www.linkedin.com/company/akynoxe","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":9.75,"n":3,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"urbin","name":"Albane Urbin","cat":"BIENETRE","catLabel":"Bien-être & soin","themes":["Santé & bien-être"],"publics":["Particuliers"],"people":"Albane Urbin","desc":"Praticienne énergétique.","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"052","page":0,"px":413,"py":1025,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"nivelle","name":"Alexis Nivelle","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers","Entreprises"],"people":"Alexis Nivelle","desc":"Peintre et dessinateur","floor":"R2","floorLabel":"2e étage","room":"203","page":2,"px":414,"py":250,"approx":false,"website":"https://alexisnivelle.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"amv","name":"AMV","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier"],"publics":["Particuliers","Entreprises"],"people":"Arnaud Morel","desc":"Entreprise de rénovation","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"005-006-007","page":0,"px":452,"py":289,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"analeina","name":"Analeïna (Adelaïde François)","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"Adelaïde François","desc":"Artiste","floor":"R1","floorLabel":"1er étage","room":"112","page":1,"px":486,"py":198,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"antego","name":"Antego","cat":"SERV","catLabel":"Services aux entreprises","themes":["RH, organisation & gouvernance","Transition écologique & sociale"],"publics":["Entreprises","Collectivités & associations"],"people":"Olivier Dourdent - Alice Le Neindre - Laetitia Desmulier - Julie Dourdent - Nicolas Caron","desc":"Entreprise de conseil en stratégie RH/ accompagnement des transitions (écologique, numérique...)","floor":"R2","floorLabel":"2e étage","room":"235","page":2,"px":340,"py":794,"approx":false,"website":"https://www.antego.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"aprobio","name":"A PRO BIO","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Alimentation & restauration","Transition écologique & sociale"],"publics":["Collectivités & associations","Entreprises","Particuliers"],"people":"François Meresse et toute son équipe","desc":"Association interprofessionnelle engagée, qui oeuvre pour l'accès à tous à une alimentation de qualité","floor":"R1","floorLabel":"1er étage","room":"aile gauche (165)","page":1,"px":210,"py":1040,"approx":false,"website":"https://www.aprobio.fr/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"aqualunia","name":"Aqualunia","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Céramique, bijoux & matières","Santé & bien-être"],"publics":["Particuliers"],"people":"Sophie Thibaut","desc":"Aqualunia est une boutique spécialisée dans les bijoux en pierres naturelles, les encens et les articles dédiés au bien-être, alliant élégance, authenticité et inspiration naturelle.","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"053","page":0,"px":449,"py":1023,"approx":false,"website":"https://aqualunia.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"artkive","name":"Ar(tk)ive","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling","Transition écologique & sociale"],"publics":["Particuliers"],"people":"Logan Persent","desc":"Vêtements upcyclés en denim","floor":"R3","floorLabel":"3e étage","room":"313","page":3,"px":487,"py":266,"approx":false,"website":"https://artkive.shop","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"artorium","name":"Artorium","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Ateliers & transmission","Enfance & familles","Arts visuels"],"publics":["Enfants & familles","Scolaires"],"people":"Jamila Bouâli","desc":"Ateliers créatifs mêlant art, science et philosophie","floor":"R2","floorLabel":"2e étage","room":"215","page":2,"px":467,"py":387,"approx":false,"website":"https://artorium.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"assureetmoi","name":"Assure & moi","cat":"SERV","catLabel":"Services aux entreprises","themes":["Finance, assurance & gestion"],"publics":["Particuliers","Entreprises"],"people":"Marie-Sarah De Breyne, Arnaud Fontaine, Léo Sorez, Guillaume Groux, Philippe Pailhes","desc":"Courtier en Assurances : nous trouvons le contrat d'assurance idéal parmi 50 compagnies (RC pro, multirisque pro, auto, habitation, mutuelle, prévoyance, retraite, assurance vie, épargne ...)","floor":"R1","floorLabel":"1er étage","room":"134","page":1,"px":333,"py":804,"approx":false,"website":"https://assureetmoi.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"astreos","name":"Astreos Security","cat":"SERV","catLabel":"Services aux entreprises","themes":["Logistique, sécurité & mobilité","Spectacle vivant & événementiel"],"publics":["Entreprises"],"people":"Omar Mokadem et Kévin Vienne","desc":"ASTREOS est une société de sécurité privée, spécialisée dans la protection des biens et des personnes.\nElle propose des prestations de surveillance humaine, de gardiennage, de sécurité événementielle ainsi que des solutions de \nprévention et de sécurité incendie.","floor":"R2","floorLabel":"2e étage","room":"274","page":2,"px":780,"py":1024,"approx":false,"website":"https://www.astreos.net/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"bouillon","name":"Atelier Bouillon","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Image, vidéo & son","Céramique, bijoux & matières"],"publics":["Particuliers","Artistes & créatifs"],"people":"Estelle Demangeat Julie Machin, Fanny Pentel Hadrien Tequi, Joo Yongkwan","desc":"Collectif d’artistes plasticien.ne.s (art numérique, film, photo, céramique, installation, peinture).","floor":"R1","floorLabel":"1er étage","room":"106-107-108","page":1,"px":374,"py":401,"approx":false,"website":"https://tierslieu-aufildesoi.org","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"helcou","name":"Atelier Helcou","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Mode, textile & upcycling","Ateliers & transmission"],"publics":["Particuliers","Enfants & familles"],"people":"Héloïse Corteville","desc":"Ateliers couture, personnalisation (broderie & flex), articles fait main.","floor":"R2","floorLabel":"2e étage","room":"212","page":2,"px":500,"py":213,"approx":false,"website":"https://atelierhelcou.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"diy","name":"Ateliers DIY","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Ateliers & transmission","Transition écologique & sociale","Enfance & familles"],"publics":["Particuliers","Entreprises","Enfants & familles"],"people":"Cathy Plancke","desc":"Ateliers créatifs et zéro déchet dans les domaines de la cosmétique homemade, des produits ménagers écologiques et des créations manuelles. Interventions auprès des particuliers, entreprises et collectivités","floor":"R2","floorLabel":"2e étage","room":"217","page":2,"px":444,"py":445,"approx":false,"website":"https://www.ateliersdiy.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":14.1,"n":3,"fams":3,"cats":6,"note":"Ateliers zéro déchet pour particuliers, familles et entreprises : transition, enfance et transmission à la fois.","top":true,"rank":4}},{"id":"bacprod","name":"BAC Prod","cat":"COM","catLabel":"Communication & image","themes":["Image, vidéo & son","Communication & marque"],"publics":["Entreprises"],"people":"Aymeric Berenger","desc":"Photographe, Vidéaste, Pilote de drone","floor":"R1","floorLabel":"1er étage","room":"103","page":1,"px":414,"py":241,"approx":false,"website":"https://bacprod.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":6.4,"n":2,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"bilik","name":"Bilik","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier","Numérique & IA"],"publics":["Particuliers"],"people":"Andréa Quignon","desc":"Bilik réalise une sélection de professionnels du bâtiment et les fait connaître auprès des particuliers qui sont en recherche d'artisans de confiance.","floor":"R2","floorLabel":"2e étage","room":"237","page":2,"px":364,"py":686,"approx":false,"website":"https://bilik.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"bonallure","name":"Bon'Allure","cat":"SERV","catLabel":"Services aux entreprises","themes":["Logistique, sécurité & mobilité","Transition écologique & sociale"],"publics":["Entreprises"],"people":"Stanislas Mulle","desc":"Société de services de livraisons 🚛📦🌿⚡️écologique","floor":"COUR","floorLabel":"Cour extérieure","room":"cour extérieure","page":null,"px":null,"py":null,"approx":false,"website":"https://www.bonallure.fr","mails":[],"phone":"","source":"tableur","logo":null,"acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"bricknum","name":"Brick&Num","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Enfance & familles","Ateliers & transmission","Numérique & IA"],"publics":["Enfants & familles","Scolaires"],"people":"Guillaume Canonne","desc":"Ateliers ludiques et amusants à base de LEGO ou de numérique","floor":"R3","floorLabel":"3e étage","room":"3e étage (plan) · 204 au tableur","page":3,"px":368,"py":444,"approx":false,"website":"https://www.brickandnum.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"parez","name":"Cabinet Parez","cat":"SERV","catLabel":"Services aux entreprises","themes":["Finance, assurance & gestion"],"publics":["Entreprises"],"people":"Matthieu Parez","desc":"Expert-comptable","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"064","page":0,"px":561,"py":1036,"approx":false,"website":"https://cabinet-parez.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"litha","name":"Café n°3 · Litha Espresso","cat":"RESTO","catLabel":"Restauration & alimentation","themes":["Alimentation & restauration"],"publics":["Entreprises"],"people":"Ludwig Créteur","desc":"Service de location de machines à café à capsules et à grains, et consommables.","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"069","page":0,"px":407,"py":1094,"approx":false,"website":"https://www.litha-espresso.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.45,"n":2,"fams":1,"cats":7,"note":null,"top":false,"rank":null}},{"id":"capstone","name":"Capstone","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier"],"publics":["Entreprises"],"people":"Lorette Bellier, Rémi Richelet","desc":"Foncière immobilière propriétaire du site","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"014","page":0,"px":355,"py":1024,"approx":false,"website":"http://capstone.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"casamia","name":"Casa Mia Créations","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Céramique, bijoux & matières","Ateliers & transmission","Alimentation & restauration"],"publics":["Particuliers","Enfants & familles"],"people":"Lisa Noel","desc":"Céramiste. Ateliers céramique (goûters et apéros)","floor":"R3","floorLabel":"3e étage","room":"302 + 312","page":3,"px":462,"py":212,"approx":false,"website":"https://www.instagram.com/casamia.creations","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"corman","name":"Clément Corman","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers","Entreprises"],"people":"Clément Corman","desc":"Artiste plasticien - Création d'oeuvres originales sur differents supports ( Mur, toile, etc..) - Créateur de l'identité \"Art of Soul\"","floor":"R2","floorLabel":"2e étage","room":"202","page":2,"px":429,"py":194,"approx":false,"website":"https://clement-corman.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"coalline","name":"Coal Line Entertainment","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Image, vidéo & son","Spectacle vivant & événementiel"],"publics":["Artistes & créatifs"],"people":"Loredana Podda (notre présidente), Lucas Sohier, Maxence Evangelista, Samuel Vanoverschelde","desc":"COAL LINE STUDIO est un espace de création dédié à la musique et à la mise en valeur des talents émergents issus des cultures urbaines. Notre approche allie exigence artistique et engagement social, en proposant à la fois un studio d’enregistrement professionnel, un laboratoire de développement artistique, et un lieu d’échange entre créateur","floor":"R1","floorLabel":"1er étage","room":"172","page":1,"px":757,"py":961,"approx":false,"website":"https://www.instagram.com/coallineentertainment","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"errances","name":"Collectif errances","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Spectacle vivant & événementiel","Enfance & familles"],"publics":["Enfants & familles","Collectivités & associations"],"people":"Mélody Blocquel, Lilou Clipet","desc":"Le Collectif errances propose des spectacles mêlant oralité, musique, marionnettes et arts associés.\nMélody Blocquel est autrice, artiste de la parole et marionnettiste.\nLilou Clipet est chargée de diffusion et de production.","floor":"R1","floorLabel":"1er étage","room":"136","page":1,"px":354,"py":720,"approx":false,"website":"https://www.collectiferrances.com","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"hamaide","name":"Coralie Hamaide","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission","Santé & bien-être","Céramique, bijoux & matières"],"publics":["Particuliers","Scolaires","Collectivités & associations"],"people":"Coralie Hamaide","desc":"Artiste - Intervenante en pratiques artistiques : Dessin / Peinture / Céramique - Art-thérapeute certifiée RNCP - Praticienne en atelier de croissance personnelle - Formatrice - Métropole européenne de Lille","floor":"R3","floorLabel":"3e étage","room":"315","page":3,"px":424,"py":531,"approx":false,"website":"https://www.coraliehamaide.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":12.75,"n":3,"fams":2,"cats":5,"note":"Artiste, art-thérapeute, formatrice : à la jonction des arts plastiques, du bien-être et de la transmission.","top":true,"rank":8}},{"id":"craienco","name":"Craie'n'Co","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Ateliers & transmission","Enfance & familles"],"publics":["Enfants & familles"],"people":"Coralie Vico","desc":"Moments de vie créatifs - tout âge","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"049","page":0,"px":114,"py":920,"approx":false,"website":"https://craienco.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"cyremia","name":"Cyremia","cat":"SERV","catLabel":"Services aux entreprises","themes":["Numérique & IA","Ateliers & transmission"],"publics":["Entreprises"],"people":"Aymeric Dhalluin, Matteo Falzone","desc":"Cyremia accompagne les entreprises dans l'adoption concrète de l'intelligence artificielle. Conseil, formation et mise en place d'automatisations et d'agents IA, en complément de services informatiques, cloud et télécom. Notre objectif, rendre l'IA réellement utile et accessible au quotidien des entreprises.","floor":"R1","floorLabel":"1er étage","room":"125","page":1,"px":326,"py":752,"approx":false,"website":"https://cyremia.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":5.1,"n":1,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"rowehy","name":"Edouard Rowehy","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers","Entreprises"],"people":"Edouard Rowehy","desc":"Illustrateur","floor":"R2","floorLabel":"2e étage","room":"218","page":2,"px":435,"py":495,"approx":false,"website":"https://ed-ou-art.com","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"ema","name":"Ema Make-up Artist","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Beauté & soin","Spectacle vivant & événementiel","Ateliers & transmission"],"publics":["Artistes & créatifs","Particuliers"],"people":"Ema Simon","desc":"Artiste maquilleuse spécialisée en effets spéciaux et formatrice.","floor":"R3","floorLabel":"3e étage","room":"317","page":3,"px":443,"py":454,"approx":false,"website":"https://emamakeupartist.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":8.45,"n":2,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"enluminance","name":"Enluminance (Eric Gouwy)","cat":"ART","catLabel":"Artistes","themes":["Spectacle vivant & événementiel","Ateliers & transmission"],"publics":["Particuliers","Collectivités & associations"],"people":"Eric Gouwy","desc":"Artiste, Homme de parole(s) et d'écrit. Philo po & éduc. pop.","floor":"SS","floorLabel":"Sous-sol","room":"011","page":null,"px":null,"py":null,"approx":false,"website":"","mails":[],"phone":"","source":"tableur","logo":null,"acu":{"score":7.45,"n":2,"fams":1,"cats":7,"note":null,"top":false,"rank":null}},{"id":"exocer","name":"Exocer","cat":"SERV","catLabel":"Services aux entreprises","themes":["Numérique & IA","Logistique, sécurité & mobilité"],"publics":["Entreprises"],"people":"Jérémy Boyer","desc":"Concepteur d'exosquelettes, assistance 20 à 50 kilos et plus","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"001 + 002","page":0,"px":517,"py":150,"approx":false,"website":"https://exocer.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":10.8,"n":3,"fams":2,"cats":8,"note":null,"top":true,"rank":11}},{"id":"familyforme","name":"Family Forme","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Santé & bien-être","Spectacle vivant & événementiel","Enfance & familles"],"publics":["Enfants & familles","Particuliers"],"people":"Karine Gouot et Steve Butstraen","desc":"Association proposant des cours de danse et arts du cirque (jonglerie, équilibres, acrobaties et voltiges) du yoga et de la gym douce de 3 ans à 77 ans ainsi que de l'éveil corporel et spectacles à partir de 3 mois.","floor":"B","floorLabel":"Bâtiment B","room":"bâtiment B","page":null,"px":null,"py":null,"approx":false,"website":"https://familyforme.fr/","mails":[],"phone":"","source":"tableur","logo":null,"acu":{"score":13.8,"n":3,"fams":2,"cats":8,"note":"Cirque, danse, sport-santé pour tous les âges : relie enfance, spectacle et bien-être — mais isolé dans le bâtiment B.","top":true,"rank":5}},{"id":"dahmani","name":"Fatima Dahmani","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Céramique, bijoux & matières","Numérique & IA"],"publics":["Particuliers","Entreprises"],"people":"Fatima Dahmani","desc":"Designer - conceptrice 3D bijouterie joaillerie.","floor":"R2","floorLabel":"2e étage","room":"244","page":2,"px":80,"py":1010,"approx":false,"website":"https://fatimadahmani.com","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"wierre","name":"Florence Wierre","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Enfants & familles"],"people":"Florence Wierre","desc":"Artiste plasticienne - Création et ateliers aquarelle tout-terrain (adultes et enfants à partir de 15 ans).","floor":"R2","floorLabel":"2e étage","room":"211","page":2,"px":511,"py":164,"approx":false,"website":"https://www.instagram.com/flo_wierre","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"giselleetrose","name":"Giselle et Rose","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Enfance & familles"],"publics":["Enfants & familles","Entreprises"],"people":"Esther Roussel","desc":"Illustratrice jeunesse","floor":"R3","floorLabel":"3e étage","room":"315","page":3,"px":465,"py":360,"approx":false,"website":"https://giselleetrose.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"harch","name":"Harch","cat":"SERV","catLabel":"Services aux entreprises","themes":["RH, organisation & gouvernance","Bâtiment, espace & immobilier"],"publics":["Entreprises"],"people":"Marine Rémy","desc":"Cabinet de recrutement spécialisé dans la construction, l'architecture et l'immobilier.","floor":"R1","floorLabel":"1er étage","room":"126","page":1,"px":298,"py":704,"approx":false,"website":"https://harch-rh.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"hibourouge","name":"Hibou Rouge","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier"],"publics":["Entreprises","Collectivités & associations"],"people":"Hélène Ronchetti, Noémie Hecquet","desc":"Agence d'architecture intérieure spécialisée dans les Etablissements recevant du Public","floor":"R2","floorLabel":"2e étage","room":"275","page":2,"px":765,"py":1070,"approx":false,"website":"https://www.hibou-rouge.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"holy","name":"Holy Studio","cat":"COM","catLabel":"Communication & image","themes":["Image, vidéo & son","Communication & marque"],"publics":["Entreprises"],"people":"Olivier Minet","desc":"Photographe, vidéaste, motion designer","floor":"R2","floorLabel":"2e étage","room":"202","page":2,"px":522,"py":120,"approx":false,"website":"https://www.olivierminet.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":6.4,"n":2,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"igwap","name":"IGWAP","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Image, vidéo & son","Spectacle vivant & événementiel"],"publics":["Particuliers"],"people":"Collectif","desc":"Collectif de musiciens","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"salle vidéo (sous-sol au tableur)","page":0,"px":214,"py":900,"approx":false,"website":"https://igwap.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"intermede","name":"Intermède","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Transition écologique & sociale","Bâtiment, espace & immobilier","RH, organisation & gouvernance"],"publics":["Entreprises","Collectivités & associations"],"people":"Marie Picquet, Zoé Ducrocq","desc":"Coopérative gestionnaire du tiers-lieu","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"014","page":0,"px":542,"py":1023,"approx":false,"website":"https://intermede.co","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":14.1,"n":3,"fams":3,"cats":6,"note":"Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.","top":true,"rank":3}},{"id":"boccia","name":"Jérôme Boccia","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"Jérôme Boccia","desc":"Artiste (bureau 205). Pas de descriptif dans le tableur.","floor":"R2","floorLabel":"2e étage","room":"205","page":2,"px":396,"py":330,"approx":true,"website":"https://jeromeboccia.net","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"joonailz","name":"Joonailz","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Beauté & soin","Arts visuels"],"publics":["Particuliers"],"people":"Joséphine Clowez","desc":"Peintre et nail artist spécialisée dans les motifs complexes et ornements maximalistes.","floor":"R1","floorLabel":"1er étage","room":"135","page":1,"px":342,"py":761,"approx":false,"website":"https://www.instagram.com/joonailz","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.7,"n":1,"fams":1,"cats":2,"note":null,"top":false,"rank":null}},{"id":"kpro","name":"K-pro services","cat":"SERV","catLabel":"Services aux entreprises","themes":["Logistique, sécurité & mobilité"],"publics":["Entreprises"],"people":"Karim Bouyahiaoui","desc":"Stockage","floor":"SS","floorLabel":"Sous-sol","room":"015","page":null,"px":null,"py":null,"approx":false,"website":"","mails":[],"phone":"","source":"tableur","logo":null,"acu":{"score":4.75,"n":1,"fams":1,"cats":5,"note":null,"top":false,"rank":null}},{"id":"kino","name":"Kino Ciné","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Image, vidéo & son","Spectacle vivant & événementiel"],"publics":["Particuliers","Scolaires"],"people":"Patrice Gostijanovic","desc":"Association qui gère le cinéma Art & Essai Kino, au sein de l'université de Lille (campus Pont-de-Bois).","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"067","page":0,"px":543,"py":1093,"approx":false,"website":"https://kino-cine.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"knapfla","name":"Knapfla","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Enfants & familles"],"people":"Géraldine Federspiel","desc":"Illustratrice et intervenante artistique.","floor":"R1","floorLabel":"1er étage","room":"117","page":1,"px":443,"py":437,"approx":false,"website":"https://www.instagram.com/knapfla/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"sunday","name":"L'atelier Sunday · Sunday Surfers","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling","Transition écologique & sociale","Ateliers & transmission"],"publics":["Particuliers","Entreprises"],"people":"Hippolyte Delbarre","desc":"Atelier de Sérigraphie et de confection textile, marque de vêtements, upcycling de bleus de travail, pièces uniques à l'esprit surf et écoresponsable.","floor":"R2","floorLabel":"2e étage","room":"207","page":2,"px":366,"py":440,"approx":false,"website":"https://sundaysurfers.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"consignerie","name":"La Consignerie","cat":"RESTO","catLabel":"Restauration & alimentation","themes":["Alimentation & restauration","Transition écologique & sociale","Spectacle vivant & événementiel"],"publics":["Entreprises"],"people":"Pierre Devred, Franck Royer","desc":"Service traiteur engagé pour vos événements d'entreprise","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"059","page":0,"px":695,"py":990,"approx":false,"website":"https://consignerie.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":13.8,"n":3,"fams":2,"cats":8,"note":"Traiteur engagé : convivialité, événementiel et transition dans la même assiette.","top":true,"rank":6}},{"id":"lafabric","name":"La Fabric","cat":"COM","catLabel":"Communication & image","themes":["Image, vidéo & son","Communication & marque"],"publics":["Entreprises"],"people":"Fred Candeille","desc":"Studio de production sonore spécialisé en identités sonores, musiques originales, podcasts et voix off pour les marques et les médias.","floor":"R3","floorLabel":"3e étage","room":"3e étage","page":3,"px":521,"py":1046,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"lafoule","name":"La Foule","cat":"COM","catLabel":"Communication & image","themes":["Communication & marque"],"publics":["Entreprises"],"people":"Charlotte Jallageas","desc":"Conseil en communication","floor":"R2","floorLabel":"2e étage","room":"219","page":2,"px":421,"py":545,"approx":false,"website":"https://lafoule.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"madeleine","name":"La petite Madeleine","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Transition écologique & sociale","Ateliers & transmission","Mode, textile & upcycling"],"publics":["Particuliers"],"people":"Luc Degeuse, Frédéric Muys","desc":"Association qui propose des repair-café (concept d’atelier où les participants apprennent à réparer leur objet cassé) et des ateliers couture.","floor":"SS","floorLabel":"Sous-sol","room":"013","page":null,"px":null,"py":null,"approx":false,"website":"https://lapetitemadeleine.org/","mails":[],"phone":"","source":"tableur","logo":null,"acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"laseconde","name":"La Seconde","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Transition écologique & sociale","Numérique & IA"],"publics":["Particuliers","Entreprises"],"people":"Hippolyte Labat, Alexis Bruslé","desc":"Récupération, réparation et et revente  d’objets technologiques","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"047","page":0,"px":121,"py":1094,"approx":false,"website":"https://la-seconde.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":8.1,"n":2,"fams":2,"cats":6,"note":null,"top":false,"rank":null}},{"id":"verhaege","name":"Laurent Verhaege","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Scolaires","Collectivités & associations","Particuliers"],"people":"Laurent Verhaege","desc":"Artiste Peintre et intervenant pour les scolaires et associations","floor":"R3","floorLabel":"3e étage","room":"308","page":3,"px":360,"py":490,"approx":false,"website":"https://www.instagram.com/laurent_verhaege_/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"leflower","name":"Leflower Studio","cat":"COM","catLabel":"Communication & image","themes":["Image, vidéo & son","Numérique & IA","Spectacle vivant & événementiel"],"publics":["Entreprises","Collectivités & associations"],"people":"Victor Levasseur, Lila Leutreau","desc":"Scénographie numérique, installation visuelles intéractives, production audiovisuelle","floor":"R1","floorLabel":"1er étage","room":"127","page":1,"px":308,"py":660,"approx":false,"website":"https://leflower-studio.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":12.8,"n":3,"fams":1,"cats":8,"note":"Scénographie numérique : point de contact entre artistes, producteurs d'image, événementiel et numérique.","top":true,"rank":7}},{"id":"jalk","name":"Leidy Jalk-Barrios","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Collectivités & associations"],"people":"Leidy Jalkbarrios","desc":"Artiste plasticienne et chercheuse. Elle a une pratique notamment du dessin et mène des projets de recherche dans lesquels participent des personnes de milieux divers (l'université, des milieux sociaux divers et la santé). Ses thèmes de recherche les plus récents concernent : l'accueil de migrants par la pratique artistique, le dessin nomade et le végétal.","floor":"R1","floorLabel":"1er étage","room":"112","page":1,"px":514,"py":198,"approx":false,"website":"https://leidyjalk.com/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"lesgus","name":"Les Gus","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling"],"publics":["Particuliers"],"people":"Louis Garez","desc":"Marque française de sous-vêtements pour hommes spécialisée dans les caleçons colorés et décontractés","floor":"R1","floorLabel":"1er étage","room":"123","page":1,"px":267,"py":838,"approx":false,"website":"https://lesgus.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"licols","name":"Licols And Co","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling"],"publics":["Particuliers"],"people":"Alice Montmayeur","desc":"Matériel en corde pour chevaux","floor":"R1","floorLabel":"1er étage","room":"129","page":1,"px":332,"py":571,"approx":false,"website":"https://licolsandco.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"likeafree","name":"Like a Free","cat":"COM","catLabel":"Communication & image","themes":["Communication & marque","Transition écologique & sociale"],"publics":["Entreprises"],"people":"Eric Deregnaucourt","desc":"Branding & communication visuelle ⚡️ Identités visuelles • Design éditorial • Rapports annuels & ESG • Print & Digital⚡️ Insta : @likeafree.design","floor":"R3","floorLabel":"3e étage","room":"3e étage","page":3,"px":615,"py":941,"approx":false,"website":"https://likeafree.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"meyer","name":"Luis Meyer","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Scolaires"],"people":"Luis Meyer","desc":"Artiste plasticien ( Ville, mur, urbain, carte, parcours, territoire, imaginaires) Recherche-création et pratiques pédagogiques.","floor":"R1","floorLabel":"1er étage","room":"112","page":1,"px":500,"py":214,"approx":false,"website":"http://luismeyerp.com","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"maillart","name":"Maill'Art","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Artistes & créatifs"],"people":"François Noreille, Jean Pierre Maïa, Beatrice Rigot, Catherine Bouvier, Christine Williame, Sylvie Detoc, Nathalie Cavrois","desc":"Collectif d’artistes plasticiens.","floor":"R1","floorLabel":"1er étage","room":"111 + 115 + 119","page":1,"px":436,"py":332,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"selvamaris","name":"Maison Selva Maris","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling","Transition écologique & sociale"],"publics":["Particuliers"],"people":"Emilie Gaillard","desc":"Vestiaire conscient & poétique, inspiré par l’histoire","floor":"R2","floorLabel":"2e étage","room":"208","page":2,"px":357,"py":487,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"maranta","name":"Maranta Couture","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling"],"publics":["Particuliers"],"people":"Jaïlys Colier","desc":"Créatrice d'accessoires en tissus.","floor":"R1","floorLabel":"1er étage","room":"175","page":1,"px":686,"py":1058,"approx":false,"website":"https://marantacouture.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"caudron","name":"Marina Caudron","cat":"ART","catLabel":"Artistes","themes":["Image, vidéo & son","Arts visuels"],"publics":["Particuliers","Entreprises"],"people":"Marina Caudron","desc":"Photographe","floor":"R1","floorLabel":"1er étage","room":"104","page":1,"px":426,"py":185,"approx":false,"website":"https://marinacaudron.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":6.75,"n":2,"fams":1,"cats":5,"note":null,"top":false,"rank":null}},{"id":"dauchy","name":"Mathieu Dauchy","cat":"COM","catLabel":"Communication & image","themes":["Spectacle vivant & événementiel","Communication & marque","Image, vidéo & son"],"publics":["Entreprises","Collectivités & associations","Artistes & créatifs"],"people":"Mathieu Dauchy","desc":"Rédacteur pour le spectacle vivant, animation de podcasts, tables rondes autour de la culture","floor":"R1","floorLabel":"1er étage","room":"137","page":1,"px":363,"py":677,"approx":false,"website":"https://www.mathieudauchy.fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":12.1,"n":3,"fams":1,"cats":6,"note":"Rédacteur, podcasteur, animateur : relie spectacle vivant, communication et culture ; un animateur naturel des rencontres du lieu.","top":true,"rank":9}},{"id":"maze","name":"Maze","cat":"SERV","catLabel":"Services aux entreprises","themes":["Ateliers & transmission","Arts visuels"],"publics":["Artistes & créatifs"],"people":"Mathilde Ehret-Zoghi et Camille Brouillard","desc":"Organisme de formation spécialisé dans les arts visuels","floor":"R2","floorLabel":"2e étage","room":"227","page":2,"px":305,"py":693,"approx":false,"website":"https://www.maze-conseils.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":9.05,"n":2,"fams":1,"cats":3,"note":"Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.","top":false,"rank":null}},{"id":"mishou","name":"Mishou Wigs","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Beauté & soin","Spectacle vivant & événementiel","Mode, textile & upcycling"],"publics":["Artistes & créatifs","Particuliers"],"people":"Margot Thomazeau","desc":"WigMaker/Perruquière Artistique, pour Mode, DragQueen, Cosplay","floor":"R2","floorLabel":"2e étage","room":"216","page":2,"px":456,"py":397,"approx":false,"website":"https://www.instagram.com/mishou.wigs/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":10.8,"n":3,"fams":2,"cats":8,"note":null,"top":true,"rank":10}},{"id":"dupont","name":"Natasha Dupont · Poëtic Brindilles","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission","Alimentation & restauration"],"publics":["Particuliers","Enfants & familles"],"people":"Natasha Dupont","desc":"Artiste plasticienne. Sous le nom Poëtic Brindilles, ateliers créatifs sur des thèmes variés, associés à la pâtisserie fine de Julie Dillies (sowatt-tierslieu.fr).","floor":"R1","floorLabel":"1er étage","room":"113","page":1,"px":488,"py":243,"approx":false,"website":"https://www.instagram.com/natasha_dupont_nm/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":10.75,"n":3,"fams":3,"cats":5,"note":null,"top":false,"rank":null}},{"id":"coulon","name":"Nathalie Coulon","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"Nathalie Coulon","desc":"Artiste plasticienne","floor":"R1","floorLabel":"1er étage","room":"114","page":1,"px":478,"py":287,"approx":false,"website":"https://nathaliecoulon.ultra-book.com/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"nexus","name":"Nexus · NSP","cat":"SERV","catLabel":"Services aux entreprises","themes":[],"publics":["Entreprises"],"people":"Cyril Fontaine","desc":"Activité non renseignée (Nexus Synergh Partners d'après le logo du plan).","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"060","page":0,"px":743,"py":977,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"nininails","name":"Nininails","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Beauté & soin"],"publics":["Particuliers"],"people":"Marie Delahaye","desc":"Nail artist et pose de strass dentaires","floor":"R1","floorLabel":"1er étage","room":"138","page":1,"px":387,"py":583,"approx":false,"website":"https://www.instagram.com/nininails____","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.7,"n":1,"fams":1,"cats":2,"note":null,"top":false,"rank":null}},{"id":"originalbijoux","name":"Original Bijoux","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Céramique, bijoux & matières"],"publics":["Particuliers"],"people":"Rachid Harik","desc":"Maître artisan créateur de bijoux d'exception","floor":"R1","floorLabel":"1er étage","room":"139","page":1,"px":375,"py":634,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"ouichange","name":"Oui Change Corp","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Transition écologique & sociale","Ateliers & transmission","RH, organisation & gouvernance"],"publics":["Entreprises","Collectivités & associations"],"people":"Collectif","desc":"Collectif de 30 animatrices et animateurs de la transformation écologique et sociale.","floor":"R1","floorLabel":"1er étage","room":"155","page":1,"px":491,"py":999,"approx":false,"website":"https://ouichangecorp.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":10.4,"n":2,"fams":2,"cats":4,"note":"30 animateur·rice·s de la transformation écologique et sociale : la méthode pour faire travailler ensemble les autres convergences.","top":false,"rank":null}},{"id":"caenen","name":"Pauline Caenen","cat":"ART","catLabel":"Artistes","themes":["Céramique, bijoux & matières","Ateliers & transmission","Spectacle vivant & événementiel","Enfance & familles"],"publics":["Enfants & familles","Particuliers","Artistes & créatifs"],"people":"Pauline Caenen","desc":"Pratiques artistiques céramique/papier/textile. Ateliers arts plastiques enfants/acdultes. Décor et accessoires spectacle vivant.","floor":"R3","floorLabel":"3e étage","room":"3e étage (plan) · 217 au tableur","page":3,"px":523,"py":119,"approx":false,"website":"https://www.instagram.com/pauline.caenen","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":10.45,"n":3,"fams":2,"cats":7,"note":null,"top":false,"rank":null}},{"id":"pland","name":"Plan D","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier","Numérique & IA"],"publics":["Entreprises"],"people":"Stéphane Delcroix, Christophe Speters, Pascal Routier","desc":"Bureau dessin en bâtiment et relevé 3D","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"057","page":0,"px":633,"py":960,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"polaifos","name":"Polaifos","cat":"COM","catLabel":"Communication & image","themes":["Image, vidéo & son","Mode, textile & upcycling"],"publics":["Entreprises","Artistes & créatifs"],"people":"Sofian Claise","desc":"Studio photo","floor":"R3","floorLabel":"3e étage","room":"313","page":3,"px":569,"py":278,"approx":false,"website":"https://www.polaifos.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":6.75,"n":2,"fams":1,"cats":5,"note":null,"top":false,"rank":null}},{"id":"rcc","name":"RCC Groupe · France Pare-Brise","cat":"SERV","catLabel":"Services aux entreprises","themes":["Logistique, sécurité & mobilité","Finance, assurance & gestion"],"publics":["Particuliers","Entreprises"],"people":"Laurent Colin et son équipe","desc":"Réparartion et remplacement de vitrage automobile, agréé assurances","floor":"R2","floorLabel":"2e étage","room":"241-242-243","page":2,"px":115,"py":1076,"approx":false,"website":"https://franceparebrise.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"refill","name":"Refill Atelier","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Mode, textile & upcycling","Transition écologique & sociale","Ateliers & transmission"],"publics":["Particuliers"],"people":"Mélanie Ramon","desc":"Atelier de retouches/réparations/remaillage/upcycling. Lieu ressource d'informations, de sensibilisation, de conseil et de transmission en faveur de l'allongement de la durée de vie des textiles. Proposition de collectes sur site en entreprises et d'ateliers couture.","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"060","page":0,"px":693,"py":1072,"approx":false,"website":"https://www.instagram.com/refill_atelier","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":10.75,"n":2,"fams":2,"cats":5,"note":"Atelier de retouches et lieu-ressource textile : le point d'entrée naturel d'un pôle réparation + mode.","top":true,"rank":12}},{"id":"wagner","name":"Rita Wagner","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"Rita Wagner","desc":"Artiste plasticienne","floor":"R1","floorLabel":"1er étage","room":"118","page":1,"px":432,"py":480,"approx":false,"website":"https://www.instagram.com/ritawagner_art","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"eugene","name":"Romain Eugène","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Enfants & familles"],"people":"Romain Eugène","desc":"Artiste Peintre, professeur de dessin et peinture.","floor":"R3","floorLabel":"3e étage","room":"315","page":3,"px":418,"py":557,"approx":false,"website":"https://www.instagram.com/romain_eugene_art","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"lebars","name":"Rosy Le Bars","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Scolaires"],"people":"Rosy Le Bars","desc":"Artiste-plasticienne (sculpture, installation et dessin) et intervenante","floor":"R1","floorLabel":"1er étage","room":"104","page":1,"px":400,"py":297,"approx":false,"website":"https://www.rosylebars.fr/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"confidentialistes","name":"Les Confidentialistes","cat":"BIENETRE","catLabel":"Bien-être & soin","themes":["Santé & bien-être","RH, organisation & gouvernance"],"publics":["Particuliers","Entreprises"],"people":"Denis Rahli","desc":"Psychopraticien : La parole est un droit, être entendu est une nécessité.  Spécialiste en Écoute Active et  Relation d'Aide","floor":"R2","floorLabel":"2e étage","room":"221","page":2,"px":247,"py":940,"approx":false,"website":"https://lesconfidentialistes.com/","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":9.75,"n":3,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"sinode","name":"Sinode Baba","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Spectacle vivant & événementiel","Image, vidéo & son"],"publics":["Particuliers","Entreprises"],"people":"Franck et son équipe","desc":"Sinode Baba est une association de production et de promotion artistique spécialisée dans l'audiovisuel et le ludique","floor":"R1","floorLabel":"1er étage","room":"131","page":1,"px":298,"py":943,"approx":false,"website":"https://sinodebaba.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.1,"n":2,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"slawa","name":"Slawa (Manon Danappe)","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"Manon Danappe","desc":"Artiste peintre contemporaine, explore les émotions et les liens humains.","floor":"R3","floorLabel":"3e étage","room":"318","page":3,"px":470,"py":470,"approx":true,"website":"https://www.instagram.com/slawa_fr","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"sneuf","name":"Sneuf","cat":"ART","catLabel":"Artistes","themes":["Arts visuels","Image, vidéo & son","Communication & marque"],"publics":["Particuliers","Entreprises"],"people":"Stéphanie Deldicque","desc":"Artiste Visuelle - Peinture, street-art - Photographie - Graphisme, illustration","floor":"R1","floorLabel":"1er étage","room":"105","page":1,"px":391,"py":336,"approx":false,"website":"https://sneuf-art.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":8.75,"n":3,"fams":1,"cats":5,"note":null,"top":false,"rank":null}},{"id":"opale","name":"Sociétés Opale","cat":"ASSO","catLabel":"Associations & collectifs","themes":["RH, organisation & gouvernance","Transition écologique & sociale"],"publics":["Entreprises","Collectivités & associations"],"people":"Tom Duclos et Sarah Berthé","desc":"Accompagnement de structures vers des modes de gouvernance et d'organisation plus horizontaux et respectueux de l'être humain :)","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"047","page":0,"px":118,"py":1077,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"soluxan","name":"Soluxan","cat":"SERV","catLabel":"Services aux entreprises","themes":["Numérique & IA"],"publics":["Entreprises"],"people":"Aymeric Vroomhout","desc":"Entreprise de Services du Numérique : Chez Soluxan, nous accompagnons aussi bien les PME et les grands comptes dans la concrétisation de leurs projets numériques. Nous facilitons cette démarche en mettant en relation nos clients avec des consultants compétents, partageant leurs valeurs et réellement investis dans chaque mission","floor":"R2","floorLabel":"2e étage","room":"228","page":2,"px":320,"py":629,"approx":false,"website":"https://www.soluxan.com/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":5.1,"n":1,"fams":1,"cats":6,"note":null,"top":false,"rank":null}},{"id":"letertre","name":"Sophie Letertre","cat":"BAT","catLabel":"Bâtiment & immobilier","themes":["Bâtiment, espace & immobilier"],"publics":["Particuliers","Entreprises"],"people":"Sophie Letertre","desc":"Designer d'intérieur","floor":"R2","floorLabel":"2e étage","room":"219","page":2,"px":408,"py":560,"approx":true,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}},{"id":"atk","name":"Studio ATK","cat":"ATELIER","catLabel":"Ateliers créatifs","themes":["Arts visuels","Ateliers & transmission"],"publics":["Particuliers","Enfants & familles"],"people":"Axelle","desc":"Ateliers artistiques et illustrations à l’aquarelle.","floor":"R1","floorLabel":"1er étage","room":"116","page":1,"px":450,"py":401,"approx":false,"website":"https://www.studioatk.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.4,"n":2,"fams":2,"cats":4,"note":null,"top":false,"rank":null}},{"id":"studiocad","name":"Studio CAD","cat":"COM","catLabel":"Communication & image","themes":["Numérique & IA","Communication & marque","Image, vidéo & son"],"publics":["Entreprises","Collectivités & associations"],"people":"Baptiste Ségard, Florian Bourgeois, Gaetan Caroen, Cléa Portolan","desc":"Studio de production digitale","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"061 + 062","page":0,"px":793,"py":1034,"approx":false,"website":"https://studiocad.fr/","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":15.8,"n":4,"fams":2,"cats":8,"note":"Digital + communication + image : fait le pont entre les communicants, les producteurs d'image et le numérique, et réalise le site du lieu.","top":true,"rank":2}},{"id":"therapie","name":"Thérapie Analytique","cat":"BIENETRE","catLabel":"Bien-être & soin","themes":["Santé & bien-être"],"publics":["Particuliers"],"people":"Fanny Chaudron, Chang Shen-Descheemaeker","desc":"Cabinet de thérapie analytique, accompagnement par la parole, l'écoute et le lien thérapeutique pour dénouer les blocages psychiques.","floor":"R1","floorLabel":"1er étage","room":"121","page":1,"px":242,"py":929,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":null,"acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"thinkvitality","name":"Think Vitality","cat":"BIENETRE","catLabel":"Bien-être & soin","themes":["Santé & bien-être"],"publics":["Particuliers"],"people":"Nadia Assaoui","desc":"Thérapie fonctionnelle/ naturopathie/M.T.C-TuiNa- drainage lymphatique-hypnotherapie","floor":"R1","floorLabel":"1er étage","room":"110","page":1,"px":523,"py":107,"approx":false,"website":"https://think-vitality-therapeute.fr","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"unasdebruja","name":"Uñas de Bruja","cat":"ARTISANAT","catLabel":"Artisanat & création","themes":["Beauté & soin","Arts visuels"],"publics":["Particuliers"],"people":"Charlotte Meunier","desc":"Prothésiste ongulaire spécialisée dans le nail art abstrait, texturé, entre le design expérimental et conceptuel.","floor":"R1","floorLabel":"1er étage","room":"132","page":1,"px":311,"py":896,"approx":false,"website":"https://www.instagram.com/unas.de.bruja","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":3.7,"n":1,"fams":1,"cats":2,"note":null,"top":false,"rank":null}},{"id":"vingtdeux","name":"Vingt-deux de Cœur","cat":"COM","catLabel":"Communication & image","themes":["Communication & marque","RH, organisation & gouvernance"],"publics":["Entreprises"],"people":"Marion Ringeval","desc":"Développement stratégique et communication visuelle","floor":"R1","floorLabel":"1er étage","room":"124","page":1,"px":276,"py":796,"approx":false,"website":"","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":7.75,"n":2,"fams":2,"cats":5,"note":null,"top":false,"rank":null}},{"id":"vif","name":"Vivons en Forme","cat":"ASSO","catLabel":"Associations & collectifs","themes":["Santé & bien-être","Enfance & familles","Alimentation & restauration","Transition écologique & sociale"],"publics":["Collectivités & associations"],"people":"Sophie McGannan et son équipe","desc":"Association engagée pour la promotion de la santé, Vivons en Forme accompagne les collectivités locales et leurs partenaires dans la conception, la mise en œuvre et l'évaluation d'actions de prévention favorisant des habitudes de vie saines et durables pour tous.","floor":"RDC","floorLabel":"Rez-de-chaussée","room":"049 + 044","page":0,"px":145,"py":1020,"approx":false,"website":"https://vivonsenforme.org","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":16.45,"n":4,"fams":3,"cats":7,"note":"Santé publique, enfance, alimentation, collectivités : un relais institutionnel pour les ateliers et le bien-être.","top":true,"rank":1}},{"id":"willrh","name":"Will RH","cat":"SERV","catLabel":"Services aux entreprises","themes":["RH, organisation & gouvernance"],"publics":["Entreprises"],"people":"François Davoine et son équipe","desc":"Agence de recrutement CDD/CDI","floor":"R3","floorLabel":"3e étage","room":"341","page":3,"px":747,"py":1009,"approx":false,"website":"https://will-rh.com","mails":[],"phone":"","source":"tableur + plan","logo":"plan","acu":{"score":4.4,"n":1,"fams":1,"cats":4,"note":null,"top":false,"rank":null}},{"id":"zeste","name":"Zeste d'Amande","cat":"BIENETRE","catLabel":"Bien-être & soin","themes":["Beauté & soin"],"publics":["Particuliers"],"people":"","desc":"Prothésiste ongulaire (sowatt-tierslieu.fr).","floor":"R1","floorLabel":"1er étage","room":"170 (plan)","page":1,"px":770,"py":1013,"approx":false,"website":"https://www.instagram.com/zestedamande_bar_a_ongles","mails":[],"phone":"","source":"site + plan","logo":null,"acu":{"score":3.35,"n":1,"fams":1,"cats":1,"note":null,"top":false,"rank":null}},{"id":"lemahieu","name":"Henri Lemahieu","cat":"ART","catLabel":"Artistes","themes":["Arts visuels"],"publics":["Particuliers"],"people":"","desc":"Présent sur le plan du 20 octobre 2026, pas encore dans le tableur ni sur le site.","floor":"R2","floorLabel":"2e étage","room":"à côté du 203 (plan)","page":2,"px":402,"py":298,"approx":false,"website":"","mails":[],"phone":"","source":"plan","logo":null,"acu":{"score":4.05,"n":1,"fams":1,"cats":3,"note":null,"top":false,"rank":null}}]</script>
+<script id="conv" type="application/json">{"families":{"faire":{"label":"Faire ensemble","icon":"✦","desc":"Des matières et des savoir-faire qui se répondent : textile, céramique, image, son."},"public":{"label":"Mêmes publics","icon":"◉","desc":"Des structures qui s’adressent aux mêmes personnes : familles, entreprises, artistes."},"transition":{"label":"Transition","icon":"❋","desc":"Réparer, réemployer, transformer les organisations : le fil rouge du tiers-lieu."},"lieu":{"label":"Vie du lieu","icon":"⌂","desc":"Ce qui fait tourner le Sowatt au quotidien et ce qui pourrait y naître."}},"convergences":[{"id":"reparer","family":"transition","title":"Réparer, réemployer, prolonger","summary":"Textile, objets tech, vêtements : quatre structures réparent ou prolongent la vie des choses, trois autres fabriquent à partir de l'existant.","potential":"Un « samedi de la réparation » commun au Foyer (repair-café + retouches + tech), une boutique-dépôt de l'upcycling au RDC, une communication unique « Sowatt répare ».","members":[{"id":"madeleine","role":"repair-café"},{"id":"refill","role":"retouches, remaillage"},{"id":"laseconde","role":"objets tech"},{"id":"sunday","role":"upcycling, sérigraphie"},{"id":"artkive","role":"denim upcyclé"},{"id":"selvamaris","role":"vestiaire conscient"},{"id":"diy","role":"zéro déchet"},{"id":"bonallure","role":"livraison écologique"}]},{"id":"transfo","family":"transition","title":"Transformer les organisations","summary":"Gouvernance horizontale, transition écologique, RH, coaching systémique : une offre complète d'accompagnement des entreprises et collectivités, dispersée sur trois étages.","potential":"Un collectif « transition des organisations » avec une porte d'entrée unique, des ateliers découverte ouverts aux entreprises du Sowatt, un programme commun avec Intermède.","members":[{"id":"ouichange","role":"animation de la transformation"},{"id":"opale","role":"gouvernance"},{"id":"antego","role":"stratégie RH & transitions"},{"id":"akynoxe","role":"coaching systémique"},{"id":"intermede","role":"coopérative du lieu"},{"id":"aprobio","role":"alimentation durable"},{"id":"vif","role":"santé publique"},{"id":"confidentialistes","role":"écoute en entreprise"},{"id":"likeafree","role":"rapports ESG"}]},{"id":"image","family":"faire","title":"Image, son & production","summary":"Photo, vidéo, drone, motion, scénographie numérique, studio son, studio d'enregistrement, cinéma : une chaîne de production audiovisuelle complète sur place.","potential":"Un plateau partagé (lumière, fond, son), des productions croisées pour les occupant·e·s (portraits, teasers, podcasts), une projection annuelle au Kino.","members":[{"id":"bacprod","role":"photo, vidéo, drone"},{"id":"holy","role":"vidéo, motion"},{"id":"polaifos","role":"studio photo"},{"id":"caudron","role":"photographie"},{"id":"leflower","role":"scénographie numérique"},{"id":"lafabric","role":"identités sonores, podcasts"},{"id":"coalline","role":"studio d'enregistrement"},{"id":"studiocad","role":"production digitale"},{"id":"sneuf","role":"photo, graphisme"},{"id":"kino","role":"cinéma"},{"id":"sinode","role":"audiovisuel, jeux"},{"id":"igwap","role":"musique"},{"id":"dauchy","role":"podcasts"}]},{"id":"marque","family":"faire","title":"Communication & marque","summary":"Social media, conseil, branding, design éditorial, rédaction, sites et production : les briques d'une agence complète, réparties entre sept structures.","potential":"Réponses groupées à des appels d'offres, une offre « lancement de marque » pour les créateurs du lieu (artisans, artistes), un annuaire de compétences.","members":[{"id":"buddy","role":"social media"},{"id":"lafoule","role":"conseil"},{"id":"likeafree","role":"branding, éditorial"},{"id":"vingtdeux","role":"stratégie & visuel"},{"id":"studiocad","role":"digital"},{"id":"dauchy","role":"rédaction, animation"},{"id":"holy","role":"motion"},{"id":"bacprod","role":"image"},{"id":"sneuf","role":"graphisme, illustration"},{"id":"maze","role":"formation"}]},{"id":"scene","family":"faire","title":"Scène, récit & événement","summary":"Conte, marionnettes, cirque, musique, murder parties, maquillage FX, perruques, accessoires : de quoi monter un spectacle de A à Z sans sortir du bâtiment.","potential":"Une création collective annuelle, un pôle « arts de la scène » visible, des prestations événementielles groupées pour les entreprises.","members":[{"id":"errances","role":"conte, marionnettes"},{"id":"familyforme","role":"cirque, danse"},{"id":"igwap","role":"musiciens"},{"id":"coalline","role":"musique"},{"id":"lafabric","role":"musique originale"},{"id":"sinode","role":"murder parties"},{"id":"ema","role":"maquillage FX"},{"id":"mishou","role":"perruques"},{"id":"caenen","role":"accessoires de scène"},{"id":"dauchy","role":"écriture, animation"},{"id":"enluminance","role":"parole, éducation populaire"},{"id":"kino","role":"projections"},{"id":"leflower","role":"installations visuelles"},{"id":"consignerie","role":"traiteur événementiel"},{"id":"astreos","role":"sécurité événementielle"}]},{"id":"enfance","family":"public","title":"Enfance, familles & pédagogie créative","summary":"LEGO, numérique, art-science-philo, céramique, aquarelle, couture, cirque, repair-café : une quinzaine d'ateliers pour enfants et familles, sans programmation commune.","potential":"Un programme « mercredis du Sowatt » et des stages vacances mutualisés, un partenariat écoles / centres sociaux porté ensemble, une billetterie commune.","members":[{"id":"bricknum","role":"LEGO & numérique"},{"id":"craienco","role":"moments créatifs"},{"id":"artorium","role":"art, science, philo"},{"id":"familyforme","role":"cirque, danse"},{"id":"giselleetrose","role":"illustration jeunesse"},{"id":"caenen","role":"céramique enfants"},{"id":"diy","role":"DIY zéro déchet"},{"id":"wierre","role":"aquarelle"},{"id":"atk","role":"aquarelle"},{"id":"helcou","role":"couture"},{"id":"verhaege","role":"interventions scolaires"},{"id":"knapfla","role":"interventions artistiques"},{"id":"hamaide","role":"pratiques artistiques"},{"id":"vif","role":"prévention santé"},{"id":"errances","role":"spectacles jeune public"},{"id":"casamia","role":"goûters céramique"},{"id":"dupont","role":"ateliers Poëtic Brindilles"}]},{"id":"textile","family":"faire","title":"Mode, textile & accessoires","summary":"Couture, retouches, sérigraphie, denim, sous-vêtements, accessoires, bijoux, perruques : un pôle mode-textile de fait, du vêtement à la photo de mode.","potential":"Un défilé / marché des créateurs du Sowatt, un atelier machines partagé, des shootings communs avec les photographes du lieu.","members":[{"id":"helcou","role":"couture, broderie"},{"id":"refill","role":"retouches"},{"id":"sunday","role":"sérigraphie, upcycling"},{"id":"selvamaris","role":"vestiaire"},{"id":"maranta","role":"accessoires tissu"},{"id":"lesgus","role":"sous-vêtements"},{"id":"artkive","role":"denim"},{"id":"licols","role":"corderie"},{"id":"mishou","role":"perruques"},{"id":"dahmani","role":"bijoux 3D"},{"id":"originalbijoux","role":"joaillerie"},{"id":"aqualunia","role":"bijoux pierres"},{"id":"polaifos","role":"photo mode"},{"id":"madeleine","role":"ateliers couture"}]},{"id":"beaute","family":"public","title":"Beauté, nail art & arts du corps","summary":"Quatre nail artists, une maquilleuse FX et une perruquière : le corps comme support de création, à la frontière de l'artisanat et de l'art.","potential":"Un bar à ongles / studio beauté partagé avec vitrine commune, des collaborations avec les photographes et artistes du lieu, des formations croisées.","members":[{"id":"joonailz","role":"nail art"},{"id":"nininails","role":"nail art"},{"id":"unasdebruja","role":"nail art"},{"id":"zeste","role":"prothésie ongulaire"},{"id":"ema","role":"maquillage"},{"id":"mishou","role":"perruques"},{"id":"aqualunia","role":"bien-être"}]},{"id":"sante","family":"public","title":"Santé, corps & bien-être","summary":"Thérapies par la parole, naturopathie, énergétique, art-thérapie, sport-santé, prévention : un parcours bien-être complet, du cabinet à la collectivité.","potential":"Une « maison du bien-être » lisible au sein du Sowatt, des ateliers santé pour les occupant·e·s, une offre QVT groupée pour les entreprises du lieu.","members":[{"id":"thinkvitality","role":"naturopathie, MTC"},{"id":"confidentialistes","role":"psychopratique"},{"id":"therapie","role":"thérapie analytique"},{"id":"urbin","role":"énergétique"},{"id":"familyforme","role":"sport-santé"},{"id":"vif","role":"prévention"},{"id":"hamaide","role":"art-thérapie"},{"id":"akynoxe","role":"coaching"},{"id":"exocer","role":"prévention TMS"}]},{"id":"batiment","family":"faire","title":"Bâtiment, espace & immobilier","summary":"Propriétaire, gestionnaire, rénovation, architecture intérieure, design d'intérieur, relevé 3D, annuaire d'artisans, recrutement BTP : toute la chaîne de l'espace bâti.","potential":"Un groupe projet pour l'évolution du site lui-même (Foyer, terrasse, signalétique), une offre « aménagement » pour les occupant·e·s, des chantiers démonstrateurs.","members":[{"id":"capstone","role":"foncière"},{"id":"intermede","role":"gestion du lieu"},{"id":"amv","role":"rénovation"},{"id":"hibourouge","role":"architecture ERP"},{"id":"letertre","role":"design d'intérieur"},{"id":"pland","role":"dessin, relevé 3D"},{"id":"bilik","role":"annuaire d'artisans"},{"id":"harch","role":"recrutement BTP"},{"id":"exocer","role":"manutention"}]},{"id":"rh","family":"public","title":"RH, recrutement & accompagnement","summary":"Recrutement, stratégie RH, coaching, gouvernance, écoute : six structures autour des mêmes DRH et dirigeants.","potential":"Un cycle de petits-déjeuners RH co-animés, une offre « transition RH » combinant recrutement, organisation et accompagnement humain.","members":[{"id":"antego","role":"stratégie RH"},{"id":"willrh","role":"recrutement"},{"id":"harch","role":"recrutement BTP"},{"id":"akynoxe","role":"coaching"},{"id":"opale","role":"gouvernance"},{"id":"ouichange","role":"animation"},{"id":"confidentialistes","role":"écoute"},{"id":"vingtdeux","role":"stratégie"}]},{"id":"numerique","family":"faire","title":"Numérique, IA & innovation","summary":"Adoption de l'IA, ESN, production digitale, scénographie interactive, 3D, exosquelettes, réemploi tech : le numérique sous toutes ses formes, du conseil à l'objet.","potential":"Des ateliers IA / numérique pour les artistes et artisans du lieu, un fablab léger (3D, prototypage) adossé à Plan D et Fatima Dahmani, une veille partagée.","members":[{"id":"cyremia","role":"IA"},{"id":"soluxan","role":"ESN"},{"id":"studiocad","role":"digital"},{"id":"leflower","role":"interactif"},{"id":"bricknum","role":"numérique ludique"},{"id":"exocer","role":"robotique"},{"id":"pland","role":"3D"},{"id":"dahmani","role":"conception 3D"},{"id":"laseconde","role":"réemploi tech"},{"id":"bilik","role":"plateforme"}]},{"id":"finance","family":"public","title":"Assurance, patrimoine & gestion","summary":"Courtage, gestion de patrimoine, expertise comptable, vitrage auto agréé assurances : les services « de confiance » dont tous les occupant·e·s ont besoin.","potential":"Des permanences conseil pour les créateurs du lieu (statuts, assurance pro, compta), un guide « s'installer au Sowatt ».","members":[{"id":"assureetmoi","role":"assurance"},{"id":"aeg","role":"patrimoine"},{"id":"parez","role":"comptabilité"},{"id":"rcc","role":"vitrage, assurances"},{"id":"nexus","role":"à préciser"}]},{"id":"ateliers-art","family":"faire","title":"Collectif d'ateliers d'artistes","summary":"Vingt-cinq artistes plasticien·ne·s, deux collectifs, une organisation de formation aux arts visuels : la plus grande communauté du lieu, surtout au 1er étage.","potential":"Portes ouvertes des ateliers, une résidence croisée avec les communicants et artisans, un parcours de formation / professionnalisation avec Maze, une galerie au Foyer.","members":[{"id":"maillart","role":"collectif"},{"id":"bouillon","role":"collectif"},{"id":"maze","role":"formation"},{"id":"nivelle","role":""},{"id":"rowehy","role":""},{"id":"knapfla","role":""},{"id":"caudron","role":""},{"id":"dupont","role":""},{"id":"coulon","role":""},{"id":"corman","role":""},{"id":"wagner","role":""},{"id":"lebars","role":""},{"id":"sneuf","role":""},{"id":"hamaide","role":""},{"id":"eugene","role":""},{"id":"analeina","role":""},{"id":"jalk","role":""},{"id":"meyer","role":""},{"id":"verhaege","role":""},{"id":"boccia","role":""},{"id":"slawa","role":""},{"id":"wierre","role":""},{"id":"caenen","role":""},{"id":"giselleetrose","role":""},{"id":"lemahieu","role":""},{"id":"enluminance","role":""},{"id":"atk","role":"ateliers"}]},{"id":"table","family":"lieu","title":"Table, café & convivialité","summary":"Café, traiteur engagé, alimentation durable, goûters céramique, pâtisserie fine : la table comme lien quotidien du lieu.","potential":"Une cantine / café du Foyer tournante, des événements « table ouverte » mensuels, un marché alimentaire avec A PRO BIO.","members":[{"id":"litha","role":"café"},{"id":"consignerie","role":"traiteur"},{"id":"aprobio","role":"alimentation durable"},{"id":"casamia","role":"goûters, apéros"},{"id":"dupont","role":"pâtisserie fine"},{"id":"diy","role":"cosmétique maison"},{"id":"vif","role":"nutrition"}]},{"id":"faire-tourner","family":"lieu","title":"Faire tourner le lieu","summary":"Propriétaire, gestionnaire, site web, livraison, stockage, sécurité, café : les fonctions support du Sowatt, aujourd'hui assurées par des occupant·e·s.","potential":"Formaliser une « équipe du lieu » (conciergerie, logistique, communication) en s'appuyant sur les structures déjà présentes.","members":[{"id":"capstone","role":"propriétaire"},{"id":"intermede","role":"gestion"},{"id":"studiocad","role":"site web"},{"id":"bonallure","role":"livraisons"},{"id":"kpro","role":"stockage"},{"id":"astreos","role":"sécurité"},{"id":"litha","role":"machines à café"},{"id":"consignerie","role":"événements"}]}],"notes":{"intermede":"Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.","maze":"Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.","studiocad":"Digital + communication + image : fait le pont entre les communicants, les producteurs d'image et le numérique, et réalise le site du lieu.","dauchy":"Rédacteur, podcasteur, animateur : relie spectacle vivant, communication et culture ; un animateur naturel des rencontres du lieu.","ouichange":"30 animateur·rice·s de la transformation écologique et sociale : la méthode pour faire travailler ensemble les autres convergences.","leflower":"Scénographie numérique : point de contact entre artistes, producteurs d'image, événementiel et numérique.","hamaide":"Artiste, art-thérapeute, formatrice : à la jonction des arts plastiques, du bien-être et de la transmission.","vif":"Santé publique, enfance, alimentation, collectivités : un relais institutionnel pour les ateliers et le bien-être.","familyforme":"Cirque, danse, sport-santé pour tous les âges : relie enfance, spectacle et bien-être — mais isolé dans le bâtiment B.","consignerie":"Traiteur engagé : convivialité, événementiel et transition dans la même assiette.","refill":"Atelier de retouches et lieu-ressource textile : le point d'entrée naturel d'un pôle réparation + mode.","diy":"Ateliers zéro déchet pour particuliers, familles et entreprises : transition, enfance et transmission à la fois."},"relations":[{"a":"capstone","b":"intermede","why":"propriétaire du site / coopérative gestionnaire"},{"a":"maillart","b":"maze","why":"formation d'artistes plasticiens"},{"a":"dupont","b":"atk","why":"ateliers créatifs voisins"},{"a":"polaifos","b":"lesgus","why":"présentés ensemble sur le site Sowatt"},{"a":"litha","b":"consignerie","why":"café + traiteur : offre événementielle du RDC"},{"a":"refill","b":"madeleine","why":"réparation textile : atelier + repair-café"},{"a":"laseconde","b":"madeleine","why":"réparation : objets tech + repair-café"},{"a":"ouichange","b":"intermede","why":"transformation écologique et sociale"},{"a":"studiocad","b":"intermede","why":"site web du tiers-lieu"}]}</script>
+<script id="geo" type="application/json">{"theta": 146, "pcx": 365.6831347591086, "pcy": 689.0868458012585, "ptsPerM": 12.325350167337415, "ortho": {"size": 1024, "mpp": 0.23662134097733253, "cx": 516.7004542500592, "cy": 606.2715225245449}, "footprint": [[227.3, 27.4], [269.7, 146.3], [265.3, 159.4], [201.1, 179.4], [265.3, 163.2], [33.4, 1115.1], [824.5, 1115.1], [831.4, 1087.0], [825.1, 1085.8], [822.6, 956.8], [580.8, 900.2], [563.3, 969.3], [464.2, 969.9], [459.8, 949.4], [436.1, 952.5], [458.0, 954.3], [466.7, 987.4], [398.1, 984.9], [400.0, 973.0], [439.9, 969.3], [338.3, 968.7], [397.5, 911.4], [387.5, 903.9], [394.4, 890.8], [376.3, 878.3], [364.5, 892.1], [358.8, 879.6], [428.0, 593.0], [455.5, 592.4], [569.5, 109.6], [527.2, 97.1], [530.3, 71.0], [458.6, 56.0], [435.5, 78.4], [262.8, 115.2]]}</script>
+<script type="module">
+import * as THREE from 'three';
+// ---------- données ----------
+const RAW = JSON.parse(document.getElementById('data').textContent);
+const CONVD = JSON.parse(document.getElementById('conv').textContent); const CONV = CONVD.convergences, FAMS = CONVD.families;
+const CATS = ['ART','ATELIER','ARTISANAT','ASSO','COM','SERV','BIENETRE','BAT','RESTO'];
+const CATLABEL = {}; RAW.forEach(o=>CATLABEL[o.cat]=o.catLabel);
+const FLOOR_ORDER = ['R3','R2','R1','RDC','SS','B','COUR'];
+const FLOORLABEL = {}; RAW.forEach(o=>FLOORLABEL[o.floor]=o.floorLabel);
+const catColor = c => `var(--c-${c})`;
+const CATHEX = {ART:'#E2572B',ATELIER:'#F2B01E',ARTISANAT:'#C2559B',ASSO:'#16A34A',COM:'#2F80ED',SERV:'#0E8C8C',BIENETRE:'#7C5CBF',BAT:'#6B7280',RESTO:'#A8622D'};
+const DIMS = {
+  cat:{label:'Catégorie',key:'catLabel',multi:false},
+  theme:{label:'Thèmes',key:'themes',multi:true},
+  floor:{label:'Étage',key:'floorLabel',multi:false},
+  conv:{label:'Convergences',key:'convTitles',multi:true},
+  public:{label:'Publics',key:'publics',multi:true},
+};
+const orgById=new Map(RAW.map(o=>[o.id,o]));
+const convById=new Map(CONV.map(c=>[c.id,c]));
+// convergences par structure (+ titres pour le filtre / le regroupement)
+const convByOrg=new Map();
+CONV.forEach(c=>c.members.forEach(m=>{ if(!convByOrg.has(m.id)) convByOrg.set(m.id,[]); convByOrg.get(m.id).push({c,role:m.role}); }));
+RAW.forEach(o=>{ o.convs=convByOrg.get(o.id)||[]; o.convTitles=o.convs.map(x=>x.c.title); o.catLabel=CATLABEL[o.cat]; });
+const ACU=new Set(RAW.filter(o=>o.acu&&o.acu.top).map(o=>o.id));
+const logoUrl = o => o.logo ? `logos/${o.id}.webp` : null;
+const logoImg = (o,cls='lg') => o.logo ? `<img class="${cls}" src="${logoUrl(o)}" alt="" loading="lazy">` : `<span class="${cls} lg-dot" style="background:${catColor(o.cat)}"></span>`;
+const vals = (o,key) => Array.isArray(o[key]) ? (o[key].length?o[key]:['—']) : (o[key] ? [o[key]] : ['—']);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+let orgs = RAW.slice();
+let groupBy = 'cat';
+let active = {cat:new Set(), theme:new Set(), floor:new Set(), conv:new Set(), public:new Set()};
+let viewMode = 'clusters'; // 'clusters' | 'lieu' | 'conv'
+let query = '';
+let selected = null, selectedConv=null, focusGroup = null;
+let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrowMQ = matchMedia('(max-width:980px)');
+
+// ---------- profil (repris d'eco-map : rôle → structure, thèmes, chantiers) ----------
+let profile=null; // {me:id|null, themes:[], wants:[convIds]}
+try{ const p=JSON.parse(localStorage.getItem('sowatt.profile')||'null'); if(p && (p.me||p.themes?.length||p.wants?.length)) profile=p; }catch(e){}
+function saveProfile(){ try{ profile? localStorage.setItem('sowatt.profile',JSON.stringify(profile)) : localStorage.removeItem('sowatt.profile'); }catch(e){} }
+const meOrg=()=>profile?.me?orgById.get(profile.me):null;
+function profileMatch(o){ if(!profile) return true; if(o.id===profile.me) return true; const t=profile.themes?.length && o.themes.some(x=>profile.themes.includes(x)); const w=profile.wants?.length && o.convs.some(c=>profile.wants.includes(c.c.id)); if(!profile.themes?.length && !profile.wants?.length) return true; return !!(t||w); }
+function profileScore(o){ if(!profile) return 0; const me=meOrg(); let s=o.themes.filter(x=>profile.themes?.includes(x)).length*2 + o.convs.filter(c=>profile.wants?.includes(c.c.id)).length*3; if(me&&o!==me){ s+=o.convs.filter(c=>me.convs.some(m=>m.c===c.c)).length*1.5 + o.themes.filter(x=>me.themes.includes(x)).length + (o.floor===me.floor?1:0) + (o.room&&o.room===me.room?2:0) + (DECL.some(r=>(r.a===me.id&&r.b===o.id)||(r.b===me.id&&r.a===o.id))?3:0); } return s; }
+function convsForProfile(limit=6){ if(!profile) return []; const me=meOrg(); return CONV.map(c=>{ let s=0; if(profile.wants?.includes(c.id)) s+=4; s+=c.members.map(m=>orgById.get(m.id)).filter(Boolean).filter(o=>o.themes.some(x=>profile.themes?.includes(x))).length*0.15; if(me&&c.members.some(m=>m.id===me.id)) s+=2; return {c,s}; }).filter(x=>x.s>=1).sort((a,b)=>b.s-a.s).slice(0,limit); }
+
+// ---------- filtres ----------
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+function textMatch(o){ if(!query) return true; const q=norm(query); return norm(o.name).includes(q)||norm(o.people).includes(q)||norm(o.desc).includes(q)||norm(o.room).includes(q); }
+function matches(o){
+  if(!textMatch(o)) return false;
+  for(const d in active){ const set=active[d]; if(!set.size) continue; const v=vals(o,DIMS[d].key); if(!v.some(x=>set.has(x))) return false; }
+  return true;
+}
+function anyFilter(){ return query || Object.values(active).some(s=>s.size); }
+function visible(o){ return (!profile || profileMatch(o)) && (!anyFilter() || matches(o)); }
+function anyDim(){ return anyFilter() || !!profile; }
+let convHits=[];
+function matchConv(){ convHits = query ? CONV.filter(c=>norm(c.title).includes(norm(query))||norm(c.summary).includes(norm(query))) : []; }
+
+// ---------- relations ----------
+const DECL=CONVD.relations||[];
+function declared(o){ return DECL.filter(r=>r.a===o.id||r.b===o.id).map(r=>({x:orgById.get(r.a===o.id?r.b:r.a),why:r.why})).filter(r=>r.x); }
+function convLinks(o){ // reliés par des convergences communes
+  const m=new Map();
+  o.convs.forEach(({c})=>c.members.forEach(mm=>{ if(mm.id===o.id) return; const x=orgById.get(mm.id); if(!x) return; if(!m.has(x)) m.set(x,{x,via:[],score:0}); const e=m.get(x); e.via.push(c); e.score+=1+(x.cat!==o.cat?0.5:0); }));
+  return [...m.values()].sort((a,b)=>b.score-a.score);
+}
+function related(o, limit=10){ // affinités : thèmes et publics partagés
+  const T=new Set(o.themes),P=new Set(o.publics);
+  return orgs.filter(x=>x!==o).map(x=>{ const t=x.themes.filter(v=>T.has(v)), p=x.publics.filter(v=>P.has(v)); const score=t.length*2+p.length*0.5+(x.cat===o.cat?0.5:0); return {x,score,shared:t}; })
+    .filter(r=>r.score>=2.5&&r.shared.length).sort((a,b)=>b.score-a.score).slice(0,limit);
+}
+function neighbours(o){ const sameRoom=orgs.filter(x=>x!==o&&x.floor===o.floor&&x.room&&x.room===o.room); const sameFloor=orgs.filter(x=>x!==o&&x.floor===o.floor&&!sameRoom.includes(x)); return {sameRoom,sameFloor}; }
+function convOrgs(c){ return new Set(c.members.map(m=>orgById.get(m.id)).filter(Boolean)); }
+
+// ---------- SVG : grappes et convergences ----------
+const svg = d3.select('#map');
+const gRoot = svg.append('g');
+const gGroups = gRoot.append('g'), gLinks = gRoot.append('g'), gNodes = gRoot.append('g'), gLabels = gRoot.append('g');
+let leaves=[], groups=[];
+const canvas = document.getElementById('canvas');
+const zoom = d3.zoom().scaleExtent([0.4,40]).on('zoom',e=>{ gRoot.attr('transform',e.transform); updateLabelVisibility(e.transform.k); });
+svg.call(zoom).on('dblclick.zoom',null);
+let W=800,H=600, root=null, leafByOrg=new Map();
+
+function layout(){
+  const r=canvas.getBoundingClientRect(); W=Math.max(320,r.width); H=Math.max(320,r.height);
+  if(viewMode==='lieu'){ LIEU.resize(); LIEU.render(); return; }
+  if(viewMode==='conv'){
+    const fams=Object.keys(FAMS).map(f=>({name:FAMS[f].label,fam:f,children:CONV.filter(c=>c.family===f).map(c=>({name:c.title,conv:c,children:c.members.map(m=>({org:orgById.get(m.id),role:m.role,value:1})).filter(x=>x.org)}))}));
+    root=d3.hierarchy({children:fams}).sum(d=>d.value||0).sort((a,b)=>b.value-a.value);
+    d3.pack().size([W,H-40]).padding(d=>d.depth===0?Math.max(16,Math.min(W,H)*0.035):d.depth===1?10:1.8)(root);
+    root.each(d=>{ d.y+=32; });
+    leaves=root.leaves().filter(l=>l.data.org); groups=root.descendants().filter(d=>d.depth===1||d.depth===2);
+  } else {
+    const key=DIMS[groupBy].key;
+    let children;
+    if(DIMS[groupBy].multi){ // une structure apparaît dans chacun de ses groupes
+      const m=new Map(); orgs.forEach(o=>vals(o,key).forEach(v=>{ if(!m.has(v)) m.set(v,[]); m.get(v).push(o); }));
+      children=[...m].map(([name,items])=>({name,children:items.map(o=>({org:o,value:1}))}));
+    } else {
+      const grouped=d3.group(orgs, o=>vals(o,key)[0]);
+      children=[...grouped].map(([name,items])=>({name,children:items.map(o=>({org:o,value:1}))}));
+    }
+    if(groupBy==='floor') children.sort((a,b)=>FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===a.name))-FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===b.name)));
+    else children.sort((a,b)=>b.children.length-a.children.length);
+    root=d3.hierarchy({children}).sum(d=>d.value).sort(groupBy==='floor'?null:(a,b)=>b.value-a.value);
+    d3.pack().size([W,H-40]).padding(d=>d.depth===0?Math.max(18,Math.min(W,H)*0.04):2.4)(root);
+    root.each(d=>{ d.y+=32; });
+    leaves=root.leaves(); groups=root.children||[];
+  }
+  leafByOrg=new Map(); leaves.forEach(l=>{ if(!leafByOrg.has(l.data.org)) leafByOrg.set(l.data.org,l); });
+  draw();
+}
+
+function draw(){
+  const gc=gGroups.selectAll('circle').data(groups,d=>d.data.name);
+  gc.join('circle').attr('class',d=>'group-circle'+(d.data.conv?' conv':'')+(d.depth===1&&viewMode==='conv'?' fam':'')).attr('cx',d=>d.x).attr('cy',d=>d.y).attr('r',d=>d.r).style('opacity',scattered?0:1)
+    .on('click',(e,d)=>{e.stopPropagation(); if(d.data.conv){ selectConv(d.data.conv); focusOn(d); } else { if(selectedConv) selectConv(null); focusOn(d);} });
+  const gl=gLabels.selectAll('text.group-label').data(groups,d=>d.data.name);
+  gl.join('text').attr('class',d=>'group-label'+(d.data.conv?' conv':'')).attr('x',d=>d.x).attr('y',d=>d.data.conv?d.y-d.r-4:d.y-d.r-8).style('opacity',scattered?0:1)
+    .html(d=>d.data.conv?`${FAMS[d.data.conv.family].icon} ${esc(d.data.conv.title.length>40?d.data.conv.title.slice(0,38)+'…':d.data.conv.title)}`:`${esc(d.data.name)} <tspan class="n">${d.children.length}</tspan>`);
+  gNodes.selectAll('circle.node').interrupt(); gGroups.selectAll('circle').interrupt(); gLabels.selectAll('text').interrupt();
+  const nkey=d=>d.data.org.id+(d.parent&&d.parent.data.conv?'@'+d.parent.data.conv.id:'')+(d.parent&&!d.parent.data.conv&&viewMode==='clusters'&&DIMS[groupBy].multi?'@'+d.parent.data.name:'');
+  const nd=gNodes.selectAll('circle.node').data(leaves,nkey);
+  nd.join('circle').attr('class','node')
+    .attr('cx',d=>scattered?scatterOf(d.data.org)[0]:d.x).attr('cy',d=>scattered?scatterOf(d.data.org)[1]:d.y).attr('r',d=>scattered?3:Math.max(1.2,d.r-0.6)).attr('fill',d=>catColor(d.data.org.cat))
+    .on('mouseenter',(e,d)=>showTip(e,d.data.org)).on('mousemove',moveTip).on('mouseleave',hideTip)
+    .on('click',(e,d)=>{e.stopPropagation(); select(d.data.org);});
+  gNodes.selectAll('circle.acu-ring').data(leaves.filter(d=>ACU.has(d.data.org.id)),nkey).join('circle').attr('class','acu-ring').attr('cx',d=>d.x).attr('cy',d=>d.y).attr('r',d=>d.r+1.5);
+  const withLogo=leaves.filter(d=>d.data.org.logo);
+  gNodes.selectAll('circle.nback').data(withLogo,nkey).join('circle').attr('class','nback').attr('cx',d=>d.x).attr('cy',d=>d.y).style('display','none');
+  gNodes.selectAll('image.nlogo').data(withLogo,nkey).join('image').attr('class','nlogo').attr('href',d=>logoUrl(d.data.org)).attr('preserveAspectRatio','xMidYMid meet').style('display','none')
+    .on('mouseenter',(e,d)=>showTip(e,d.data.org)).on('mousemove',moveTip).on('mouseleave',hideTip).on('click',(e,d)=>{e.stopPropagation(); select(d.data.org);});
+  const nl=gLabels.selectAll('text.node-label').data(leaves,nkey);
+  nl.join('text').attr('class','node-label').attr('x',d=>d.x+d.r+2).attr('y',d=>d.y+3).text(d=>d.data.org.name).style('display','none');
+  applyState();
+  updateLabelVisibility(d3.zoomTransform(svg.node()).k);
+  svg.on('click',()=>{ if(selected) select(null); else if(selectedConv) selectConv(null); });
+}
+
+function applyState(){
+  const f=anyDim();
+  gNodes.selectAll('circle.node').classed('off',d=>f && !visible(d.data.org)).classed('sel',d=>d.data.org===selected);
+  gGroups.selectAll('circle').classed('focus',d=>d===focusGroup);
+  drawLinks();
+  const shown=orgs.filter(visible).length;
+  document.getElementById('countShown').textContent=shown; document.getElementById('countAll').textContent=orgs.length;
+  document.getElementById('status').classList.toggle('filtered',f);
+  const zero=f && shown===0; if(zero!==lastZero){ lastZero=zero; renderHint(); }
+  renderFilters();
+  LIEU.setState();
+}
+let lastZero=false;
+let relSet=new Set(), relKind=new Map();
+function computeRelations(){
+  relSet=new Set(); relKind=new Map();
+  if(selectedConv){ relSet=convOrgs(selectedConv); return; }
+  if(!selected) return;
+  const decl=declared(selected), know=convLinks(selected).slice(0,12);
+  const knowSet=new Set(know.map(k=>k.x));
+  const aff=related(selected,8).filter(r=>!knowSet.has(r.x)).slice(0,6);
+  decl.forEach(d=>relKind.set(d.x,{kind:'decl',w:2}));
+  know.forEach(k=>{ if(!relKind.has(k.x)) relKind.set(k.x,{kind:'know',w:1+k.score*0.5}); });
+  aff.forEach(a=>{ if(!relKind.has(a.x)) relKind.set(a.x,{kind:'aff',w:1}); });
+  relSet=new Set(relKind.keys());
+}
+function drawLinks(){
+  gLinks.selectAll('*').remove();
+  computeRelations();
+  if(viewMode==='lieu'){ return; }
+  if(selectedConv){ const pts=[...relSet].map(o=>leafByOrg.get(o)).filter(Boolean); if(pts.length>1){ const cx=d3.mean(pts,p=>p.x), cy=d3.mean(pts,p=>p.y); gLinks.selectAll('path').data(pts).join('path').attr('class','link').attr('stroke-width',1.2).attr('d',p=>`M${cx},${cy} L${p.x},${p.y}`); gLinks.append('circle').attr('class','halo pulse').attr('cx',cx).attr('cy',cy).attr('r',6); }
+    gNodes.selectAll('circle.node').classed('off',d=>!relSet.has(d.data.org)||(anyFilter()&&!matches(d.data.org))); updateLabelVisibility(d3.zoomTransform(svg.node()).k); return; }
+  if(!selected){ updateLabelVisibility(d3.zoomTransform(svg.node()).k); return; }
+  const a=leafByOrg.get(selected); if(!a) return;
+  const curve=(b)=>{ const dx=b.x-a.x, dy=b.y-a.y; const k=0.22; const c1x=a.x+dx*0.25-dy*k, c1y=a.y+dy*0.25+dx*k, c2x=a.x+dx*0.75-dy*k*0.4, c2y=a.y+dy*0.75+dx*k*0.4; return `M${a.x},${a.y} C${c1x},${c1y} ${c2x},${c2y} ${b.x},${b.y}`; };
+  const items=[...relKind].map(([x,k])=>({x,...k}));
+  gLinks.selectAll('path').data(items).join('path').attr('class',d=>'link '+d.kind).attr('stroke-width',d=>d.w).attr('d',d=>{const b=leafByOrg.get(d.x); return b?curve(b):null;});
+  gLinks.append('circle').attr('class','halo pulse').attr('cx',a.x).attr('cy',a.y).attr('r',6);
+  gNodes.selectAll('circle.node').classed('off',d=>{ if(d.data.org===selected||relSet.has(d.data.org)) return false; return anyDim()? !visible(d.data.org) : true; });
+  updateLabelVisibility(d3.zoomTransform(svg.node()).k);
+}
+
+let currentK=1;
+function updateLabelVisibility(k){
+  currentK=k;
+  const t=d3.zoomTransform(svg.node());
+  const rs=1/Math.sqrt(k);
+  const nodeR=d=>(scattered?3:Math.max(1.2,d.r-0.6))*Math.max(rs,0.35);
+  gNodes.selectAll('circle.node').attr('r',nodeR);
+  gNodes.selectAll('circle.acu-ring').attr('r',d=>nodeR(d)+2.5/k);
+  gLinks.style('--ik',1/k);
+  const offSet=new Set(); gNodes.selectAll('circle.node.off').each(d=>offSet.add(d.data.org));
+  const showLogo=d=>nodeR(d)*k>=12 && !offSet.has(d.data.org);
+  gNodes.selectAll('circle.nback').style('display',d=>showLogo(d)?null:'none').attr('cx',d=>d.x).attr('cy',d=>d.y).attr('r',d=>nodeR(d)*0.82);
+  gNodes.selectAll('image.nlogo').style('display',d=>showLogo(d)?null:'none').each(function(d){ const r=nodeR(d)*0.72; d3.select(this).attr('x',d.x-r).attr('y',d.y-r).attr('width',2*r).attr('height',2*r); });
+  gLabels.selectAll('text.group-label').style('font-size',d=>(d.data.conv?Math.max(10/k,10/Math.sqrt(k)*0.6):Math.max(13/k,13/Math.sqrt(k)*0.6))+'px').style('stroke-width',(4/k)+'px')
+    .style('display',d=>d.data.conv ? ((focusGroup===d||focusGroup===d.parent||k>2.2||d.r*k>34)?null:'none') : (k>5?'none':null));
+  const dim=anyDim();
+  const inFocus=d=>focusGroup && d.parent===focusGroup;
+  const eligible=d=>{ const o=d.data.org; if(o===selected||relSet.has(o)) return true; if(selected||selectedConv) return false; if(viewMode==='conv' && !(focusGroup && (d.parent===focusGroup||d.parent?.parent===focusGroup)) && k<2.5) return false; if(dim && !visible(o)) return false; const big=d.r*k>14; return big || (inFocus(d) && d.r*k>5); };
+  const prio=d=>{ const o=d.data.org; return o===selected?0 : relSet.has(o)?1 : (profile&&o.id===profile.me)?1 : (profile&&profileMatch(o))?2 : ACU.has(o.id)?2 : 3; };
+  const placed=[]; const cand=leaves.filter(eligible).sort((a,b)=>prio(a)-prio(b)||a.data.org.name.length-b.data.org.name.length); const show=new Set();
+  for(const d of cand){
+    const sx=t.applyX(d.x)+nodeR(d)*k+3, sy=t.applyY(d.y);
+    if(sx<-200||sx>W||sy<0||sy>H) continue;
+    const w=Math.min(d.data.org.name.length*6.2+6,260), box=[sx,sy-7,sx+w,sy+7];
+    if(placed.some(b=>!(box[2]<b[0]||box[0]>b[2]||box[3]<b[1]||box[1]>b[3]))) continue;
+    placed.push(box); show.add(d.data.org); if(placed.length>90) break;
+  }
+  gLabels.selectAll('text.node-label').style('display',d=>show.has(d.data.org)?null:'none')
+    .attr('x',d=>d.x+nodeR(d)+3/k).attr('y',d=>d.y+3.5/k).style('font-size',(11/k)+'px').style('stroke-width',(3/k)+'px');
+}
+
+function zoomTo(x,y,r,dur){
+  const k=Math.min(W,H)/(r*2.3);
+  const tr=d3.zoomIdentity.translate(W/2,H/2).scale(k).translate(-x,-y);
+  (dur&&!reduced? svg.transition().duration(dur): svg).call(zoom.transform,tr);
+}
+function focusOn(g){ focusGroup=g; if(viewMode!=='lieu') zoomTo(g.x,g.y,g.r,650); renderHint(); applyState(); }
+function setView(mode){
+  viewMode=mode;
+  for(const [id,m] of [['viewClusters','clusters'],['viewLieu','lieu'],['viewConv','conv']]) document.getElementById(id).setAttribute('aria-pressed',mode===m);
+  document.body.classList.toggle('lieu',mode==='lieu');
+  focusGroup=null; svg.call(zoom.transform,d3.zoomIdentity);
+  if(mode==='lieu'){ LIEU.show(); } else { LIEU.hide(); }
+  layout(); renderHint(); renderLegend(); applyState();
+}
+function resetView(){ focusGroup=null; if(selectedConv){ selectedConv=null; renderDetail(); } if(viewMode==='lieu') LIEU.home(); else (reduced?svg:svg.transition().duration(500)).call(zoom.transform,d3.zoomIdentity); renderHint(); applyState(); }
+function selectConv(c){ selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
+function select(o){
+  selected=o; if(o) selectedConv=null; renderDetail();
+  if(o){ if(viewMode==='lieu') LIEU.flyTo(o); else { const l=leafByOrg.get(o); if(l && l.parent && l.parent!==focusGroup){ focusGroup=l.parent; zoomTo(l.parent.x,l.parent.y,l.parent.r,650); renderHint(); } } }
+  applyState(); if(!o&&viewMode!=='lieu') updateLabelVisibility(currentK);
+}
+
+// ---------- UI ----------
+const tip=document.getElementById('tip');
+function showTip(e,o){ tip.innerHTML=`<div class="row">${logoImg(o,'lg tip')}<span>${esc(o.name)}<div class="sub">${esc(o.catLabel)} · ${esc(o.floorLabel)}${o.room?' · '+esc(o.room):''}</div></span></div>`; tip.style.opacity=1; moveTip(e); }
+function moveTip(e){ const r=canvas.getBoundingClientRect(); tip.style.left=(e.clientX-r.left)+'px'; tip.style.top=(e.clientY-r.top)+'px'; }
+function hideTip(){ tip.style.opacity=0; }
+
+function renderGroupSeg(){
+  const seg=document.getElementById('groupSeg'); if(!seg) return; seg.innerHTML='';
+  const sel=document.createElement('select'); sel.id='groupSel'; sel.setAttribute('aria-label','Regrouper les structures par');
+  for(const d in DIMS){ const o=document.createElement('option'); o.value=d; o.textContent=DIMS[d].label.toLowerCase(); o.selected=d===groupBy; sel.appendChild(o); }
+  sel.onchange=()=>{ groupBy=sel.value; focusGroup=null; svg.call(zoom.transform,d3.zoomIdentity); layout(); renderHint(); renderLegend(); };
+  seg.appendChild(sel);
+}
+function renderHint(){
+  const h=document.getElementById('hint'); h.innerHTML='';
+  const c=document.createElement('div'); c.className='crumb';
+  const shown=orgs.filter(visible).length;
+  if(anyFilter() && shown===0){ c.className='crumb zero'; c.innerHTML=`<span>Aucune structure ne correspond${convHits.length?` · ${convHits.length} convergence${convHits.length>1?'s':''} dans le panneau`:''}</span><button id="hintClear">Effacer</button>`; h.appendChild(c); c.querySelector('#hintClear').onclick=()=>document.getElementById('clearAll').click(); return; }
+  if(viewMode==='lieu'){ c.innerHTML=`<span class="sub">Le bâtiment réel (OpenStreetMap) posé sur l'orthophoto IGN, nord en haut. Glisser = tourner · molette = zoomer · clic droit = déplacer.</span><span class="floorbar">${['all','R3','R2','R1','RDC','SS'].map(f=>`<button data-floor="${f}" aria-pressed="${(LIEU.floor||'all')===f}">${f==='all'?'Tout':f==='SS'?'Sous-sol':f==='RDC'?'RDC':f.replace('R','')+(f==='R1'?'er':'e')}</button>`).join(' · ')}</span><span class="floorbar" style="margin-left:6px;border-left:1px solid var(--line);padding-left:8px"><button data-gap="eclate" aria-pressed="${LIEU.gap==='eclate'}">Éclaté</button> · <button data-gap="compact" aria-pressed="${LIEU.gap==='compact'}">Compact</button></span>`; h.appendChild(c); c.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>{ LIEU.setFloor(b.dataset.floor==='all'?null:b.dataset.floor); renderHint(); }); c.querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{ LIEU.setGap(b.dataset.gap); renderHint(); }); return; }
+  if(focusGroup){ c.innerHTML=`<button id="crumbBack">← ${viewMode==='conv'?'Toutes les convergences':'Tout'}</button><span>${esc(focusGroup.data.name)} · ${focusGroup.children.length} structures</span>`; h.appendChild(c); c.querySelector('#crumbBack').onclick=resetView; }
+  else if(viewMode==='conv'){ c.innerHTML=`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span>`; h.appendChild(c); }
+  else { c.classList.add('gb'); c.innerHTML=`<span>Regroupées par</span><span id="groupSeg" role="group"></span><span class="sub" style="color:var(--muted)">· cliquer une grappe pour zoomer, un point pour ouvrir une fiche</span>`; h.appendChild(c); renderGroupSeg(); }
+}
+let legendOpen=false; try{ legendOpen=localStorage.getItem('sowatt.legend')==='1'; }catch(e){}
+function renderLegend(){
+  const l=document.getElementById('legend');
+  let pill=document.getElementById('legendPill');
+  if(!pill){ pill=document.createElement('button'); pill.id='legendPill'; pill.className='legend-pill'; pill.setAttribute('aria-controls','legend'); l.parentNode.insertBefore(pill,l); pill.onclick=()=>{ legendOpen=true; try{localStorage.setItem('sowatt.legend','1');}catch(e){} renderLegend(); }; }
+  pill.innerHTML=`<span class="dots">${CATS.map(a=>`<i style="background:${catColor(a)}"></i>`).join('')}</span>Légende`;
+  pill.setAttribute('aria-expanded',String(legendOpen)); pill.hidden=legendOpen; l.hidden=!legendOpen;
+  const linkNote = `<p><span style="color:var(--fg)">━</span> relation déclarée · <span style="color:var(--accent)">━</span> convergence commune · <span style="color:var(--dim)">┄</span> affinité thématique · <span style="color:var(--accent)">◌</span> point d'acupuncture</p>`;
+  const note = viewMode==='conv' ? `<p>Chaque cercle est une convergence ; les points à l'intérieur sont ses membres (une structure peut apparaître plusieurs fois).</p>` : viewMode==='lieu' ? `<p>Plans : MAJ du 20 oct. 2026 ; sous-sol, bâtiment B et cour placés hors plan. Orthophoto © IGN (Géoplateforme) · emprise © contributeurs OpenStreetMap.</p>` : DIMS[groupBy].multi ? `<p>Une structure apparaît dans chacun de ses groupes.</p>` : '';
+  l.innerHTML=`<button class="lclose" id="legendClose" aria-label="Masquer la légende">×</button><h4>Couleur = catégorie</h4><ul>${CATS.map(a=>`<li><span class="sw" style="background:${catColor(a)}"></span>${esc(CATLABEL[a])}</li>`).join('')}</ul>${linkNote}${note}`;
+  l.querySelector('#legendClose').onclick=()=>{ legendOpen=false; try{localStorage.setItem('sowatt.legend','0');}catch(e){} renderLegend(); };
+}
+const FILTER_LIMIT=8;
+const fstate={open:{cat:true,theme:true}, more:{}};
+const CHEV='<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const orderCache={};
+function chipOrder(d){
+  if(!orderCache[d]){ const key=DIMS[d].key; const counts=d3.rollup(orgs.flatMap(o=>vals(o,key)),v=>v.length,x=>x); let arr=[...counts].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([v])=>v); if(d==='floor') arr.sort((a,b)=>FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===a))-FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===b))); orderCache[d]=arr; }
+  return orderCache[d];
+}
+function renderFilters(){
+  const wrap=document.getElementById('filterGroups'), aside=document.getElementById('filters');
+  const scrollTop=aside.scrollTop; const html=[];
+  for(const d in DIMS){
+    const key=DIMS[d].key, act=active[d];
+    const others=orgs.filter(o=>{ if(profile && !profileMatch(o)) return false; if(!textMatch(o)) return false; for(const e in active){ if(e===d||!active[e].size) continue; if(!vals(o,DIMS[e].key).some(x=>active[e].has(x))) return false; } return true; });
+    const counts=d3.rollup(others.flatMap(o=>vals(o,key)),v=>v.length,x=>x);
+    const items=chipOrder(d).map(v=>[v,counts.get(v)||0]).filter(([v,n])=>(n>0||act.has(v))&&v!=='—');
+    const expanded=!!fstate.more[d];
+    const list=expanded ? items : items.filter(([v],i)=>i<FILTER_LIMIT||act.has(v));
+    const hiddenN=items.length-list.length; const open=act.size>0||!!fstate.open[d];
+    const chip=([v,n])=>`<button class="chip" data-dim="${d}" data-val="${esc(v)}" aria-pressed="${act.has(v)}">${d==='cat'?`<span class="sw" style="background:${catColor(CATS.find(c=>CATLABEL[c]===v))}"></span>`:''}${esc(v)} <span class="n">${n}</span></button>`;
+    const more=hiddenN>0 ? `<button class="chip more" data-more="${d}" aria-expanded="false">+${hiddenN}</button>` : (expanded&&items.length>FILTER_LIMIT ? `<button class="chip more" data-more="${d}" aria-expanded="true">Réduire</button>` : '');
+    html.push(`<details class="fgroup" data-dim="${d}"${open?' open':''}><summary><span class="lbl">${esc(DIMS[d].label)}</span>${act.size?`<span class="cnt">${act.size}</span><button class="gclear" data-clear="${d}">effacer</button>`:''}${CHEV}</summary><div class="chips">${list.map(chip).join('')}${more}</div></details>`);
+  }
+  wrap.innerHTML=html.join('');
+  wrap.querySelectorAll('.chip[data-dim]').forEach(b=>b.onclick=()=>{ const d=b.dataset.dim,v=b.dataset.val; const on=!active[d].has(v); on?active[d].add(v):active[d].delete(v); if(d==='floor'&&viewMode==='lieu'){ LIEU.setFloor(on?Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===v):null); renderHint(); } applyState(); });
+  wrap.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>{ const d=b.dataset.more; fstate.more[d]=!fstate.more[d]; renderFilters(); });
+  wrap.querySelectorAll('[data-clear]').forEach(b=>b.onclick=e=>{ e.preventDefault(); e.stopPropagation(); active[b.dataset.clear].clear(); applyState(); });
+  wrap.querySelectorAll('details.fgroup').forEach(dt=>dt.addEventListener('toggle',()=>{ fstate.open[dt.dataset.dim]=dt.open; }));
+  aside.scrollTop=scrollTop;
+}
+function convCard(c,compact){
+  const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o);
+  return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
+}
+function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
+function convHitsHtml(){ if(!query||!convHits.length) return ''; return `<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
+function profileBarHtml(compact){ if(!profile) return ''; const me=meOrg(); const who=me?esc(me.name):'Visiteur·se'; const th=profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'; if(compact) return `<div class="profile-bar" style="padding:6px 10px;margin-right:28px"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${who} · ${th}</span><button id="editProfile">Modifier</button></div>`; return `<div class="profile-bar"><b>${who}</b><span style="color:var(--muted);font-size:12px">${th}${profile.wants?.length?' · '+profile.wants.length+' chantier'+(profile.wants.length>1?'s':''):''}</span><span style="margin-left:auto;display:flex;gap:10px"><button id="editProfile">Modifier</button><button id="showAll">Tout afficher</button></span></div>`; }
+function bindProfileBar(el){ el.querySelector('#editProfile')?.addEventListener('click',()=>startOnboarding(2)); el.querySelector('#showAll')?.addEventListener('click',()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); applyState(); renderDetail(); renderPopover(); }); }
+function orgLi(x,why,title){ return `<li><button data-id="${x.id}"${title?` title="${esc(title)}"`:''}>${logoImg(x)}<span class="nm">${esc(x.name)}</span><span class="why">${esc(why)}</span></button></li>`; }
+function acuList(limit=12){ return RAW.filter(o=>o.acu&&o.acu.top).sort((a,b)=>a.acu.rank-b.acu.rank).slice(0,limit); }
+function renderDetail(){
+  const el=document.getElementById('detailBody');
+  if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
+    el.innerHTML=`<button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">Convergence</div><ul class="reslist">${convCard(c,false)}</ul>
+    ${acus.length?`<div class="ksec"><dt>Points d'acupuncture dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
+    <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Convergences et rôles ont été déduits des descriptifs ; à faire valider et enrichir par les occupant·e·s.</p>`;
+    el.querySelector('#closeDetail').onclick=()=>selectConv(null); el.querySelectorAll('.rorgs .chip[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); }); syncDetailSheet(); return; }
+  if(!selected && profile){
+    const me=meOrg(); const pool=orgs.filter(o=>o!==me&&profileMatch(o)).map(o=>({o,s:profileScore(o)})).sort((a,b)=>b.s-a.s).slice(0,8);
+    const nMatch=orgs.filter(o=>profileMatch(o)&&o!==me).length; const nb=me?neighbours(me):null;
+    el.innerHTML=`<div class="foryou">${profileBarHtml()}${convHitsHtml()}
+      <h2 style="font-size:16px">${nMatch} structures correspondent à votre profil</h2>
+      <p style="color:var(--muted);font-size:12.5px;margin:0">Elles restent en avant sur la carte ; le reste du lieu attend en arrière-plan. Ouvrez-en une pour voir qui elle relie.</p>
+      ${me?`<h3>Votre structure</h3><ul class="rel">${orgLi(me,me.room?'bureau '+me.room:me.floorLabel)}</ul>`:''}
+      <h3>Les plus proches de vous</h3>
+      <ul class="rel">${pool.map(r=>orgLi(r.o,me&&r.o.floor===me.floor?'même étage':(r.o.themes.filter(x=>profile.themes?.includes(x)).length+' thèmes'))).join('')||'<li class="kempty">Élargissez vos thèmes ou vos chantiers.</li>'}</ul>
+      <h3>Chantiers pour vous</h3>
+      <ul class="reslist">${convsForProfile(6).map(x=>convCard(x.c,true)).join('')||'<li class="kempty">Rien ne correspond encore.</li>'}</ul>
+      ${nb&&(nb.sameRoom.length||nb.sameFloor.length)?`<h3>Vos voisin·e·s de palier</h3><ul class="rel aff">${nb.sameRoom.map(x=>orgLi(x,'même bureau')).join('')}${nb.sameFloor.slice(0,8).map(x=>orgLi(x,x.room||'')).join('')}</ul>`:''}
+      <p style="font-size:11.5px;margin-top:12px"><button id="replayIntro" style="background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0">Revoir l'introduction</button></p></div>`;
+    bindProfileBar(el); el.querySelector('#replayIntro').onclick=()=>startOnboarding(0);
+    el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+    bindConvCards(el); renderPopover(); syncDetailSheet(); return;
+  }
+  if(!selected){
+    el.innerHTML=`${convHitsHtml()}<div class="empty"><p style="font-size:12.5px;margin:0 0 8px"><button id="setupProfile" class="btn" style="padding:6px 10px">Personnaliser cette carte</button></p><h2>Comment lire cette carte</h2><p>Chaque point est une structure du Sowatt, colorée par catégorie. ${RAW.length} structures, ${CONV.length} convergences.</p><ol><li><b>Qui est là ?</b> Grappes par catégorie, thème, étage ou public ; filtres à gauche.</li><li><b>Où ?</b> La vue <button class="chip" id="goLieu">Le lieu 3D</button> pose chacun·e sur son bureau, étage par étage.</li><li><b>Avec qui ?</b> Ouvrir une fiche : relations déclarées, convergences communes, affinités, voisin·e·s.</li><li><b>Où appuyer ?</b> Les <b>convergences</b> sont des chantiers communs possibles ; les <b>points d'acupuncture</b> sont les structures qui relient le plus de mondes différents.</li></ol></div>
+    <div class="ksec"><dt>Points d'acupuncture <span class="n">· les 12 structures les plus reliantes</span></dt><ul class="rel acu-list">${acuList().map(o=>`<li><button data-id="${o.id}"><span class="rank">${o.acu.rank}</span>${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${o.acu.n} conv. · ${o.acu.cats} cat.</span></button></li>`).join('')}</ul></div>
+    <div class="ksec"><dt>Convergences</dt><ul class="reslist">${CONV.map(c=>convCard(c,true)).join('')}</ul></div>`;
+    el.querySelector('#goLieu').onclick=()=>setView('lieu'); el.querySelector('#setupProfile').onclick=()=>startOnboarding(2);
+    el.querySelectorAll('.acu-list button').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+    bindConvCards(el); syncDetailSheet(); return; }
+  const o=selected; const rel=related(o,8); const know=convLinks(o); const decl=declared(o); const nb=neighbours(o);
+  const tagList=(label,arr,dim)=>arr&&arr.length?`<div><dt>${label}</dt><dd class="chips">${arr.map(v=>`<button class="chip" data-dim="${dim}" data-val="${esc(v)}" aria-pressed="${active[dim].has(v)}">${esc(v)}</button>`).join('')}</dd></div>`:'';
+  const site=o.website?`<a href="${esc(o.website)}" target="_blank" rel="noopener">${esc(o.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))} ↗</a>`:'';
+  el.innerHTML=`<button class="close" id="closeDetail" aria-label="Fermer">×</button>${profileBarHtml(true)}
+    <div style="display:flex;gap:14px;align-items:flex-start;margin-top:4px">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Point d'acupuncture n°${o.acu.rank}">◌ acupuncture n°${o.acu.rank}</span>`:''}
+    <h2 style="margin-top:8px">${esc(o.name)}</h2></div></div>
+    ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
+    <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
+    ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
+    <div class="contact">${site?`<span>${site}</span>`:''}${o.mails.map(m=>`<span><a href="mailto:${esc(m)}">${esc(m)}</a></span>`).join('')}${o.phone?`<span><a href="tel:${esc(o.phone.replace(/\s/g,''))}">${esc(o.phone)}</a></span>`:''}</div>
+    ${ACU.has(o.id)&&o.acu.note?`<div class="acu-note"><b>Pourquoi un point d'acupuncture ·</b> ${esc(o.acu.note)}</div>`:''}
+    <dl class="meta">${tagList('Thèmes',o.themes,'theme')}${tagList('Publics',o.publics,'public')}</dl>
+    <div class="ksec"><dt>Convergences <span class="n">${o.convs.length}</span></dt>${o.convs.length?`<ul class="reslist">${o.convs.map(x=>convCard(x.c,true)).join('')}</ul>`:'<p class="kempty">Aucune convergence identifiée pour l’instant.</p>'}</div>
+    ${decl.length?`<div class="ksec"><dt>Relations déclarées <span class="n">${decl.length}</span></dt><ul class="rel">${decl.map(d=>orgLi(d.x,d.why)).join('')}</ul></div>`:''}
+    <div class="ksec"><dt>Reliés par des convergences communes <span class="n">${know.length}</span></dt><ul class="rel">${know.length?know.slice(0,10).map(k=>orgLi(k.x,k.via.length+' conv.',k.via.map(v=>v.title).join(' · '))).join(''):'<li class="kempty">Aucune.</li>'}</ul></div>
+    ${rel.length?`<div class="ksec"><dt style="color:var(--dim)">Affinités thématiques <span class="n">(thèmes partagés, pas des partenariats)</span></dt><ul class="rel aff">${rel.slice(0,6).map(r=>orgLi(r.x,r.shared.length+' thème'+(r.shared.length>1?'s':''),r.shared.join(' · '))).join('')}</ul></div>`:''}
+    ${(nb.sameRoom.length||nb.sameFloor.length)?`<div class="ksec"><dt>Voisin·e·s <span class="n">${nb.sameRoom.length?nb.sameRoom.length+' même bureau · ':''}${nb.sameFloor.length} même étage</span></dt><ul class="rel aff">${nb.sameRoom.map(x=>orgLi(x,'même bureau')).join('')}${nb.sameFloor.slice(0,6).map(x=>orgLi(x,x.room||'')).join('')}</ul></div>`:''}
+    <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : ${esc(o.source)}.</p>`;
+  el.querySelector('#closeDetail').onclick=()=>select(null); bindProfileBar(el);
+  el.querySelector('#goRoom').onclick=()=>{ const keep=selected; if(viewMode!=='lieu') setView('lieu'); selected=keep; LIEU.flyTo(keep); applyState(); };
+  el.querySelectorAll('.meta .chip').forEach(b=>b.onclick=()=>{ const d=b.dataset.dim,v=b.dataset.val; active[d].has(v)?active[d].delete(v):active[d].add(v); applyState(); renderDetail(); });
+  el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+  bindConvCards(el);
+  const dt=el.querySelector('#descText'), rm=el.querySelector('#readMore');
+  if(dt && rm){ syncDetailSheet(); if(dt.scrollHeight>dt.clientHeight+2){ rm.hidden=false; rm.onclick=()=>{ const open=dt.classList.toggle('clamp')===false; rm.textContent=open?'Réduire':'Lire la suite'; rm.setAttribute('aria-expanded',String(open)); }; } }
+  syncDetailSheet();
+}
+
+document.getElementById('search').addEventListener('input',e=>{ query=e.target.value.trim().toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(!selected) renderDetail(); applyState(); });
+document.getElementById('searchToggle').onclick=e=>{ const h=document.querySelector('header.top'); const open=h.classList.toggle('search-open'); e.currentTarget.setAttribute('aria-expanded',String(open)); if(open) document.getElementById('search').focus(); };
+const pop=document.getElementById('aboutPop'), popBtn=document.getElementById('aboutBtn');
+function setPopover(open){ pop.hidden=!open; popBtn.setAttribute('aria-expanded',String(open)); if(open) renderPopover(); }
+popBtn.onclick=()=>setPopover(pop.hidden);
+document.addEventListener('click',e=>{ if(!pop.hidden && !pop.contains(e.target) && e.target!==popBtn) setPopover(false); });
+document.getElementById('clearAll').onclick=()=>{ const had=anyFilter(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; matchConv(); if(viewMode==='lieu'){ LIEU.setFloor(null); renderHint(); } if(!had && profile){ profile=null; saveProfile(); } if(!selected&&!selectedConv) renderDetail(); applyState(); renderPopover(); };
+function renderPopover(){
+  const el=document.getElementById('profileSummary'); if(!el) return; const me=meOrg();
+  el.innerHTML = profile ? `<b>${me?esc(me.name):'Visiteur·se'}</b>${me?` · ${esc(me.floorLabel)}`:''}<br><span class="muted" style="color:var(--muted)">${profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'}${profile.wants?.length?' · chantiers : '+esc(profile.wants.map(id=>convById.get(id)?.title).filter(Boolean).join(', ')):''}</span>` : `<span style="color:var(--muted)">Pas encore de profil : la carte montre tout.</span>`;
+  document.getElementById('popShowAll').hidden=!profile; document.getElementById('popForYou').hidden=!(profile && narrowMQ.matches); popBtn.classList.toggle('has-profile',!!profile);
+}
+document.getElementById('profileBtn').onclick=()=>{ setPopover(false); startOnboarding(2); };
+document.getElementById('popReplay').onclick=()=>{ setPopover(false); startOnboarding(0); };
+document.getElementById('popForYou').onclick=()=>{ forYouOpen=true; select(null); setPopover(false); };
+document.getElementById('popShowAll').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); forYouOpen=false; applyState(); renderDetail(); setPopover(false); renderPopover(); };
+document.getElementById('zin').onclick=()=>viewMode==='lieu'?LIEU.dolly(0.7):svg.transition().duration(reduced?0:250).call(zoom.scaleBy,1.6);
+document.getElementById('zout').onclick=()=>viewMode==='lieu'?LIEU.dolly(1.4):svg.transition().duration(reduced?0:250).call(zoom.scaleBy,1/1.6);
+document.getElementById('zreset').onclick=resetView;
+document.getElementById('viewClusters').onclick=()=>setView('clusters');
+document.getElementById('viewLieu').onclick=()=>setView('lieu');
+document.getElementById('viewConv').onclick=()=>setView('conv');
+document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; selected=null; selectedConv=null; if(viewMode!=='clusters') setView('clusters'); startOnboarding(0); };
+function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
+function setDetailOpen(open){ const d=document.getElementById('detail'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(open){ d.scrollTop=0; setFiltersOpen(false); } }
+let convDismissed=false, forYouOpen=false;
+function syncDetailSheet(){ setDetailOpen(!!(selected||selectedConv||(profile&&forYouOpen)||(query&&convHits.length&&!convDismissed))); }
+function closeDetailSheet(){ forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
+document.getElementById('toggleFilters').onclick=()=>setFiltersOpen(document.getElementById('filters').hidden);
+document.getElementById('closeFilters').onclick=()=>setFiltersOpen(false);
+document.getElementById('closeDetailSheet').onclick=closeDetailSheet;
+addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ setPopover(false); return; } if(narrowMQ.matches){ if(!document.getElementById('filters').hidden) setFiltersOpen(false); else if(!document.getElementById('detail').hidden && obStep<0) closeDetailSheet(); } else if(selected) select(null); else if(selectedConv) selectConv(null); });
+function placeViewSeg(){ const seg=document.getElementById('viewSeg'); if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
+function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { document.getElementById('filters').hidden=false; document.getElementById('toggleFilters').setAttribute('aria-pressed','false'); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
+narrowMQ.addEventListener('change',applyNarrow);
+let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ layout(); },150); });
+
+// ---------- Le lieu : WebGL (three.js) — bâtiment réel orienté sur l'orthophoto IGN ----------
+const GEO = JSON.parse(document.getElementById('geo').textContent);
+const LIEU=(()=>{
+  const FLOORS=[{id:'SS',label:'Sous-sol',y:-1,plan:null},{id:'RDC',label:'RDC',y:0,plan:'plans/floor0.webp'},{id:'R1',label:'1er',y:1,plan:'plans/floor1.webp'},{id:'R2',label:'2e',y:2,plan:'plans/floor2.webp'},{id:'R3',label:'3e',y:3,plan:'plans/floor3.webp'}];
+  const PW=842.25, PH=1190.25, LIFT=22, PPM=GEO.ptsPerM;  // 1 m ≈ 12,3 points de plan
+  const GAPS={compact:3.6*PPM*1.25, eclate:11*PPM}; let gapMode='eclate'; let GAP=GAPS[gapMode];
+  const HORS={bonallure:[560,700,'RDC'],familyforme:[150,330,'RDC'],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
+  const el=document.getElementById('gl');
+  let renderer, scene, camera, ray=new THREE.Raycaster(), inited=false, visible=false, needs=true, raf=0, shown=false;
+  const nodes=new Map(), labels=new Map(); const floorGroups=new Map(); let building, linkGroup, haloSprite, pins;
+  let floor=null;
+  const target=new THREE.Vector3(0,0,0); const sph={r:2600,theta:2.3,phi:0.92};
+  const homeR=()=>{ const r=canvas.getBoundingClientRect(); const a=Math.max(0.3,r.width/Math.max(1,r.height)); return Math.min(9000,Math.max(2500,1750/(0.69*a))); };
+  const homeTarget=()=>new THREE.Vector3(0,GAP*1.3,0);
+  const floorY=F=>F.y*GAP;
+  const local=o=>{ const h=HORS[o.id]; const f=h?h[2]:o.floor; const F=FLOORS.find(x=>x.id===f)||FLOORS[1]; const px=h?h[0]:(o.px??421), py=h?h[1]:(o.py??595); return {x:px-GEO.pcx, z:py-GEO.pcy, F}; };
+  const worldPos=o=>{ const p=local(o); const v=new THREE.Vector3(p.x,floorY(p.F)+LIFT,p.z); building.localToWorld(v); return v; };
+  function circleTex(o){
+    const S=128, c=document.createElement('canvas'); c.width=c.height=S; const g=c.getContext('2d');
+    const col=CATHEX[o.cat]; g.clearRect(0,0,S,S);
+    g.beginPath(); g.arc(S/2,S/2,S/2-2,0,Math.PI*2); g.fillStyle=o.logo?'#fff':col; g.fill(); g.lineWidth=o.logo?7:3; g.strokeStyle=o.logo?col:'#fff'; g.stroke();
+    if(ACU.has(o.id)){ g.setLineDash([6,5]); g.lineWidth=3; g.strokeStyle='#F05A28'; g.beginPath(); g.arc(S/2,S/2,S/2-13,0,Math.PI*2); g.stroke(); g.setLineDash([]); }
+    const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=4;
+    if(o.logo){ const im=new Image(); im.onload=()=>{ g.save(); g.beginPath(); g.arc(S/2,S/2,S/2-9,0,Math.PI*2); g.clip(); g.drawImage(im,10,10,S-20,S-20); g.restore(); tex.needsUpdate=true; request(); }; im.src=logoUrl(o); }
+    return tex;
+  }
+  function textTex(txt,opts={}){
+    const fs=opts.size||26, pad=14; const c=document.createElement('canvas'); const g=c.getContext('2d'); g.font=`${opts.weight||600} ${fs}px Outfit, Figtree, sans-serif`;
+    const w=Math.ceil(g.measureText(txt).width)+pad*2, h=fs+pad*1.4; c.width=w*2; c.height=h*2; g.scale(2,2);
+    if(opts.bg!==false){ g.fillStyle=opts.bg||'rgba(255,255,255,.92)'; g.beginPath(); g.roundRect(0,0,w,h,h/2); g.fill(); }
+    g.font=`${opts.weight||600} ${fs}px Outfit, Figtree, sans-serif`; g.fillStyle=opts.color||'#1F1B17'; g.textBaseline='middle'; g.fillText(txt,pad,h/2);
+    const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; return {tex,w,h};
+  }
+  function screenSprite(t,px){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t.tex,transparent:true,depthTest:false,sizeAttenuation:false})); const k=px/Math.max(1,el.clientHeight); sp.scale.set(t.w*k,t.h*k,1); return sp; }
+  function footprintShape(){ const sh=new THREE.Shape(); GEO.footprint.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
+  function buildFloors(){
+    const loader=new THREE.TextureLoader();
+    FLOORS.forEach(F=>{
+      const grp=new THREE.Group(); grp.position.y=floorY(F); building.add(grp); floorGroups.set(F.id,grp);
+      let mat;
+      if(F.plan){ const tex=loader.load(F.plan,()=>request()); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,depthWrite:false}); }
+      else { const c=document.createElement('canvas'); c.width=842; c.height=1190; const g=c.getContext('2d'); g.fillStyle='rgba(235,231,224,.85)'; g.beginPath(); g.roundRect(180,440,500,320,24); g.fill(); g.strokeStyle='#B0A79D'; g.setLineDash([8,8]); g.lineWidth=3; g.stroke(); const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,depthWrite:false}); }
+      const slab=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),mat); slab.rotation.x=-Math.PI/2; slab.position.set(PW/2-GEO.pcx,0.5,PH/2-GEO.pcy); slab.renderOrder=10+F.y; slab.userData.slab=true; grp.add(slab);
+      if(F.plan){ // murs translucides sur l'emprise réelle
+        const wallH=GAP*0.88; const geo=new THREE.ExtrudeGeometry(footprintShape(),{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0);
+        const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.22,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls);
+        const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges);
+      }
+      const t=textTex(F.label,{size:22,color:'#F05A28',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(33-GEO.pcx-30,8,1115-GEO.pcy+30); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp);
+    });
+  }
+  function init(){
+    if(inited) return; inited=true;
+    renderer=new THREE.WebGLRenderer({canvas:el,antialias:true,alpha:true,powerPreference:'low-power'}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setClearColor(0xffffff,0);
+    scene=new THREE.Scene(); camera=new THREE.PerspectiveCamera(38,1,10,30000);
+    const loader=new THREE.TextureLoader();
+    // sol : orthophoto IGN, nord vers -z, centrée sur le centroïde de l'emprise OSM
+    const o=GEO.ortho, k=o.mpp*PPM, size=o.size*k;
+    const gtex=loader.load('plans/ortho.webp',()=>request()); gtex.colorSpace=THREE.SRGBColorSpace; gtex.anisotropy=8;
+    const ground=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:gtex,transparent:true,opacity:0.92,depthWrite:false})); ground.rotation.x=-Math.PI/2; ground.position.set((o.size/2-o.cx)*k,-2,(o.size/2-o.cy)*k); ground.renderOrder=0; scene.add(ground);
+    const vc=document.createElement('canvas'); vc.width=vc.height=512; const vg=vc.getContext('2d'); const grd=vg.createRadialGradient(256,256,120,256,256,256); grd.addColorStop(0,'rgba(255,255,255,0)'); grd.addColorStop(0.75,'rgba(255,255,255,0.55)'); grd.addColorStop(1,'rgba(255,255,255,1)'); vg.fillStyle=grd; vg.fillRect(0,0,512,512); const vt=new THREE.CanvasTexture(vc); const fade=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:vt,transparent:true,depthWrite:false})); fade.rotation.x=-Math.PI/2; fade.position.copy(ground.position); fade.position.y=-1; fade.renderOrder=1; scene.add(fade);
+    building=new THREE.Group(); building.rotation.y=THREE.MathUtils.degToRad(GEO.theta); scene.add(building);
+    buildFloors();
+    RAW.forEach(o=>{
+      const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
+      const sp=new THREE.Sprite(mat); sp.position.set(p.x,LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
+    });
+    buildPins();
+    linkGroup=new THREE.Group(); scene.add(linkGroup);
+    const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#F05A28'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
+    haloSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:ht,transparent:true,depthTest:false})); haloSprite.visible=false; haloSprite.renderOrder=200; scene.add(haloSprite);
+    // boussole
+    const nt=textTex('N ↑',{size:20,color:'#6B625A',bg:'rgba(255,255,255,.85)'}); const ns=screenSprite(nt,0.5); ns.position.set(0,4,-size*0.42); scene.add(ns);
+    bindControls(); resize(); updateCamera();
+  }
+  function buildPins(){ if(pins){ scene.remove(pins); pins.geometry.dispose(); } const arr=[]; RAW.forEach(o=>{ const p=local(o); const a=new THREE.Vector3(p.x,floorY(p.F)+1,p.z), b=new THREE.Vector3(p.x,floorY(p.F)+LIFT-12,p.z); building.localToWorld(a); building.localToWorld(b); arr.push(a.x,a.y,a.z,b.x,b.y,b.z); }); const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3)); pins=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:.7})); scene.add(pins); }
+  function setGap(mode){ gapMode=mode; GAP=GAPS[mode]; FLOORS.forEach(F=>{ const grp=floorGroups.get(F.id); grp.position.y=floorY(F); grp.children.forEach(ch=>{ if(ch.userData.wall||ch.userData.edge){ grp.remove(ch); } }); if(F.plan){ const wallH=GAP*0.88; const geo=new THREE.ExtrudeGeometry(footprintShape(),{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0); const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.22,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges); } }); buildPins(); if(floor){ const F=FLOORS.find(x=>x.id===floor); flyTarget(new THREE.Vector3(0,floorY(F),0),sph.r); } else flyTarget(homeTarget(),sph.r); setState(); }
+  function updateCamera(){ const {r,theta,phi}=sph; camera.position.set(target.x+r*Math.sin(phi)*Math.sin(theta), target.y+r*Math.cos(phi), target.z+r*Math.sin(phi)*Math.cos(theta)); camera.lookAt(target); request(); }
+  function resize(){ if(!inited) return; const r=canvas.getBoundingClientRect(); const w=Math.max(1,r.width), h=Math.max(1,r.height); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+  function request(){ needs=true; if(visible&&!raf) raf=requestAnimationFrame(frame); }
+  let tween=null;
+  function frame(){ raf=0; if(!visible) return; if(tween){ const t=Math.min(1,(performance.now()-tween.t0)/tween.dur); const e=1-Math.pow(1-t,3); target.lerpVectors(tween.from,tween.to,e); sph.r=tween.r0+(tween.r1-tween.r0)*e; if(tween.th!=null){ sph.theta=tween.th0+(tween.th-tween.th0)*e; sph.phi=tween.ph0+(tween.ph-tween.ph0)*e; } updateCamera(); if(t>=1) tween=null; needs=true; }
+    if(needs){ needs=false; renderer.render(scene,camera); } if(tween) raf=requestAnimationFrame(frame); }
+  function flyTarget(to,r,th,ph){ if(reduced){ target.copy(to); sph.r=r; if(th!=null){sph.theta=th; sph.phi=ph;} updateCamera(); return; } tween={from:target.clone(),to,r0:sph.r,r1:r,th0:sph.theta,ph0:sph.phi,th,ph,t0:performance.now(),dur:750}; request(); }
+  function bindControls(){
+    const ptrs=new Map(); let pinch=null, mode=null;
+    el.addEventListener('pointerdown',e=>{ el.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY,x0:e.clientX,y0:e.clientY}); mode=(e.button===2||e.shiftKey||e.ctrlKey)?'pan':'rot'; if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pinch={d:Math.hypot(a.x-b.x,a.y-b.y),cx:(a.x+b.x)/2,cy:(a.y+b.y)/2}; } });
+    el.addEventListener('pointermove',e=>{
+      if(!ptrs.has(e.pointerId)){ hover(e); return; }
+      const p=ptrs.get(e.pointerId); const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+      if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; const d=Math.hypot(a.x-b.x,a.y-b.y), cx=(a.x+b.x)/2, cy=(a.y+b.y)/2; if(pinch){ sph.r=Math.max(250,Math.min(9000,sph.r*pinch.d/d)); pan(cx-pinch.cx,cy-pinch.cy); } pinch={d,cx,cy}; updateCamera(); return; }
+      if(mode==='pan') pan(dx,dy); else { sph.theta-=dx*0.005; sph.phi=Math.max(0.12,Math.min(1.5,sph.phi-dy*0.005)); }
+      tween=null; updateCamera();
+    });
+    const up=e=>{ const p=ptrs.get(e.pointerId); ptrs.delete(e.pointerId); pinch=null; if(p && Math.hypot(e.clientX-p.x0,e.clientY-p.y0)<5 && e.button!==2) click(e); };
+    el.addEventListener('pointerup',up); el.addEventListener('pointercancel',e=>{ ptrs.delete(e.pointerId); pinch=null; });
+    el.addEventListener('wheel',e=>{ e.preventDefault(); sph.r=Math.max(250,Math.min(9000,sph.r*Math.exp(e.deltaY*0.0012))); tween=null; updateCamera(); },{passive:false});
+    el.addEventListener('contextmenu',e=>e.preventDefault());
+    el.addEventListener('pointerleave',hideTip);
+  }
+  function pan(dx,dy){ const r=canvas.getBoundingClientRect(); const k=sph.r*1.2/r.height; const right=new THREE.Vector3(), upv=new THREE.Vector3(0,1,0), dir=new THREE.Vector3(); camera.getWorldDirection(dir); right.crossVectors(dir,upv).normalize(); const fwd=new THREE.Vector3().crossVectors(upv,right).normalize(); target.addScaledVector(right,-dx*k).addScaledVector(fwd,-dy*k); }
+  function pick(e){ const r=el.getBoundingClientRect(); const m=new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1); ray.setFromCamera(m,camera); const hits=ray.intersectObjects([...nodes.values()].filter(s=>s.visible&&s.material.opacity>0.2)); return hits.length?hits[0].object.userData.org:null; }
+  function hover(e){ const o=pick(e); el.style.cursor=o?'pointer':''; if(o){ showTip(e,o); } else hideTip(); }
+  function click(e){ const o=pick(e); if(o) select(o); else if(selected) select(null); else if(selectedConv) selectConv(null); }
+  function dimFor(o){ const f=anyDim(); if(selectedConv) return relSet.has(o)&&(!anyFilter()||matches(o))?1:0.1; if(selected) return (o===selected||relSet.has(o))?1:(f?(visible(o)?0.35:0.08):0.18); return f&&!visible(o)?0.1:1; }
+  function setState(){
+    if(!inited) return;
+    nodes.forEach((sp,id)=>{ const o=sp.userData.org; const fl=(HORS[id]?HORS[id][2]:o.floor); const floorOk=!floor||fl===floor; sp.material.opacity=dimFor(o)*(floorOk?1:0.08); const s=o===selected?40:(relSet.has(o)?34:30); sp.scale.set(s,s,1); });
+    floorGroups.forEach((grp,id)=>{ const on=!floor||id===floor; grp.children.forEach(ch=>{ if(ch.userData.slab) ch.material.opacity=on?1:0.1; else if(ch.userData.wall) ch.material.opacity=on?0.22:0.04; else if(ch.userData.edge) ch.material.opacity=on?0.55:0.1; else if(ch.userData.floorText) ch.material.opacity=on?1:0.3; }); });
+    if(pins) pins.material.opacity=floor?0.25:0.7;
+    labels.forEach(sp=>scene.remove(sp)); labels.clear();
+    const show=new Set(); if(selected) show.add(selected); relSet.forEach(o=>show.add(o));
+    show.forEach(o=>{ const sp=nodes.get(o.id); if(!sp) return; const t=textTex(o.name,{size:22,weight:o===selected?700:500}); const l=screenSprite(t,0.55); l.position.copy(worldPos(o)); l.position.y+=26; l.renderOrder=150; l.center.set(0.5,-0.15); scene.add(l); labels.set(o.id,l); });
+    while(linkGroup.children.length) linkGroup.remove(linkGroup.children[0]);
+    const mk=(a,b,color,op,dash)=>{ const mid=new THREE.Vector3().addVectors(a,b).multiplyScalar(0.5); mid.y+=Math.max(30,a.distanceTo(b)*0.16); const curve=new THREE.QuadraticBezierCurve3(a,mid,b); const g=new THREE.BufferGeometry().setFromPoints(curve.getPoints(28)); const m=dash?new THREE.LineDashedMaterial({color,transparent:true,opacity:op,dashSize:10,gapSize:8}):new THREE.LineBasicMaterial({color,transparent:true,opacity:op}); const line=new THREE.Line(g,m); if(dash) line.computeLineDistances(); line.renderOrder=90; linkGroup.add(line); };
+    haloSprite.visible=false;
+    if(selectedConv){ const pts=[...relSet].map(o=>worldPos(o)); if(pts.length){ const c=new THREE.Vector3(); pts.forEach(p=>c.add(p)); c.multiplyScalar(1/pts.length); c.y+=70; pts.forEach(p=>mk(c,p,0xF05A28,0.6,false)); haloSprite.position.copy(c); haloSprite.scale.set(50,50,1); haloSprite.visible=true; } }
+    else if(selected){ const a=worldPos(selected); relKind.forEach((k,x)=>{ const b=worldPos(x); mk(a,b,k.kind==='decl'?0x1F1B17:k.kind==='know'?0xF05A28:0xB0A79D,k.kind==='aff'?0.55:0.75,k.kind==='aff'); }); haloSprite.position.copy(a); haloSprite.scale.set(46,46,1); haloSprite.visible=true; }
+    request();
+  }
+  function home(){ floor=null; flyTarget(homeTarget(),homeR(),2.3,0.92); setState(); }
+  function flyTo(o){ if(!nodes.get(o.id)) return; const fl=(HORS[o.id]?HORS[o.id][2]:o.floor); if(floor&&floor!==fl){ floor=null; renderHint(); } flyTarget(worldPos(o),Math.min(sph.r,1400)); setState(); }
+  function flyToConv(c){ const pts=c.members.map(m=>orgById.get(m.id)).filter(Boolean).map(o=>worldPos(o)); if(!pts.length) return; const ctr=new THREE.Vector3(); pts.forEach(p=>ctr.add(p)); ctr.multiplyScalar(1/pts.length); let far=0; pts.forEach(p=>far=Math.max(far,p.distanceTo(ctr))); floor=null; flyTarget(ctr,Math.max(1200,far*2.4)); }
+  function setFloor(f){ floor=f; if(f){ const F=FLOORS.find(x=>x.id===f); flyTarget(new THREE.Vector3(0,floorY(F),0),1500,sph.theta,0.75); } else home(); setState(); }
+  function dolly(k){ sph.r=Math.max(250,Math.min(9000,sph.r*k)); updateCamera(); }
+  function show(){ init(); visible=true; resize(); if(!shown){ shown=true; sph.r=homeR(); target.copy(homeTarget()); } setState(); updateCamera(); }
+  function hide(){ visible=false; hideTip(); }
+  return {show,hide,resize,render:request,setState,flyTo,flyToConv,home,setFloor,setGap,dolly,get floor(){return floor;},get gap(){return gapMode;}};
+})();
+
+// ---------- onboarding (repris d'eco-map) : les structures sont les particules, chaque écran les réorganise ----------
+const onb=document.getElementById('onb'), onbCard=document.getElementById('onbCard');
+let obStep=-1, obDraft=null, scattered=false;
+const scatterPos=new Map(); const rng=d3.randomLcg(7);
+function scatterOf(o){ if(!scatterPos.has(o.id)) scatterPos.set(o.id,[0.08+rng()*0.84, 0.1+rng()*0.8]); const p=scatterPos.get(o.id); return [p[0]*W,p[1]*H]; }
+function setScatter(on){
+  scattered=on; const dur=reduced?0:900;
+  gNodes.selectAll('circle.node').transition().duration(dur).ease(d3.easeCubicInOut).attr('cx',d=>on?scatterOf(d.data.org)[0]:d.x).attr('cy',d=>on?scatterOf(d.data.org)[1]:d.y).attr('r',d=>on?3:Math.max(1.2,d.r-0.6));
+  gNodes.selectAll('circle.acu-ring,circle.nback,image.nlogo').style('display','none');
+  gGroups.selectAll('circle').transition().duration(dur).style('opacity',on?0:1);
+  gLabels.selectAll('text.group-label').transition().duration(dur).style('opacity',on?0:1);
+  gLinks.selectAll('*').remove();
+  if(!on) setTimeout(()=>updateLabelVisibility(currentK),dur+20);
+}
+let meQuery='';
+const STEPS=[
+  {render:()=>`<div class="step">Sowatt · carte des occupant·e·s</div><p class="big">${RAW.length}</p><h2>structures font vivre le Sowatt</h2><p>Artistes, artisans, ateliers, associations, agences, cabinets, thérapeutes. Chaque point est l'une d'elles. Suivez les liens pour trouver qui fait quoi, à quel étage, et avec qui converger.</p><div class="nav"><button class="primary" data-next>Commencer</button><button class="ghost" data-skip>Aller directement à la carte</button></div>`,
+   enter:()=>{ profile=null; for(const d in active) active[d].clear(); if(viewMode!=='clusters') setView('clusters'); applyState(); setScatter(true); }},
+  {render:()=>`<div class="step">Qui est là</div><h2>Neuf familles, un même bâtiment</h2><p>Des ateliers d'artistes du 1er aux agences du 2e, chaque catégorie garde sa couleur partout dans la carte. Les anneaux pointillés marquent les points d'acupuncture : les structures qui relient le plus de mondes différents.</p><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-next>Continuer</button></div>`,
+   enter:()=>{ profile=null; if(viewMode!=='clusters') setView('clusters'); applyState(); setScatter(false); }},
+  {render:()=>{ const q=norm(meQuery); const list=RAW.filter(o=>!q||norm(o.name).includes(q)||norm(o.people).includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'fr')); return `<div class="step">Personnaliser · 1 sur 3</div><h2>Qui êtes-vous ?</h2><p>Choisissez votre structure : la carte mettra en avant vos voisin·e·s et celles et ceux qui travaillent comme vous. Visiteur·se ? Passez cette étape.</p><input class="mesearch" id="meSearch" type="search" placeholder="Votre structure ou votre nom" value="${esc(meQuery)}" autocomplete="off"><div class="choices">${list.map(o=>`<button class="chip" data-me="${o.id}" aria-pressed="${obDraft.me===o.id}">${logoImg(o,'lg')}${esc(o.name)}</button>`).join('')}</div><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-next>${obDraft.me?'Continuer':'Je visite, continuer'}</button><button class="ghost" data-skip>Passer</button></div>`; },
+   enter:()=>{ if(viewMode!=='clusters') setView('clusters'); setScatter(false); profile={me:obDraft.me,themes:[],wants:[]}; applyState(); if(obDraft.me){ const o=orgById.get(obDraft.me); const l=leafByOrg.get(o); if(l&&l.parent) zoomTo(l.parent.x,l.parent.y,l.parent.r,650); } }},
+  {render:()=>{ const all=Object.entries(d3.rollup(RAW.flatMap(o=>o.themes),v=>v.length,x=>x)).sort((a,b)=>b[1]-a[1]).map(x=>x[0]); return `<div class="step">Personnaliser · 2 sur 3</div><h2>Sur quoi travaillez-vous ?</h2><p>Jusqu'à trois thèmes. Les structures qui les partagent passeront devant.</p><div class="choices">${all.map(t=>`<button class="chip" data-theme="${esc(t)}" aria-pressed="${obDraft.themes.includes(t)}">${esc(t)}</button>`).join('')}</div><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-next ${obDraft.themes.length?'':'disabled'}>Continuer</button><button class="ghost" data-skip>Passer</button></div>`; },
+   enter:()=>{ profile={me:obDraft.me,themes:obDraft.themes.slice(),wants:[]}; if(viewMode!=='clusters') setView('clusters'); groupBy='theme'; layout(); applyState(); }},
+  {render:()=>`<div class="step">Personnaliser · 3 sur 3</div><h2>Quel chantier vous tente ?</h2><p>Les convergences sont des projets communs possibles entre structures de familles différentes. Choisissez ceux qui vous parlent.</p><div class="choices">${CONV.map(c=>`<button class="chip" data-want="${c.id}" aria-pressed="${obDraft.wants.includes(c.id)}"><span style="color:var(--accent);margin-right:4px">${FAMS[c.family].icon}</span>${esc(c.title)}</button>`).join('')}</div><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-next>Continuer</button><button class="ghost" data-skip>Passer</button></div>`,
+   enter:()=>{ profile={me:obDraft.me,themes:obDraft.themes.slice(),wants:obDraft.wants.slice()}; if(viewMode!=='conv') setView('conv'); applyState(); }},
+  {render:()=>{ const me=orgById.get(obDraft.me); const n=orgs.filter(o=>profileMatch(o)&&o!==me).length; const kn=convsForProfile(50).length; const nb=me?neighbours(me):null; return `<div class="step">Votre vue</div><p class="big">${n}</p><h2>structures correspondent à votre profil${nb?`, dont ${nb.sameFloor.length+nb.sameRoom.length} sur votre palier`:''}</h2><p>${kn} chantiers vous concernent. Vos structures restent devant ; le reste du lieu attend en arrière-plan jusqu'à ce que vous le demandiez. Changez de profil ou affichez tout à tout moment.</p><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-finish>Ouvrir ma carte</button><button class="ghost" data-skip>Tout afficher plutôt</button></div>`; },
+   enter:()=>{ profile={me:obDraft.me,themes:obDraft.themes.slice(),wants:obDraft.wants.slice()}; if(viewMode!=='lieu') setView('lieu'); applyState(); const me=orgById.get(obDraft.me); if(me) LIEU.flyTo(me); else LIEU.home(); }},
+];
+function startOnboarding(step){
+  obDraft={me:profile?.me||null,themes:(profile?.themes||[]).slice(),wants:(profile?.wants||[]).slice()}; meQuery='';
+  document.body.classList.add('onboarding'); onb.hidden=false; select(null); selectedConv=null; focusGroup=null; svg.call(zoom.transform,d3.zoomIdentity);
+  setTimeout(()=>{ layout(); goStep(step); },30);
+}
+function goStep(i){
+  obStep=Math.max(0,Math.min(STEPS.length-1,i)); const s=STEPS[obStep];
+  onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">Molette ou flèches ← → pour avancer</div>`;
+  s.enter();
+  onbCard.querySelector('[data-next]')?.addEventListener('click',()=>goStep(obStep+1));
+  onbCard.querySelector('[data-prev]')?.addEventListener('click',()=>goStep(obStep-1));
+  onbCard.querySelector('[data-skip]')?.addEventListener('click',()=>endOnboarding(false));
+  onbCard.querySelector('[data-finish]')?.addEventListener('click',()=>endOnboarding(true));
+  onbCard.querySelectorAll('[data-me]').forEach(b=>b.onclick=()=>{ obDraft.me=obDraft.me===b.dataset.me?null:b.dataset.me; goStep(obStep); });
+  const ms=onbCard.querySelector('#meSearch'); if(ms){ ms.oninput=()=>{ meQuery=ms.value; const pos=ms.selectionStart; goStep(obStep); const m2=onbCard.querySelector('#meSearch'); m2.focus(); m2.setSelectionRange(pos,pos); }; }
+  onbCard.querySelectorAll('[data-want]').forEach(b=>b.onclick=()=>{ const t=b.dataset.want; const i=obDraft.wants.indexOf(t); if(i>=0) obDraft.wants.splice(i,1); else obDraft.wants.push(t); goStep(obStep); });
+  onbCard.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{ const t=b.dataset.theme; const i=obDraft.themes.indexOf(t); if(i>=0) obDraft.themes.splice(i,1); else if(obDraft.themes.length<3) obDraft.themes.push(t); goStep(obStep); });
+  if(!ms) onbCard.querySelector('.primary')?.focus({preventScroll:true});
+}
+function endOnboarding(keep){
+  if(keep && (obDraft.me||obDraft.themes.length||obDraft.wants.length)) profile={me:obDraft.me,themes:obDraft.themes.slice(),wants:obDraft.wants.slice()}; else profile=null;
+  saveProfile();
+  document.body.classList.remove('onboarding'); onb.hidden=true; obStep=-1;
+  if(scattered) setScatter(false);
+  if(!profile && viewMode!=='clusters') setView('clusters'); else if(profile && viewMode==='conv') setView('clusters');
+  if(groupBy!=='cat'){ groupBy='cat'; }
+  setTimeout(()=>{ layout(); renderHint(); renderDetail(); renderPopover(); const me=meOrg(); if(me&&viewMode==='lieu') LIEU.flyTo(me); },30);
+}
+let wheelLock=0;
+canvas.addEventListener('wheel',e=>{ if(obStep<0) return; e.preventDefault(); e.stopPropagation(); const now=Date.now(); if(now-wheelLock<900||Math.abs(e.deltaY)<20) return; wheelLock=now; const can=!onbCard.querySelector('[data-next]')?.disabled; if(e.deltaY>0){ if(obStep===STEPS.length-1) endOnboarding(true); else if(can) goStep(obStep+1); } else goStep(obStep-1); },{passive:false,capture:true});
+addEventListener('keydown',e=>{ if(obStep<0||e.target.matches('input')) return; if(e.key==='ArrowRight'||e.key==='Enter'){ const n=onbCard.querySelector('[data-next],[data-finish]'); if(n&&!n.disabled&&e.target.tagName!=='BUTTON') n.click(); } else if(e.key==='ArrowLeft'&&obStep>0) goStep(obStep-1); else if(e.key==='Escape') endOnboarding(true); });
+applyNarrow(); renderLegend(); renderHint(); renderDetail(); layout(); renderPopover();
+if(!profile) startOnboarding(0); else if(meOrg()&&viewMode==='clusters'){ /* profil connu : carte complète, sélection dans le panneau */ }
+
+</script>
+
+</body>
+</html>
