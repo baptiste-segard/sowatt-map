@@ -257,7 +257,7 @@ function renderHint(){
   if(anyFilter() && shown===0){ c.className='crumb zero'; c.innerHTML=`<span>Aucune structure ne correspond${convHits.length?` · ${convHits.length} convergence${convHits.length>1?'s':''} dans le panneau`:''}</span><button id="hintClear">Effacer</button>`; h.appendChild(c); c.querySelector('#hintClear').onclick=()=>document.getElementById('clearAll').click(); return; }
   if(viewMode==='lieu'){ c.innerHTML=`<span class="sub">Le bâtiment réel (OpenStreetMap) posé sur l'orthophoto IGN, nord en haut. Glisser = tourner · molette = zoomer · clic droit = déplacer.</span><span class="floorbar">${['all','R3','R2','R1','RDC','SS'].map(f=>`<button data-floor="${f}" aria-pressed="${(LIEU.floor||'all')===f}">${f==='all'?'Tout':f==='SS'?'Sous-sol':f==='RDC'?'RDC':f.replace('R','')+(f==='R1'?'er':'e')}</button>`).join(' · ')}</span><span class="floorbar" style="margin-left:6px;border-left:1px solid var(--line);padding-left:8px"><button data-gap="eclate" aria-pressed="${LIEU.gap==='eclate'}">Éclaté</button> · <button data-gap="compact" aria-pressed="${LIEU.gap==='compact'}">Compact</button></span>`; h.appendChild(c); c.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>{ LIEU.setFloor(b.dataset.floor==='all'?null:b.dataset.floor); renderHint(); }); c.querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{ LIEU.setGap(b.dataset.gap); renderHint(); }); return; }
   if(focusGroup){ c.innerHTML=`<button id="crumbBack">← ${viewMode==='conv'?'Toutes les convergences':'Tout'}</button><span>${esc(focusGroup.data.name)} · ${focusGroup.children.length} structures</span>`; h.appendChild(c); c.querySelector('#crumbBack').onclick=resetView; }
-  else if(viewMode==='conv'){ c.innerHTML=`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span>`; h.appendChild(c); }
+  else if(viewMode==='conv'){ c.innerHTML=`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. <span class="sub">Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span></span>`; h.appendChild(c); }
   else { c.classList.add('gb'); c.innerHTML=`<span>Regroupées par</span><span id="groupSeg" role="group"></span><span class="sub" style="color:var(--muted)">· cliquer une grappe pour zoomer, un point pour ouvrir une fiche</span>`; h.appendChild(c); renderGroupSeg(); }
 }
 let legendOpen=false; try{ legendOpen=localStorage.getItem('sowatt.legend')==='1'; }catch(e){}
@@ -311,7 +311,9 @@ function convCard(c,compact){
   return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>${c.first_step?`<p class="rstep"><b>Premier pas ·</b> ${esc(c.first_step)}</p>`:''}${c.evidence?`<p class="rev">Repéré sur : ${esc(c.evidence)}</p>`:''}`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
 }
 function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
-function convHitsHtml(){ if(!query||!convHits.length) return ''; return `<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
+function orgHits(){ return query? RAW.filter(textMatch).sort((a,b)=>a.name.localeCompare(b.name,'fr')) : []; }
+function orgHitsHtml(){ if(!query) return ''; const h=orgHits(); return `<div class="ksec" style="margin:0 0 16px"><dt>Structures pour « ${esc(query)} » <span class="n">${h.length}</span></dt>${h.length?`<ul class="rel">${h.slice(0,12).map(o=>orgLi(o,o.catLabel)).join('')}</ul>${h.length>12?`<p class="kempty">… et ${h.length-12} autres, en surbrillance sur la carte.</p>`:''}`:'<p class="kempty">Aucune structure ne correspond.</p>'}</div>`; }
+function convHitsHtml(){ if(!query) return ''; if(!convHits.length) return orgHitsHtml(); return orgHitsHtml()+`<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
 function profileBarHtml(compact){ if(!profile) return ''; const who=esc(profileWho()); const th=profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'; if(compact) return `<div class="profile-bar" style="padding:6px 10px;margin-right:28px"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${who} · ${th}</span><button id="editProfile">Modifier</button></div>`; return `<div class="profile-bar"><b>${who}</b><span style="color:var(--muted);font-size:12px">${th}${profile.wants?.length?' · '+profile.wants.length+' chantier'+(profile.wants.length>1?'s':''):''}</span><span style="margin-left:auto;display:flex;gap:10px"><button id="editProfile">Modifier</button><button id="showAll">Tout afficher</button></span></div>`; }
 function bindProfileBar(el){ el.querySelector('#editProfile')?.addEventListener('click',()=>startOnboarding(2)); el.querySelector('#showAll')?.addEventListener('click',()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); applyState(); renderDetail(); renderPopover(); }); }
 function orgLi(x,why,title){ return `<li><button data-id="${x.id}"${title?` title="${esc(title)}"`:''}>${logoImg(x)}<span class="nm">${esc(x.name)}</span><span class="why">${esc(why)}</span></button></li>`; }
@@ -347,6 +349,7 @@ function renderDetail(){
     <div class="ksec"><dt>Micro-systèmes <span class="n">· ${CONV.filter(c=>c.family==='niche').length} petits chantiers précis</span></dt><ul class="reslist">${CONV.filter(c=>c.family==='niche').map(c=>convCard(c,true)).join('')}</ul></div>
     <div class="ksec"><dt>Grandes convergences</dt><ul class="reslist">${CONV.filter(c=>c.family!=='niche').map(c=>convCard(c,true)).join('')}</ul></div>`;
     el.querySelectorAll('.agenda .aorg').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+    el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
     el.querySelector('#goLieu').onclick=()=>setView('lieu'); el.querySelector('#setupProfile').onclick=()=>startOnboarding(2);
     el.querySelectorAll('.acu-list button').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
     bindConvCards(el); syncDetailSheet(); return; }
@@ -407,7 +410,7 @@ document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); 
 function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
 function setDetailOpen(open){ const d=document.getElementById('detail'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(open){ d.scrollTop=0; setFiltersOpen(false); } }
 let convDismissed=false, forYouOpen=false;
-function syncDetailSheet(){ setDetailOpen(!!(selected||selectedConv||(profile&&forYouOpen)||(query&&convHits.length&&!convDismissed))); }
+function syncDetailSheet(){ setDetailOpen(!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed))); }
 function closeDetailSheet(){ forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
 document.getElementById('toggleFilters').onclick=()=>setFiltersOpen(document.getElementById('filters').hidden);
 document.getElementById('closeFilters').onclick=()=>setFiltersOpen(false);
@@ -587,7 +590,7 @@ function startOnboarding(step){
 }
 function goStep(i){
   obStep=Math.max(0,Math.min(STEPS.length-1,i)); const s=STEPS[obStep];
-  onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">Molette ou flèches ← → pour avancer</div>`;
+  onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">${TOUCH?'Balayez ← → pour avancer':'Molette ou flèches ← → pour avancer'}</div>`;
   s.enter();
   onbCard.querySelector('[data-next]')?.addEventListener('click',()=>goStep(obStep+1));
   onbCard.querySelector('[data-prev]')?.addEventListener('click',()=>goStep(obStep-1));
@@ -606,8 +609,13 @@ function endOnboarding(keep){
   if(scattered) setScatter(false);
   if(!profile && viewMode!=='clusters') setView('clusters'); else if(profile && viewMode==='conv') setView('clusters');
   if(groupBy!=='cat'){ groupBy='cat'; }
-  setTimeout(()=>{ layout(); renderHint(); renderDetail(); renderPopover(); const me=meOrg(); if(me&&viewMode==='lieu') LIEU.flyTo(me); },30);
+  if(profile && narrowMQ.matches) forYouOpen=true;
+  setTimeout(()=>{ layout(); renderHint(); renderDetail(); renderPopover(); syncDetailSheet(); const me=meOrg(); if(me&&viewMode==='lieu') LIEU.flyTo(me); },30);
 }
+const TOUCH=matchMedia('(pointer:coarse)').matches;
+let swipeX=null, swipeY=null;
+onb.addEventListener('touchstart',e=>{ if(obStep<0||e.touches.length!==1) return; swipeX=e.touches[0].clientX; swipeY=e.touches[0].clientY; },{passive:true});
+onb.addEventListener('touchend',e=>{ if(obStep<0||swipeX===null) return; const dx=e.changedTouches[0].clientX-swipeX, dy=e.changedTouches[0].clientY-swipeY; swipeX=null; if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5) return; if(dx<0){ const n=onbCard.querySelector('[data-next],[data-finish]'); if(n&&!n.disabled) n.click(); } else if(obStep>0) goStep(obStep-1); },{passive:true});
 let wheelLock=0;
 canvas.addEventListener('wheel',e=>{ if(obStep<0) return; e.preventDefault(); e.stopPropagation(); const now=Date.now(); if(now-wheelLock<900||Math.abs(e.deltaY)<20) return; wheelLock=now; const can=!onbCard.querySelector('[data-next]')?.disabled; if(e.deltaY>0){ if(obStep===STEPS.length-1) endOnboarding(true); else if(can) goStep(obStep+1); } else goStep(obStep-1); },{passive:false,capture:true});
 addEventListener('keydown',e=>{ if(obStep<0||e.target.matches('input')) return; if(e.key==='ArrowRight'||e.key==='Enter'){ const n=onbCard.querySelector('[data-next],[data-finish]'); if(n&&!n.disabled&&e.target.tagName!=='BUTTON') n.click(); } else if(e.key==='ArrowLeft'&&obStep>0) goStep(obStep-1); else if(e.key==='Escape') endOnboarding(true); });

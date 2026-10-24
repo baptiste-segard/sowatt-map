@@ -38,7 +38,7 @@ for o in occ:
     o['publicsDetail'] = e.get('publics', '')
     o['agenda'] = sorted((agenda_item(a) for a in e.get('agenda', [])), key=lambda a: a['end'])
     o['reseaux'] = e.get('reseaux', [])
-    o['alertes'] = e.get('alertes', [])
+    o['alertes'] = [] if PUBLIC else e.get('alertes', [])  # notes internes, pas en public
     if not PUBLIC:
         o['mails'] = o.get('mails', []) + [m for m in e.get('mails_trouves', []) if m not in o.get('mails', [])]
         if not o.get('phone') and e.get('tel_trouves'):
