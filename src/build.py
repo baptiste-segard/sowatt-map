@@ -20,6 +20,29 @@ if PUBLIC:
     for d in ('logos', 'plans', 'vendor'):
         if not os.path.exists(os.path.join(SITE, d)):
             shutil.copytree(os.path.join(ROOT, '..', 'site', d), os.path.join(SITE, d))
+# ---- enrichissement (sites des structures, 24/10/2026) : offre, formats, agenda, réseaux, contacts trouvés
+import datetime
+MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
+def agenda_item(a):
+    d = a['date']; parts = d.split('/'); y, *ym = parts[0].split('-'); m = int(ym[0]) if ym else None; rest = ym[1:]
+    days = ([rest[0]] if rest else []) + parts[1:]
+    if not m: return dict(a, label=y, end=f'{y}-12-31')
+    end = f'{y}-{m:02d}-{int(days[-1]):02d}' if days else f'{y}-{m:02d}-28'
+    lab = (('–'.join(str(int(x)) for x in [days[0], days[-1]]) if len(days) == 2 and len(parts) == 2 else ', '.join(str(int(x)) for x in days)) + ' ' if days else '') + MOIS[m - 1] + ('' if y == '2026' else ' ' + y)
+    return dict(a, label=lab, end=end)
+ENR = json.load(open('enrichissement.json'))
+for o in occ:
+    e = ENR.get(o['id'], {})
+    for k in ('offre', 'formats'):
+        o[k] = e.get(k, '')
+    o['publicsDetail'] = e.get('publics', '')
+    o['agenda'] = sorted((agenda_item(a) for a in e.get('agenda', [])), key=lambda a: a['end'])
+    o['reseaux'] = e.get('reseaux', [])
+    o['alertes'] = e.get('alertes', [])
+    if not PUBLIC:
+        o['mails'] = o.get('mails', []) + [m for m in e.get('mails_trouves', []) if m not in o.get('mails', [])]
+        if not o.get('phone') and e.get('tel_trouves'):
+            o['phone'] = e['tel_trouves'][0]
 conv = json.load(open('convergences.json'))
 byid = {o['id']: o for o in occ}
 
@@ -37,7 +60,7 @@ for o in occ:
         for m in c['members']:
             if m['id'] != o['id']:
                 cats.add(byid[m['id']]['cat'])
-    score = len(cs) * 2 + len(fams) + len(cats) * 0.35 + (3 if o['id'] in conv['notes'] else 0)
+    score = sum(1 if c['family'] == 'niche' else 2 for c in cs) + len(fams) + len(cats) * 0.35 + (3 if o['id'] in conv['notes'] else 0)
     o['acu'] = {'score': round(score, 2), 'n': len(cs), 'fams': len(fams), 'cats': len(cats), 'note': conv['notes'].get(o['id']), 'top': False, 'rank': None}
     scores.append((score, o['id']))
 scores.sort(reverse=True)

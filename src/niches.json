@@ -1,0 +1,601 @@
+{
+ "families": {
+  "niche": {
+   "label": "Micro-systèmes",
+   "icon": "◈",
+   "desc": "Petits systèmes de 3 à 7 structures, appuyés sur ce qu'elles font déjà (sites, agendas), avec un premier pas datable."
+  }
+ },
+ "convergences": [
+  {
+   "id": "kino-hlm",
+   "family": "niche",
+   "title": "Le Kino hors les murs",
+   "summary": "Le Kino-Ciné est fermé « jusqu'à nouvel ordre » (campus Pont-de-Bois). Le So Watt a un grand espace événementiel au RDC et tout ce qu'il faut autour pour une séance.",
+   "potential": "Des séances et ciné-débats du Kino au RDC, avec un atelier cinéma ados de Sinode Baba en avant-séance.",
+   "first_step": "Proposer d'accueillir le ciné-débat « La Sociale » prévu le 17/11 18h30.",
+   "evidence": "Bandeau de fermeture sur kino-cine.com ; ateliers cinéma ados sur sinodebaba.fr.",
+   "members": [
+    {
+     "id": "kino",
+     "role": "programmation, ciné-débat"
+    },
+    {
+     "id": "sinode",
+     "role": "atelier cinéma ados"
+    },
+    {
+     "id": "bacprod",
+     "role": "son, captation"
+    },
+    {
+     "id": "leflower",
+     "role": "scénographie numérique"
+    },
+    {
+     "id": "litha",
+     "role": "café"
+    },
+    {
+     "id": "astreos",
+     "role": "sécurité ERP"
+    }
+   ]
+  },
+  {
+   "id": "sowatt-repare",
+   "family": "niche",
+   "title": "Semaine « So Watt répare » (14–21 nov.)",
+   "summary": "Le Repair Café de La Petite Madeleine se tient au So Watt le 14/11, la Semaine européenne de réduction des déchets suit le 21/11 à Saint-André. Quatre voisins réparent ou réemploient déjà.",
+   "potential": "Faire du 14/11 un samedi réparation complet : objets, textile, denim, sérigraphie, cosmétique zéro déchet, contenants consignés.",
+   "first_step": "Un stand remaillage (Refill) + denim (Ar(tk)ive) au Repair Café du 14/11.",
+   "evidence": "Agenda lapetitemadeleine.org ; pages Refill, Ar(tk)ive, Sunday, La Seconde.",
+   "members": [
+    {
+     "id": "madeleine",
+     "role": "repair café"
+    },
+    {
+     "id": "refill",
+     "role": "retouche, remaillage"
+    },
+    {
+     "id": "laseconde",
+     "role": "objets de réemploi"
+    },
+    {
+     "id": "artkive",
+     "role": "denim upcyclé"
+    },
+    {
+     "id": "sunday",
+     "role": "sérigraphie, upcycling"
+    },
+    {
+     "id": "diy",
+     "role": "zéro déchet"
+    },
+    {
+     "id": "consignerie",
+     "role": "consigne"
+    }
+   ]
+  },
+  {
+   "id": "boucle-denim",
+   "family": "niche",
+   "title": "La boucle du jean",
+   "summary": "Collecte, réparation, transformation, impression, apprentissage : toute la chaîne textile tient dans le bâtiment.",
+   "potential": "Un jean fatigué entre par La Seconde, ressort réparé (Refill), transformé en workwear (Ar(tk)ive) ou floqué (Sunday) ; Helcou apprend à le faire soi-même.",
+   "first_step": "Une vitrine « avant / après » à la braderie Sunday Surfers 2026.",
+   "evidence": "Ar(tk)ive : denim upcyclé fait main ; Sunday : sérigraphie sans minimum ; Helcou : cours 50–55 €.",
+   "members": [
+    {
+     "id": "laseconde",
+     "role": "collecte"
+    },
+    {
+     "id": "refill",
+     "role": "réparation"
+    },
+    {
+     "id": "artkive",
+     "role": "transformation"
+    },
+    {
+     "id": "sunday",
+     "role": "impression"
+    },
+    {
+     "id": "helcou",
+     "role": "transmission couture"
+    },
+    {
+     "id": "madeleine",
+     "role": "éco-créa textile"
+    }
+   ]
+  },
+  {
+   "id": "vacances",
+   "family": "niche",
+   "title": "Le pass vacances du So Watt",
+   "summary": "Pendant ces vacances de Toussaint, cinq structures programment déjà des ateliers enfants, chacune de son côté.",
+   "potential": "Un seul programme imprimé et une seule page d'inscription par période de vacances ; des journées complètes en enchaînant les ateliers.",
+   "first_step": "Programme commun des vacances de Noël (Craie'n'Co a déjà le 24/12).",
+   "evidence": "Brick&Num 26–27/10 ; Craie'n'Co 23, 24, 31/10 ; Family Forme stages 19–30/10 ; Artorium mercredis + vacances ; ATK duo parent/enfant.",
+   "members": [
+    {
+     "id": "bricknum",
+     "role": "briques & numérique"
+    },
+    {
+     "id": "craienco",
+     "role": "créatif & bien-être"
+    },
+    {
+     "id": "familyforme",
+     "role": "danse, cirque"
+    },
+    {
+     "id": "artorium",
+     "role": "art & science"
+    },
+    {
+     "id": "atk",
+     "role": "aquarelle parent/enfant"
+    },
+    {
+     "id": "caenen",
+     "role": "arts plastiques"
+    }
+   ]
+  },
+  {
+   "id": "anniversaires",
+   "family": "niche",
+   "title": "L'anniversaire au So Watt",
+   "summary": "Trois structures vendent déjà des anniversaires enfants, une pâtissière et un traiteur sont dans les murs.",
+   "potential": "Une formule à la carte : un atelier au choix + goûter + salle.",
+   "first_step": "Une page commune « fêter son anniversaire au So Watt » avec les trois offres existantes.",
+   "evidence": "Pages anniversaires de Craie'n'Co, Brick&Num et Family Forme.",
+   "members": [
+    {
+     "id": "craienco",
+     "role": "anniversaire créatif"
+    },
+    {
+     "id": "bricknum",
+     "role": "anniversaire LEGO"
+    },
+    {
+     "id": "familyforme",
+     "role": "anniversaire cirque/danse"
+    },
+    {
+     "id": "dupont",
+     "role": "pâtisserie (Poëtic Brindilles)"
+    },
+    {
+     "id": "consignerie",
+     "role": "goûter traiteur"
+    }
+   ]
+  },
+  {
+   "id": "jeune-public",
+   "family": "niche",
+   "title": "Scène jeune public",
+   "summary": "Marionnette dès 6 mois, spectacles pour crèches, décors, scénographie numérique, et la plume de la brochure du Grand Bleu : une petite filière jeune public.",
+   "potential": "Accueillir une étape de travail des Lueurs (création 2027) devant les crèches et RAM du réseau de La Troupaka.",
+   "first_step": "Demander au Collectif errances une sortie de résidence au RDC avant les premières du 17/02/2027.",
+   "evidence": "Agenda collectiferrances.com ; La Troupaka sur familyforme.fr ; brochure Grand Bleu sur mathieudauchy.fr.",
+   "members": [
+    {
+     "id": "errances",
+     "role": "création marionnette"
+    },
+    {
+     "id": "familyforme",
+     "role": "réseau crèches (Troupaka)"
+    },
+    {
+     "id": "caenen",
+     "role": "décors, accessoires"
+    },
+    {
+     "id": "leflower",
+     "role": "scénographie numérique"
+    },
+    {
+     "id": "dauchy",
+     "role": "écriture, médiation"
+    }
+   ]
+  },
+  {
+   "id": "labo-mercredi",
+   "family": "niche",
+   "title": "Le labo du mercredi",
+   "summary": "Microscopie botanique et dessin scientifique d'un côté, programmation de briques de l'autre, modélisation 3D à l'étage : un mercredi art-science-numérique.",
+   "potential": "Un cycle « observer → dessiner → modéliser → construire ».",
+   "first_step": "Un mercredi croisé Artorium × Brick&Num.",
+   "evidence": "Ateliers « microscopie botanique » et « Hypothèse » (Artorium) ; ateliers numériques (Brick&Num) ; formation Rhino3D (F. Dahmani).",
+   "members": [
+    {
+     "id": "artorium",
+     "role": "observation, dessin scientifique"
+    },
+    {
+     "id": "bricknum",
+     "role": "programmation"
+    },
+    {
+     "id": "dahmani",
+     "role": "modélisation 3D"
+    }
+   ]
+  },
+  {
+   "id": "cantines",
+   "family": "niche",
+   "title": "Bien manger, bien bouger : offre aux communes",
+   "summary": "A PRO BIO aide les collectivités à passer leur restauration collective au bio ; Vivons en Forme anime la prévention santé dans plus de 300 villes. Même client : la commune.",
+   "potential": "Une offre conjointe pour les villes VIF des Hauts-de-France : cantine bio + prévention 3–12 ans.",
+   "first_step": "Une rencontre A PRO BIO × Vivons en Forme dans la salle de réunion du So Watt.",
+   "evidence": "aprobio.fr (Plan Bio HdF, appels d'offres) ; vivonsenforme.org (>300 villes, >250 000 enfants).",
+   "members": [
+    {
+     "id": "aprobio",
+     "role": "restauration collective bio"
+    },
+    {
+     "id": "vif",
+     "role": "prévention santé enfants"
+    },
+    {
+     "id": "familyforme",
+     "role": "activité physique"
+    },
+    {
+     "id": "bonallure",
+     "role": "livraison électrique"
+    },
+    {
+     "id": "consignerie",
+     "role": "traiteur local"
+    }
+   ]
+  },
+  {
+   "id": "artistes-auteurs",
+   "family": "niche",
+   "title": "La permanence artistes-auteurs",
+   "summary": "Maze forme les artistes-auteurs à leur statut et leur compta ; plus de 25 artistes travaillent dans le même bâtiment.",
+   "potential": "Une permanence mensuelle sur place + un parcours collectif finançable (Afdas).",
+   "first_step": "Proposer aux artistes la session « b.a.-ba de la compta » des 7, 10 et 11/12.",
+   "evidence": "Agenda maze-conseils.com (formations nov./déc. 2026, page financement).",
+   "members": [
+    {
+     "id": "maze",
+     "role": "formation, conseil"
+    },
+    {
+     "id": "maillart",
+     "role": "collectif d'artistes"
+    },
+    {
+     "id": "parez",
+     "role": "expertise comptable"
+    },
+    {
+     "id": "aeg",
+     "role": "patrimoine pro"
+    },
+    {
+     "id": "assureetmoi",
+     "role": "assurance"
+    }
+   ]
+  },
+  {
+   "id": "personnage",
+   "family": "niche",
+   "title": "Fabrique de personnages",
+   "summary": "Prothèses SFX, perruques artistiques, nail art maximaliste, couture, photo : de quoi créer un personnage entier (drag, cosplay, cinéma, murder party).",
+   "potential": "Un kit « personnage » pour les murder parties de Sinode Baba et les tournages ; un shooting commun pour les portfolios.",
+   "first_step": "Un shooting « créature » commun photographié par Polaifos.",
+   "evidence": "Boutique SFX d'Ema ; descriptif Mishou Wigs (drag, cosplay) ; murder parties sur sinodebaba.fr.",
+   "members": [
+    {
+     "id": "ema",
+     "role": "prothèses SFX"
+    },
+    {
+     "id": "mishou",
+     "role": "perruques"
+    },
+    {
+     "id": "joonailz",
+     "role": "nail art ornemental"
+    },
+    {
+     "id": "unasdebruja",
+     "role": "nail art expérimental"
+    },
+    {
+     "id": "maranta",
+     "role": "couture"
+    },
+    {
+     "id": "polaifos",
+     "role": "photo"
+    },
+    {
+     "id": "sinode",
+     "role": "client : murder parties"
+    }
+   ]
+  },
+  {
+   "id": "ongles",
+   "family": "niche",
+   "title": "Quatre prothésistes, un étage de nail art",
+   "summary": "Joonailz, Nininails, Uñas de Bruja et Zeste d'Amande font le même métier dans le même lieu, avec des styles très différents.",
+   "potential": "Achats groupés, remplacements mutuels, une expo « micro-peinture » ou un nail art jam ouvert au public.",
+   "first_step": "Un café entre les quatre pour lister ce qu'elles pourraient mutualiser.",
+   "evidence": "Descriptifs des occupant·e·s (So Watt / tableur).",
+   "members": [
+    {
+     "id": "joonailz",
+     "role": "ornements maximalistes"
+    },
+    {
+     "id": "nininails",
+     "role": "nail art, strass dentaires"
+    },
+    {
+     "id": "unasdebruja",
+     "role": "abstrait, texturé"
+    },
+    {
+     "id": "zeste",
+     "role": "prothésiste ongulaire"
+    }
+   ]
+  },
+  {
+   "id": "podcast",
+   "family": "niche",
+   "title": "Le podcast du lieu",
+   "summary": "Un rédacteur qui écrit et anime des podcasts, un studio de production sonore, une agence de récits de territoire, et le gestionnaire du lieu comme commanditaire naturel.",
+   "potential": "Une saison pilote « Les gens du So Watt », nourrie par cette carte.",
+   "first_step": "5 épisodes pilotes commandés par Intermède.",
+   "evidence": "Podcasts Capsule ID (Dauchy) ; La Fabric (identités sonores, podcasts) ; références La Maillerie / Claeyssens (La Foule).",
+   "members": [
+    {
+     "id": "dauchy",
+     "role": "écriture, animation"
+    },
+    {
+     "id": "lafabric",
+     "role": "production sonore"
+    },
+    {
+     "id": "lafoule",
+     "role": "récit de territoire"
+    },
+    {
+     "id": "intermede",
+     "role": "commanditaire"
+    },
+    {
+     "id": "bacprod",
+     "role": "captation vidéo"
+    }
+   ]
+  },
+  {
+   "id": "journee-equipe",
+   "family": "niche",
+   "title": "La journée d'équipe clé en main",
+   "summary": "Traiteur éco, café, ateliers DIY et aquarelle en team building, QVCT, ergonomie : une journée séminaire complète sans sortir du bâtiment.",
+   "potential": "Un produit vendu par Oui Change (qui cherche justement des partenaires à présenter chez ses clients) et finançable via Antego (Qualiopi, OPCO).",
+   "first_step": "Une offre commune envoyée à Oui Change Corp.",
+   "evidence": "Pages consignerie.com, litha-espresso.fr, ateliersdiy.fr, studioatk.fr, ouichangecorp.com, antego.fr.",
+   "members": [
+    {
+     "id": "ouichange",
+     "role": "distribution, GreenBuilding"
+    },
+    {
+     "id": "antego",
+     "role": "formation finançable"
+    },
+    {
+     "id": "consignerie",
+     "role": "traiteur, animations culinaires"
+    },
+    {
+     "id": "litha",
+     "role": "café"
+    },
+    {
+     "id": "diy",
+     "role": "atelier DIY"
+    },
+    {
+     "id": "atk",
+     "role": "team building aquarelle"
+    },
+    {
+     "id": "confidentialistes",
+     "role": "QVCT, brainstorming"
+    },
+    {
+     "id": "exocer",
+     "role": "ergonomie"
+    }
+   ]
+  },
+  {
+   "id": "chantier",
+   "family": "niche",
+   "title": "Du relevé au chantier",
+   "summary": "Relevé 3D, design intérieur, aménagement d'enseignes, rénovation, mise en relation artisans-particuliers, recrutement BTP, immobilier d'entreprise : la chaîne bâtiment est complète.",
+   "potential": "Un circuit d'apport d'affaires (Bilik ↔ AMV, Plan D ↔ Letertre / Hibou Rouge) et des profils BTP via Harch.",
+   "first_step": "Demander à Plan D un relevé 3D du So Watt (utile aussi pour la carte 3D).",
+   "evidence": "Offres Harch (conducteur de travaux, QHSE, TCE) ; hibou-rouge.fr ; descriptifs Plan D et Bilik.",
+   "members": [
+    {
+     "id": "pland",
+     "role": "relevé 3D"
+    },
+    {
+     "id": "letertre",
+     "role": "design intérieur"
+    },
+    {
+     "id": "hibourouge",
+     "role": "espaces d'enseigne"
+    },
+    {
+     "id": "amv",
+     "role": "rénovation"
+    },
+    {
+     "id": "bilik",
+     "role": "mise en relation"
+    },
+    {
+     "id": "harch",
+     "role": "recrutement BTP"
+    },
+    {
+     "id": "capstone",
+     "role": "immobilier"
+    }
+   ]
+  },
+  {
+   "id": "festival-hiver",
+   "family": "niche",
+   "title": "Le festival d'hiver au RDC",
+   "summary": "IGWAP a déjà monté deux éditions d'un festival d'hiver de groupes amateurs ; le lieu a la salle, la sécurité, le bar, la vidéo, le VJing.",
+   "potential": "Une 3e édition au So Watt en janvier–février 2027.",
+   "first_step": "Proposer le RDC à IGWAP pour l'hiver 2027.",
+   "evidence": "Archives festival d'hiver sur igwap.fr (dont édition chez Houblons-Nous).",
+   "members": [
+    {
+     "id": "igwap",
+     "role": "programmation"
+    },
+    {
+     "id": "coalline",
+     "role": "studio musiques urbaines"
+    },
+    {
+     "id": "leflower",
+     "role": "VJing"
+    },
+    {
+     "id": "astreos",
+     "role": "sécurité événementielle"
+    },
+    {
+     "id": "consignerie",
+     "role": "bar"
+    },
+    {
+     "id": "kpro",
+     "role": "stockage matériel"
+    }
+   ]
+  },
+  {
+   "id": "ia-outils",
+   "family": "niche",
+   "title": "IA et outils pour indépendants",
+   "summary": "Une soixantaine de micro-structures partagent les mêmes besoins : outils, sauvegardes, IA, pub en ligne.",
+   "potential": "Un cycle d'ateliers courts « mes outils en ordre, puis l'IA ».",
+   "first_step": "Un premier atelier Cyremia ouvert à tous les occupant·e·s.",
+   "evidence": "cyremia.com (IA, Workspace, sauvegardes) ; soluxan.com (cyber) ; agencebuddy.fr (Meta Ads).",
+   "members": [
+    {
+     "id": "cyremia",
+     "role": "IA, outils"
+    },
+    {
+     "id": "soluxan",
+     "role": "cybersécurité"
+    },
+    {
+     "id": "buddy",
+     "role": "pub Meta"
+    },
+    {
+     "id": "studiocad",
+     "role": "digital, communication"
+    }
+   ]
+  },
+  {
+   "id": "micro-edition",
+   "family": "niche",
+   "title": "Le zine du So Watt",
+   "summary": "Riso et sérigraphie, gravure et livre d'artiste, illustration, écriture : une petite chaîne d'édition.",
+   "potential": "Un zine trimestriel imprimé en riso, vendu à l'accueil.",
+   "first_step": "Un numéro 0 tiré chez Giselle et Rose.",
+   "evidence": "giselleetrose.com (riso, micro-édition) ; luismeyerp.com (livre d'artiste) ; ed-ou-art.com.",
+   "members": [
+    {
+     "id": "giselleetrose",
+     "role": "riso, sérigraphie"
+    },
+    {
+     "id": "meyer",
+     "role": "gravure, livre d'artiste"
+    },
+    {
+     "id": "rowehy",
+     "role": "illustration"
+    },
+    {
+     "id": "knapfla",
+     "role": "illustration"
+    },
+    {
+     "id": "sunday",
+     "role": "sérigraphie"
+    },
+    {
+     "id": "dauchy",
+     "role": "textes"
+    }
+   ]
+  },
+  {
+   "id": "hospitalite",
+   "family": "niche",
+   "title": "Hospitalité",
+   "summary": "Une artiste primée pour son travail avec les réfugiés, un philosophe d'éducation populaire, un cinéma de ciné-débats, et une soirée « Liberté, égalité, etc. » déjà annoncée au So Watt.",
+   "potential": "Accrocher l'expo « Liens d'hospitalité » autour de la soirée du 28/01/2027 avec un temps de débat.",
+   "first_step": "Proposer à Leidy Jalk d'exposer pendant la soirée du 28/01.",
+   "evidence": "leidyjalk.com ; agenda sowatt-tierslieu.fr (28/01/2027, Ensemble Tout Contre).",
+   "members": [
+    {
+     "id": "jalk",
+     "role": "exposition"
+    },
+    {
+     "id": "enluminance",
+     "role": "débat, éduc pop"
+    },
+    {
+     "id": "kino",
+     "role": "ciné-débat"
+    }
+   ]
+  }
+ ]
+}

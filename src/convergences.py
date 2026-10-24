@@ -126,9 +126,14 @@ if __name__ == '__main__':
             assert m in occ, (c['id'], m)
     for k in ACU_NOTES:
         assert k in occ, k
-    data = dict(families=FAMILIES, convergences=[dict(c, members=[dict(id=m, role=r) for m, r in c['members']]) for c in CONV], notes=ACU_NOTES)
+    # micro-systèmes (niches.json, issus du passage sur les sites des structures, 24/10/2026)
+    NICHES = json.load(open(os.path.join(ROOT, 'niches.json')))
+    for c in NICHES['convergences']:
+        for m in c['members']:
+            assert m['id'] in occ, (c['id'], m['id'])
+    data = dict(families=dict(FAMILIES, **NICHES['families']), convergences=[dict(c, members=[dict(id=m, role=r) for m, r in c['members']]) for c in CONV] + NICHES['convergences'], notes=ACU_NOTES)
     json.dump(data, open(os.path.join(ROOT, 'convergences.json'), 'w'), ensure_ascii=False, indent=1)
     from collections import Counter
-    cnt = Counter(m for c in CONV for m, _ in c['members'])
-    print(len(CONV), 'convergences;', len(cnt), 'structures reliées;', 'hors convergence:', sorted(occ - set(cnt)))
+    cnt = Counter(m['id'] for c in data['convergences'] for m in c['members'])
+    print(len(data['convergences']), 'convergences (dont', len(NICHES['convergences']), 'micro-systèmes);', len(cnt), 'structures reliées;', 'hors convergence:', sorted(occ - set(cnt)))
     print(cnt.most_common(15))

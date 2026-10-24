@@ -26,14 +26,20 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 3.35,
-   "n": 1,
-   "fams": 1,
-   "cats": 1,
+   "score": 5.7,
+   "n": 2,
+   "fams": 2,
+   "cats": 2,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Gestion de patrimoine (Élodie Gallois) : placements, ingénierie fiscale, patrimoine professionnel, prévoyance.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "buddy",
@@ -62,14 +68,24 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
+   "score": 6.05,
+   "n": 2,
+   "fams": 2,
    "cats": 3,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/agencebuddy",
+   "https://www.instagram.com/agencebuddy/",
+   "https://www.linkedin.com/company/agencebuddy/posts/"
+  ],
+  "alertes": []
  },
  {
   "id": "akynoxe",
@@ -105,7 +121,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "urbin",
@@ -140,7 +164,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "nivelle",
@@ -176,7 +208,17 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/alexisnivelle/"
+  ],
+  "alertes": [
+   "Téléphone du site = 00 00… (fictif)."
+  ]
  },
  {
   "id": "amv",
@@ -205,14 +247,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
+   "score": 6.05,
+   "n": 2,
+   "fams": 2,
    "cats": 3,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "analeina",
@@ -247,7 +297,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "antego",
@@ -277,14 +335,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.4,
-   "n": 2,
-   "fams": 2,
-   "cats": 4,
+   "score": 10.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Conseil et formation RH (certifié Qualiopi, partenariats OPCO) : stratégie RH, process, accompagnement des managers.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.linkedin.com/company/antegofrance/posts/"
+  ],
+  "alertes": []
  },
  {
   "id": "aprobio",
@@ -315,14 +381,25 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
+   "score": 10.45,
+   "n": 3,
+   "fams": 3,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Réseau bio régional : accompagne la restauration collective et les collectivités (appels d'offres, réglementation, formation des équipes) ; anime le Plan Bio Hauts-de-France ; observatoire ; agenda de rencontres et salons.",
+  "formats": "",
+  "publicsDetail": "Collectivités, restauration collective, filière bio",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/aprobiohdf/",
+   "https://www.instagram.com/aprobiohdf/",
+   "https://www.linkedin.com/company/association-a-pro-bio/",
+   "https://www.youtube.com/channel/UCqaSD-ZC17oeMonJT5jiasg"
+  ],
+  "alertes": []
  },
  {
   "id": "aqualunia",
@@ -358,7 +435,16 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Boutique lithothérapie / aromathérapie : pendules, géodes, encens, colliers d'aromathérapie.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://facebook.com/Aqualunia",
+   "https://instagram.com/Aqualunia"
+  ],
+  "alertes": []
  },
  {
   "id": "artkive",
@@ -387,14 +473,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
-   "cats": 5,
+   "score": 11.1,
+   "n": 4,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Vêtements workwear upcyclés en denim (ex. ligne BOSOZOKU), faits main, petites séries ; atelier né à Tourcoing.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/ar_tk_ive/"
+  ],
+  "alertes": []
  },
  {
   "id": "artorium",
@@ -425,14 +519,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 7.4,
+   "n": 3,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Ateliers art × science (Jamila) : peinture, aquarelle, dessin, argile ; microscopie botanique, dessin scientifique, « Hypothèse » (un fait scientifique → une œuvre).",
+  "formats": "Enfants chaque mercredi + vacances scolaires ; ateliers parents-enfants ; adultes. Ex. 2h30 = 30 €.",
+  "publicsDetail": "Enfants, familles, adultes",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/atelier.artorium",
+   "https://www.instagram.com/artorium_atelier"
+  ],
+  "alertes": []
  },
  {
   "id": "assureetmoi",
@@ -461,14 +564,24 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 3.35,
-   "n": 1,
-   "fams": 1,
-   "cats": 1,
+   "score": 5.7,
+   "n": 2,
+   "fams": 2,
+   "cats": 2,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/assureetmoi/",
+   "https://www.instagram.com/assureetmoi/",
+   "https://www.linkedin.com/company/assure-et-moi/"
+  ],
+  "alertes": []
  },
  {
   "id": "astreos",
@@ -497,14 +610,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
+   "score": 11.45,
+   "n": 4,
+   "fams": 3,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Sécurité privée : surveillance, distribution, événementiel, sécurité incendie.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Téléphone du site = 03 20 00 00 00 (fictif), non repris."
+  ]
  },
  {
   "id": "bouillon",
@@ -542,7 +663,17 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/AufildesoiLetierslieu"
+  ],
+  "alertes": [
+   "Le site lié (tierslieu-aufildesoi.org) décrit l'Atelier Bouillon au tiers-lieu Au Fil de Soi (îlot Maracci) : vérifier s'il s'agit du même collectif / s'il a déménagé."
+  ]
  },
  {
   "id": "helcou",
@@ -572,14 +703,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
+   "score": 9.75,
+   "n": 3,
+   "fams": 3,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Cours de couture par niveaux + apéros couture ; carte cadeau.",
+  "formats": "Niveau 0 « S'initier » 50 € ; Niveau 1 « Progresser » 55 € ; apéro couture 55 € (2h30).",
+  "publicsDetail": "Adultes débutants",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/atelier_helcou/"
+  ],
+  "alertes": []
  },
  {
   "id": "diy",
@@ -611,14 +750,25 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 14.1,
-   "n": 3,
-   "fams": 3,
-   "cats": 6,
+   "score": 17.45,
+   "n": 5,
+   "fams": 4,
+   "cats": 7,
    "note": "Ateliers zéro déchet pour particuliers, familles et entreprises : transition, enfance et transmission à la fois.",
    "top": true,
-   "rank": 4
-  }
+   "rank": 5
+  },
+  "offre": "Une trentaine d'ateliers DIY : cosmétique maison, produits ménagers, parfum solide, crème visage ; à domicile, en entreprise ou au So Watt (depuis mars 2026).",
+  "formats": "Poste individuel, on repart avec sa création et la recette ; devis entreprise.",
+  "publicsDetail": "Particuliers, entreprises, groupes",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/LacavernedeViviBaba/",
+   "https://www.facebook.com/ateliersDIYLille/",
+   "https://www.facebook.com/nestaartworkz/",
+   "https://www.instagram.com/ateliersdiylille/"
+  ],
+  "alertes": []
  },
  {
   "id": "bacprod",
@@ -647,14 +797,26 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 6.4,
-   "n": 2,
-   "fams": 1,
-   "cats": 4,
+   "score": 9.75,
+   "n": 4,
+   "fams": 2,
+   "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Photo, vidéo, drone (Aymeric Bérenger, 20 ans d'audiovisuel, ancien ingénieur du son).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/aymeric.berenger",
+   "https://www.instagram.com/aymericberenger/",
+   "https://www.linkedin.com/uas/login"
+  ],
+  "alertes": [
+   "Mail affiché sur le site = mail du thème (hello@bdevs.com), non repris."
+  ]
  },
  {
   "id": "bilik",
@@ -683,14 +845,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site injoignable lors du passage (23/10)."
+  ]
  },
  {
   "id": "bonallure",
@@ -719,14 +889,24 @@
   "source": "tableur",
   "logo": null,
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
+   "score": 10.45,
+   "n": 3,
+   "fams": 3,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Livraison éco-responsable en véhicule électrique (Bordeaux & Lille), y compris plats cuisinés, frais et surgelés ; tarifs sur mesure.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://fr.linkedin.com/company/bon'allure",
+   "https://www.instagram.com/bon_allure/",
+   "https://www.instagram.com/brasserie_gobrecht/"
+  ],
+  "alertes": []
  },
  {
   "id": "bricknum",
@@ -757,14 +937,37 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
-   "cats": 7,
+   "score": 12.8,
+   "n": 5,
+   "fams": 3,
+   "cats": 8,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Ateliers briques (LEGO® et autres) et ateliers numériques (programmer des briques, Minecraft) ; anniversaires ; itinérance en vélo-remorque. Installée au So Watt depuis le 1er septembre.",
+  "formats": "Ateliers permanents, stages vacances, anniversaires, événements.",
+  "publicsDetail": "Enfants, adultes, organisateurs d'événements",
+  "agenda": [
+   {
+    "date": "2026-10-26",
+    "quoi": "Briques – scène monstrueuse (9h30) / Minecraft Halloween (14h30)",
+    "lieu": "So Watt",
+    "label": "26 oct.",
+    "end": "2026-10-26"
+   },
+   {
+    "date": "2026-10-27",
+    "quoi": "Numérique – programmer une machine qui fait peur",
+    "lieu": "So Watt",
+    "label": "27 oct.",
+    "end": "2026-10-27"
+   }
+  ],
+  "reseaux": [
+   "https://www.instagram.com/brick_num/"
+  ],
+  "alertes": []
  },
  {
   "id": "parez",
@@ -792,14 +995,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 3.35,
-   "n": 1,
-   "fams": 1,
-   "cats": 1,
+   "score": 5.7,
+   "n": 2,
+   "fams": 2,
+   "cats": 2,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site injoignable lors du passage (23/10)."
+  ]
  },
  {
   "id": "litha",
@@ -827,14 +1038,24 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.45,
-   "n": 2,
-   "fams": 1,
-   "cats": 7,
+   "score": 10.8,
+   "n": 4,
+   "fams": 2,
+   "cats": 8,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Service café en entreprise (machines, cafés de spécialité), ressources RH (onboarding) ; démarche d'éco-conception avec une agence.",
+  "formats": "",
+  "publicsDetail": "Startups, PME, grands comptes, CHR",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/lithaespresso/",
+   "https://www.instagram.com/lithaespresso/",
+   "https://www.linkedin.com/company/litha-espresso/"
+  ],
+  "alertes": []
  },
  {
   "id": "capstone",
@@ -862,14 +1083,20 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
+   "score": 9.75,
+   "n": 3,
+   "fams": 3,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Groupe immobilier d'entreprise (location, construction, externalisation de locaux d'activité, logistique, bureaux) ; propriétaire du site.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "casamia",
@@ -907,7 +1134,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "corman",
@@ -943,7 +1178,17 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Peintre portraitiste : expositions (hommage à Salah), résidence en Sicile, grands formats.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://vimeo.com/",
+   "https://www.instagram.com/ame2clem/",
+   "https://www.instagram.com/elatedthemes/"
+  ],
+  "alertes": []
  },
  {
   "id": "coalline",
@@ -972,14 +1217,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "errances",
@@ -1009,14 +1262,59 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
+   "score": 10.45,
+   "n": 3,
+   "fams": 3,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Compagnie marionnette / jeune public. Coordonne depuis 2021 l'espace OFF TADAM au Festival mondial des théâtres de marionnettes (Charleville). Production déléguée d'« Au Fond des Mers » (dès 6 mois). Lien historique avec la micro-édition Les Piñatas.",
+  "formats": "",
+  "publicsDetail": "Tout-petits, jeune public, lieux de diffusion",
+  "agenda": [
+   {
+    "date": "2026-10-26/30",
+    "quoi": "Résidence « Les Lueurs » (création 2027)",
+    "lieu": "Théâtre des 3 Chênes, Le Quesnoy",
+    "label": "26–30 oct.",
+    "end": "2026-10-30"
+   },
+   {
+    "date": "2026-11-23/27",
+    "quoi": "Résidence Les Lueurs",
+    "lieu": "Tas de Sable – CNMa, Rivery",
+    "label": "23–27 nov.",
+    "end": "2026-11-27"
+   },
+   {
+    "date": "2027-02-17",
+    "quoi": "Premières Les Lueurs",
+    "lieu": "Le Forum, Charleville",
+    "label": "17 févr. 2027",
+    "end": "2027-02-17"
+   },
+   {
+    "date": "2027-04-21",
+    "quoi": "Les Lueurs",
+    "lieu": "Espace culturel de Bondues",
+    "label": "21 avr. 2027",
+    "end": "2027-04-21"
+   },
+   {
+    "date": "2027-09",
+    "quoi": "TADAM",
+    "lieu": "Charleville-Mézières",
+    "label": "sept. 2027",
+    "end": "2027-09-28"
+   }
+  ],
+  "reseaux": [
+   "https://www.facebook.com/collectiferrances/",
+   "https://www.instagram.com/collectiferrances/"
+  ],
+  "alertes": []
  },
  {
   "id": "hamaide",
@@ -1054,9 +1352,18 @@
    "fams": 2,
    "cats": 5,
    "note": "Artiste, art-thérapeute, formatrice : à la jonction des arts plastiques, du bien-être et de la transmission.",
-   "top": true,
-   "rank": 8
-  }
+   "top": false,
+   "rank": null
+  },
+  "offre": "Art-thérapeute diplômée ; ateliers arts plastiques (dessin, peinture, céramique, sculpture) enfants/adultes ; mandala dessin centré.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/chamaide",
+   "https://www.instagram.com/coraliehamaide/"
+  ],
+  "alertes": []
  },
  {
   "id": "craienco",
@@ -1085,14 +1392,56 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 7.4,
+   "n": 3,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Ateliers créatifs et bien-être (marque Rêves de Mômes), cocon de ~30 m² pour enfants et familles ; anniversaires personnalisés ; beauty party « Happy Coquette », custo cuisine.",
+  "formats": "10 ateliers par période (rentrées sept./janv./avril), mercredi matin par âge ; goûters créatifs ; petits-déj ados/adultes.",
+  "publicsDetail": "Enfants, ados, familles",
+  "agenda": [
+   {
+    "date": "2026-10-23",
+    "quoi": "Vacances créatives enfants/familles 14h",
+    "lieu": "So Watt",
+    "label": "23 oct.",
+    "end": "2026-10-23"
+   },
+   {
+    "date": "2026-10-24",
+    "quoi": "Atelier vacances 10h",
+    "lieu": "So Watt",
+    "label": "24 oct.",
+    "end": "2026-10-24"
+   },
+   {
+    "date": "2026-10-31",
+    "quoi": "Vacances créatives 14h",
+    "lieu": "So Watt",
+    "label": "31 oct.",
+    "end": "2026-10-31"
+   },
+   {
+    "date": "2026-11-08",
+    "quoi": "Petit-déj créatif ados/adultes (color aqua) 10h",
+    "lieu": "So Watt",
+    "label": "8 nov.",
+    "end": "2026-11-08"
+   },
+   {
+    "date": "2026-12-24",
+    "quoi": "Atelier vacances",
+    "lieu": "So Watt",
+    "label": "24 déc.",
+    "end": "2026-12-24"
+   }
+  ],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "cyremia",
@@ -1121,14 +1470,20 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 5.1,
-   "n": 1,
-   "fams": 1,
+   "score": 7.1,
+   "n": 2,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "IT pour PME : IA « branchée sur votre métier » (cadrage, installation, formation), Google Workspace / Microsoft 365, sécurité et sauvegardes.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "rowehy",
@@ -1157,14 +1512,23 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 6.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Illustration (« mini fluo impertinente », illustration poétique), boutique, ateliers créatifs dans son atelier du So Watt.",
+  "formats": "10 personnes max ; créneau sur demande dès 3 personnes.",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/edouart.illu/",
+   "https://www.instagram.com/ed.ou.art/"
+  ],
+  "alertes": []
  },
  {
   "id": "ema",
@@ -1195,14 +1559,24 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 8.45,
-   "n": 2,
-   "fams": 2,
+   "score": 10.45,
+   "n": 3,
+   "fams": 3,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Maquillage effets spéciaux : boutique de prothèses en silicone et accessoires (SFX).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/sfx_ema/",
+   "https://www.tiktok.com/@sfx_ema",
+   "https://youtube.com/@emamakeupartist"
+  ],
+  "alertes": []
  },
  {
   "id": "enluminance",
@@ -1232,14 +1606,22 @@
   "source": "tableur",
   "logo": null,
   "acu": {
-   "score": 7.45,
-   "n": 2,
-   "fams": 1,
+   "score": 9.45,
+   "n": 3,
+   "fams": 2,
    "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "exocer",
@@ -1268,14 +1650,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 10.8,
-   "n": 3,
-   "fams": 2,
-   "cats": 8,
+   "score": 13.15,
+   "n": 4,
+   "fams": 3,
+   "cats": 9,
    "note": null,
    "top": true,
    "rank": 11
-  }
+  },
+  "offre": "Exosquelettes / assistance mécanique : audit biomécanique et ergonomique, déploiement, formation, maintenance.",
+  "formats": "",
+  "publicsDetail": "Industrie, logistique",
+  "agenda": [],
+  "reseaux": [
+   "https://linkedin.com/company/exocer"
+  ],
+  "alertes": []
  },
  {
   "id": "familyforme",
@@ -1306,14 +1696,49 @@
   "source": "tableur",
   "logo": null,
   "acu": {
-   "score": 13.8,
-   "n": 3,
-   "fams": 2,
+   "score": 18.8,
+   "n": 7,
+   "fams": 3,
    "cats": 8,
    "note": "Cirque, danse, sport-santé pour tous les âges : relie enfance, spectacle et bien-être — mais isolé dans le bâtiment B.",
    "top": true,
-   "rank": 5
-  }
+   "rank": 2
+  },
+  "offre": "Association (La Kademy, fond du parking) : danse jazz/classique/contemporain/acro, cirque, voltige, yoga, séniors et cours adaptés, éveil corporel 3 mois–3 ans, « Contes en corps » parents-enfants, KA Kids, La Troupaka (spectacles pour crèches, RAM, MAM, écoles), anniversaires.",
+  "formats": "370 €/an pour un cours hebdo (adhésion familiale 30 € incluse) ; stages vacances.",
+  "publicsDetail": "Bébés, enfants, familles, séniors, structures petite enfance",
+  "agenda": [
+   {
+    "date": "2026-10-19/23",
+    "quoi": "Stage vacances",
+    "lieu": "La Kademy",
+    "label": "19–23 oct.",
+    "end": "2026-10-23"
+   },
+   {
+    "date": "2026-10-26/30",
+    "quoi": "Stage vacances",
+    "lieu": "La Kademy",
+    "label": "26–30 oct.",
+    "end": "2026-10-30"
+   },
+   {
+    "date": "2026-11-11",
+    "quoi": "Clôture des inscriptions 2026-27",
+    "lieu": "",
+    "label": "11 nov.",
+    "end": "2026-11-11"
+   }
+  ],
+  "reseaux": [
+   "http://www.youtube.com/channel/UC6e3dOQJfKGtVVJYg6o0BOA",
+   "http://www.youtube.com/channel/UCSoeBVpltZhPLFBUQ28dNvA",
+   "http://www.youtube.com/channel/UCw6Flff4hBfL3BC7vzZlrZA",
+   "http://www.youtube.com/channel/UCxOMfved1ydBGokwOtwcLqg"
+  ],
+  "alertes": [
+   "Bâtiment B = La Kademy « au fond du parking » (site So Watt) : précise l'emplacement à confirmer dans la 3D."
+  ]
  },
  {
   "id": "dahmani",
@@ -1343,14 +1768,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Joaillerie et décor mural autour du motif géométrique ; formation et tutoriels Rhino3D / ZBrush (chaîne YouTube @3DForCREATIVES).",
+  "formats": "",
+  "publicsDetail": "Particuliers, créateurs de bijoux à former",
+  "agenda": [],
+  "reseaux": [
+   "https://www.youtube.com/@3DForCREATIVES/videos"
+  ],
+  "alertes": []
  },
  {
   "id": "wierre",
@@ -1387,7 +1820,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "giselleetrose",
@@ -1417,14 +1858,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.4,
-   "n": 2,
-   "fams": 2,
-   "cats": 4,
+   "score": 10.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Sérigraphie, risographie et numérique ; gamme de papeterie ; collaborations céramique, micro-édition, textile.",
+  "formats": "",
+  "publicsDetail": "Particuliers, créateurs, marques",
+  "agenda": [],
+  "reseaux": [
+   "http://instagram.com/giselle_et_rose"
+  ],
+  "alertes": []
  },
  {
   "id": "harch",
@@ -1453,14 +1902,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
+   "score": 9.75,
+   "n": 3,
+   "fams": 3,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Cabinet de recrutement, notamment BTP : offres en cours de conducteur de travaux, responsable QHSE, chargé d'opérations TCE.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.linkedin.com/company/harch-rh/"
+  ],
+  "alertes": []
  },
  {
   "id": "hibourouge",
@@ -1489,14 +1946,20 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
+   "score": 6.05,
+   "n": 2,
+   "fams": 2,
    "cats": 3,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Conception d'espaces pour enseignes (ouverture, rénovation, déploiement France/international).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "holy",
@@ -1532,7 +1995,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site vide (olivierminet.com)."
+  ]
  },
  {
   "id": "igwap",
@@ -1561,14 +2032,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Collectif de musique amateur « comme moyen d'émancipation sociale et culturelle » ; groupes aux fêtes de la musique ; festival d'hiver (2 éditions, dont la 2e chez Houblons-Nous, Bois Blanc).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/people/IGWAP/100085537957419/"
+  ],
+  "alertes": []
  },
  {
   "id": "intermede",
@@ -1599,14 +2078,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 14.1,
-   "n": 3,
-   "fams": 3,
+   "score": 16.1,
+   "n": 4,
+   "fams": 4,
    "cats": 6,
    "note": "Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.",
    "top": true,
-   "rank": 3
-  }
+   "rank": 7
+  },
+  "offre": "Coopérative (Lyon) : urbanisme transitoire, lieux hybrides, prospective des modes de vie ; « réemploi à tous les étages » (bâtiments, mobilier, objet de recherche).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/intermede_scop/",
+   "https://www.linkedin.com/company/intermedelyon/posts/"
+  ],
+  "alertes": []
  },
  {
   "id": "boccia",
@@ -1641,7 +2129,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site injoignable lors du passage (23/10)."
+  ]
  },
  {
   "id": "joonailz",
@@ -1670,14 +2166,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 3.7,
-   "n": 1,
-   "fams": 1,
-   "cats": 2,
+   "score": 7.4,
+   "n": 3,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "kpro",
@@ -1705,14 +2209,22 @@
   "source": "tableur",
   "logo": null,
   "acu": {
-   "score": 4.75,
-   "n": 1,
-   "fams": 1,
+   "score": 6.75,
+   "n": 2,
+   "fams": 2,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "kino",
@@ -1742,14 +2254,33 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 10.1,
+   "n": 4,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Cinéma art et essai (Villeneuve d'Ascq) avec ciné-débats.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [
+   {
+    "date": "2026-11-17",
+    "quoi": "Ciné-débat « La Sociale » 18h30 (vivre, travailler, vieillir dignement)",
+    "lieu": "Kino – sous réserve",
+    "label": "17 nov.",
+    "end": "2026-11-17"
+   }
+  ],
+  "reseaux": [
+   "https://www.facebook.com/kino.cine",
+   "https://www.instagram.com/kino_cine"
+  ],
+  "alertes": [
+   "Le site annonce une FERMETURE TEMPORAIRE : campus Pont-de-Bois fermé administrativement, séances annulées jusqu'à nouvel ordre."
+  ]
  },
  {
   "id": "knapfla",
@@ -1779,14 +2310,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.4,
-   "n": 2,
-   "fams": 2,
-   "cats": 4,
+   "score": 10.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "sunday",
@@ -1817,14 +2356,28 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
-   "cats": 5,
+   "score": 12.45,
+   "n": 5,
+   "fams": 3,
+   "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Marque textile + atelier de sérigraphie « sans minimum » ; ligne upcycling.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [
+   {
+    "date": "2026",
+    "quoi": "Braderie Sunday Surfers en préparation",
+    "lieu": "",
+    "label": "2026",
+    "end": "2026-12-31"
+   }
+  ],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "consignerie",
@@ -1854,14 +2407,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 13.8,
-   "n": 3,
-   "fams": 2,
-   "cats": 8,
+   "score": 20.15,
+   "n": 8,
+   "fams": 3,
+   "cats": 9,
    "note": "Traiteur engagé : convivialité, événementiel et transition dans la même assiette.",
    "top": true,
-   "rank": 6
-  }
+   "rank": 1
+  },
+  "offre": "Traiteur d'entreprise éco-responsable (Lille & France) : livraison (petits-déj, plateaux, goûters, cocktails), événementiel, congrès-salons, animations culinaires / show cooking avec chefs partenaires, coffrets cadeaux.",
+  "formats": "",
+  "publicsDetail": "Entreprises",
+  "agenda": [],
+  "reseaux": [
+   "https://www.linkedin.com/company/laconsignerie/"
+  ],
+  "alertes": []
  },
  {
   "id": "lafabric",
@@ -1890,14 +2451,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "lafoule",
@@ -1925,14 +2494,24 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 6.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Conseil en récits de territoire : prospective, stratégie, récit & identité, activation. Références : La Maillerie, Distillerie Claeyssens, Château de Brou, Romances…",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/lafouleconsulting",
+   "https://www.instagram.com/agence_lafoule/",
+   "https://www.linkedin.com/company/la-foule-consulting/"
+  ],
+  "alertes": []
  },
  {
   "id": "madeleine",
@@ -1962,14 +2541,49 @@
   "source": "tableur",
   "logo": null,
   "acu": {
-   "score": 7.75,
-   "n": 2,
-   "fams": 2,
-   "cats": 5,
+   "score": 11.1,
+   "n": 4,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Association : Repair Café, ateliers Éco-créa textile, sensibilisation, Planète Fest' (festival de l'écologie de La Madeleine), install party Linux, vide-grenier.",
+  "formats": "",
+  "publicsDetail": "Habitants, bricoleurs",
+  "agenda": [
+   {
+    "date": "2026-11-07",
+    "quoi": "Repair café",
+    "lieu": "Salle Satgé, La Madeleine",
+    "label": "7 nov.",
+    "end": "2026-11-07"
+   },
+   {
+    "date": "2026-11-12",
+    "quoi": "Éco-créa textile",
+    "lieu": "La Madeleine",
+    "label": "12 nov.",
+    "end": "2026-11-12"
+   },
+   {
+    "date": "2026-11-14",
+    "quoi": "Repair café 14h30–17h30",
+    "lieu": "So Watt",
+    "label": "14 nov.",
+    "end": "2026-11-14"
+   },
+   {
+    "date": "2026-11-21",
+    "quoi": "Semaine européenne de réduction des déchets 14h–17h",
+    "lieu": "Salle André Wauquier, Saint-André",
+    "label": "21 nov.",
+    "end": "2026-11-21"
+   }
+  ],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "laseconde",
@@ -1999,14 +2613,20 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 8.1,
-   "n": 2,
-   "fams": 2,
-   "cats": 6,
+   "score": 11.45,
+   "n": 4,
+   "fams": 3,
+   "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Réemploi : remise sur le marché à petits prix ; adhésion 5 €/an.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "verhaege",
@@ -2044,7 +2664,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "leflower",
@@ -2075,14 +2703,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 12.8,
-   "n": 3,
-   "fams": 1,
+   "score": 16.8,
+   "n": 6,
+   "fams": 2,
    "cats": 8,
    "note": "Scénographie numérique : point de contact entre artistes, producteurs d'image, événementiel et numérique.",
    "top": true,
-   "rank": 7
-  }
+   "rank": 6
+  },
+  "offre": "Installations visuelles, VJing / performances live, réalisation audiovisuelle, scénographie numérique pour spectacle vivant, expositions, événements.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/leflower_studio/",
+   "https://www.linkedin.com/company/leflower-studio/"
+  ],
+  "alertes": []
  },
  {
   "id": "jalk",
@@ -2112,14 +2749,20 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 6.4,
+   "n": 2,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Artiste visuelle (née à Barranquilla) ; expo « Liens d'hospitalité » ; prix « Vos talents pour les réfugiés » (Amnesty International France, 2017).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "lesgus",
@@ -2154,7 +2797,17 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/les_gus/"
+  ],
+  "alertes": [
+   "Site en maintenance (page mot de passe)."
+  ]
  },
  {
   "id": "licols",
@@ -2189,7 +2842,18 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Licols éthologiques et accessoires équestres (e-shop, blog conseils).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/p/DGYi5A5NSq9/",
+   "https://www.instagram.com/p/DOOmuYEDMXR/",
+   "https://www.instagram.com/p/Dd1uCD1qqWN/",
+   "https://www.instagram.com/p/DdjpchUhmXR/"
+  ],
+  "alertes": []
  },
  {
   "id": "likeafree",
@@ -2225,7 +2889,13 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "meyer",
@@ -2255,14 +2925,23 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
-   "cats": 3,
+   "score": 6.75,
+   "n": 2,
+   "fams": 2,
+   "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Gravure, dessin, livre d'artiste, résidences, scénographie urbaine (« Intergraphie urbaine »).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/L.meyerp",
+   "https://www.youtube.com/channel/UCkEVjRtKvZNE2ViRM0hYmlg"
+  ],
+  "alertes": []
  },
  {
   "id": "maillart",
@@ -2292,14 +2971,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
+   "score": 6.05,
+   "n": 2,
+   "fams": 2,
    "cats": 3,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "selvamaris",
@@ -2335,7 +3022,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "maranta",
@@ -2363,14 +3058,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 4.4,
-   "n": 1,
-   "fams": 1,
+   "score": 6.4,
+   "n": 2,
+   "fams": 2,
    "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Couture faite main (sacs, pièces uniques), carte cadeau.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://instagram.com/maranta_couture",
+   "https://www.instagram.com/maranta_couture/"
+  ],
+  "alertes": []
  },
  {
   "id": "caudron",
@@ -2407,7 +3111,13 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "dauchy",
@@ -2439,14 +3149,23 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 12.1,
-   "n": 3,
-   "fams": 1,
+   "score": 16.1,
+   "n": 6,
+   "fams": 2,
    "cats": 6,
    "note": "Rédacteur, podcasteur, animateur : relie spectacle vivant, communication et culture ; un animateur naturel des rencontres du lieu.",
    "top": true,
-   "rank": 9
-  }
+   "rank": 8
+  },
+  "offre": "Rédacteur : brochures et newsletter du Grand Bleu (scène jeune public, saison 26/27), podcasts d'entreprise (Capsule ID saison 2 pour Koltrain / Hauts-de-France Innovation Développement), biographies d'artistes ; Substack.",
+  "formats": "",
+  "publicsDetail": "Lieux culturels, entreprises, institutions",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/MathieuDauchyRedacteur",
+   "https://www.linkedin.com/in/mathieu-dauchy-957075a/"
+  ],
+  "alertes": []
  },
  {
   "id": "maze",
@@ -2475,14 +3194,38 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 9.05,
-   "n": 2,
-   "fams": 1,
-   "cats": 3,
+   "score": 11.4,
+   "n": 3,
+   "fams": 2,
+   "cats": 4,
    "note": "Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.",
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Organisme de formation et conseil administratif pour artistes-auteur·ices (statut, déclarations, compta, contrats) et diffuseurs (rémunérations). Plateforme //slash//, web-série, ressources gratuites, programme avec AC//RA (Auvergne-Rhône-Alpes).",
+  "formats": "",
+  "publicsDetail": "Artistes-auteurs, diffuseurs, collectivités",
+  "agenda": [
+   {
+    "date": "2026-11-09/16/18/23",
+    "quoi": "Formation diffuseurs : gérer les rémunérations des artistes-auteurs (18 h, distanciel)",
+    "lieu": "à distance",
+    "label": "9, 16, 18, 23 nov.",
+    "end": "2026-11-23"
+   },
+   {
+    "date": "2026-12-07/10/11",
+    "quoi": "Le b.a.-ba de la compta des artistes-auteurs",
+    "lieu": "à distance",
+    "label": "7, 10, 11 déc.",
+    "end": "2026-12-11"
+   }
+  ],
+  "reseaux": [
+   "https://www.instagram.com/mazeconseils/",
+   "https://www.linkedin.com/company/maze-conseils"
+  ],
+  "alertes": []
  },
  {
   "id": "mishou",
@@ -2513,14 +3256,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 10.8,
-   "n": 3,
-   "fams": 2,
+   "score": 12.8,
+   "n": 4,
+   "fams": 3,
    "cats": 8,
    "note": null,
-   "top": true,
-   "rank": 10
-  }
+   "top": false,
+   "rank": null
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "dupont",
@@ -2551,14 +3302,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 10.75,
-   "n": 3,
-   "fams": 3,
+   "score": 12.75,
+   "n": 4,
+   "fams": 4,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "coulon",
@@ -2593,7 +3352,13 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": []
  },
  {
   "id": "nexus",
@@ -2626,7 +3391,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "nininails",
@@ -2654,14 +3427,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 3.7,
-   "n": 1,
-   "fams": 1,
+   "score": 5.7,
+   "n": 2,
+   "fams": 2,
    "cats": 2,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "originalbijoux",
@@ -2696,7 +3477,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "ouichange",
@@ -2727,14 +3516,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 10.4,
-   "n": 2,
-   "fams": 2,
-   "cats": 4,
+   "score": 13.1,
+   "n": 3,
+   "fams": 3,
+   "cats": 6,
    "note": "30 animateur·rice·s de la transformation écologique et sociale : la méthode pour faire travailler ensemble les autres convergences.",
-   "top": false,
-   "rank": null
-  }
+   "top": true,
+   "rank": 12
+  },
+  "offre": "Programme « GreenBuilding » pour TPE/PME : capsules thématiques qui mettent les salariés en action sur la transition ; agenda d'ateliers grand public ; cherche des partenaires pour présenter leurs produits/services chez ses entreprises clientes.",
+  "formats": "",
+  "publicsDetail": "TPE, PME, grand public",
+  "agenda": [],
+  "reseaux": [
+   "https://fr.linkedin.com/company/ouichange-corp",
+   "https://www.linkedin.com/company/ouichange-corp/"
+  ],
+  "alertes": []
  },
  {
   "id": "caenen",
@@ -2767,14 +3565,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 10.45,
-   "n": 3,
-   "fams": 2,
+   "score": 13.45,
+   "n": 5,
+   "fams": 3,
    "cats": 7,
    "note": null,
-   "top": false,
-   "rank": null
-  }
+   "top": true,
+   "rank": 10
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "pland",
@@ -2803,14 +3609,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 9.1,
+   "n": 3,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "polaifos",
@@ -2840,14 +3654,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 6.75,
-   "n": 2,
-   "fams": 1,
+   "score": 8.75,
+   "n": 3,
+   "fams": 2,
    "cats": 5,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Photographe (tarifs particuliers / pros, événementiel) ; projet perso « Vêtues d'une ombre ».",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.instagram.com/polaifos/",
+   "https://www.tiktok.com/@polaifos"
+  ],
+  "alertes": []
  },
  {
   "id": "rcc",
@@ -2884,7 +3707,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site injoignable lors du passage (23/10)."
+  ]
  },
  {
   "id": "refill",
@@ -2914,14 +3745,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 10.75,
-   "n": 2,
-   "fams": 2,
-   "cats": 5,
+   "score": 14.1,
+   "n": 4,
+   "fams": 3,
+   "cats": 6,
    "note": "Atelier de retouches et lieu-ressource textile : le point d'entrée naturel d'un pôle réparation + mode.",
    "top": true,
-   "rank": 12
-  }
+   "rank": 9
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "wagner",
@@ -2956,7 +3795,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "eugene",
@@ -2993,7 +3840,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "lebars",
@@ -3030,7 +3885,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Artiste plasticienne : installations activées (Faire corps, Germination, ring-trampoline), interventions.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Mail du formulaire = mail du thème WordPress (themenectar), non repris."
+  ]
  },
  {
   "id": "confidentialistes",
@@ -3060,14 +3923,23 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 9.75,
-   "n": 3,
-   "fams": 2,
-   "cats": 5,
+   "score": 12.45,
+   "n": 4,
+   "fams": 3,
+   "cats": 7,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Cabinet RH (Sarl Sens, Denis Rahli) : écoute active / QVCT, conduite du changement, assertivité, réunions brainstorming ; accompagnement individuel et collectif.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://fr.linkedin.com/in/denis-rahli-les-confidentialistes-haut-de-france-d%C3%A9veloppement-personnel-parole-bien%C3%AAtre-qvct-rse-",
+   "https://www.facebook.com/Confidentialistes/"
+  ],
+  "alertes": []
  },
  {
   "id": "sinode",
@@ -3097,14 +3969,59 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.1,
-   "n": 2,
-   "fams": 1,
+   "score": 10.1,
+   "n": 4,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Association ludique : murder parties, enquêtes immersives (« L'Agence Nostradamus » à Séries Mania), Enquête au Musée, Play'it chez Leroy Merlin ; ateliers cinéma pour ados (métiers et techniques).",
+  "formats": "",
+  "publicsDetail": "Ados, adultes, musées, enseignes, structures jeunesse",
+  "agenda": [
+   {
+    "date": "2026-10-31",
+    "quoi": "Enquête au Musée",
+    "lieu": "Musée de Flandre, Cassel",
+    "label": "31 oct.",
+    "end": "2026-10-31"
+   },
+   {
+    "date": "2026-11-07",
+    "quoi": "Enquête au Musée",
+    "lieu": "Festival du Polar, Estaimpuis",
+    "label": "7 nov.",
+    "end": "2026-11-07"
+   },
+   {
+    "date": "2026-11-17",
+    "quoi": "Play'it",
+    "lieu": "Leroy Merlin V. d'Ascq",
+    "label": "17 nov.",
+    "end": "2026-11-17"
+   },
+   {
+    "date": "2026-11-28",
+    "quoi": "Play'it",
+    "lieu": "Leroy Merlin V. d'Ascq",
+    "label": "28 nov.",
+    "end": "2026-11-28"
+   },
+   {
+    "date": "2026-12-12",
+    "quoi": "Play'it",
+    "lieu": "Leroy Merlin V. d'Ascq",
+    "label": "12 déc.",
+    "end": "2026-12-12"
+   }
+  ],
+  "reseaux": [
+   "https://www.instagram.com/sinodebaba/",
+   "https://www.youtube.com/@sinodebaba157"
+  ],
+  "alertes": []
  },
  {
   "id": "slawa",
@@ -3139,7 +4056,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "sneuf",
@@ -3177,7 +4102,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Site hors service (index de serveur vide)."
+  ]
  },
  {
   "id": "opale",
@@ -3214,7 +4147,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "soluxan",
@@ -3242,14 +4183,23 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 5.1,
-   "n": 1,
-   "fams": 1,
+   "score": 7.1,
+   "n": 2,
+   "fams": 2,
    "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "ESN (certifiée Great Place to Work) : projets web/mobile, infra as code, cloud, cybersécurité, réseaux, télécom.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.linkedin.com/company/soluxan/",
+   "https://www.youtube.com/@GroupeSoluxan69"
+  ],
+  "alertes": []
  },
  {
   "id": "letertre",
@@ -3278,14 +4228,22 @@
   "source": "tableur + plan",
   "logo": null,
   "acu": {
-   "score": 4.05,
-   "n": 1,
-   "fams": 1,
+   "score": 6.05,
+   "n": 2,
+   "fams": 2,
    "cats": 3,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "atk",
@@ -3315,14 +4273,38 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 7.4,
-   "n": 2,
-   "fams": 2,
-   "cats": 4,
+   "score": 11.1,
+   "n": 4,
+   "fams": 3,
+   "cats": 6,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Aquarelle : 3 niveaux d'apprentissage, duo parent/enfant (dès 8 ans), team building en entreprise ; illustration aquarelle sur commande.",
+  "formats": "Découverte niveau 1 : 65 € ; duo parent/enfant : 59 €.",
+  "publicsDetail": "",
+  "agenda": [
+   {
+    "date": "2026-11-06",
+    "quoi": "Découverte aquarelle niv. 1, 14h30",
+    "lieu": "So Watt",
+    "label": "6 nov.",
+    "end": "2026-11-06"
+   },
+   {
+    "date": "2026-12-02",
+    "quoi": "Découverte aquarelle niv. 1, 14h30",
+    "lieu": "So Watt",
+    "label": "2 déc.",
+    "end": "2026-12-02"
+   }
+  ],
+  "reseaux": [
+   "https://www.facebook.com/axelle.turk",
+   "https://www.instagram.com/studioatk.fr/"
+  ],
+  "alertes": []
  },
  {
   "id": "studiocad",
@@ -3353,14 +4335,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 15.8,
-   "n": 4,
-   "fams": 2,
+   "score": 17.8,
+   "n": 5,
+   "fams": 3,
    "cats": 8,
    "note": "Digital + communication + image : fait le pont entre les communicants, les producteurs d'image et le numérique, et réalise le site du lieu.",
    "top": true,
-   "rank": 2
-  }
+   "rank": 4
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.linkedin.com/company/studiocadlille/"
+  ],
+  "alertes": []
  },
  {
   "id": "therapie",
@@ -3395,7 +4385,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "thinkvitality",
@@ -3430,7 +4428,17 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Naturopathie fonctionnelle, médecine chinoise, hypnose, neurocoaching.",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/nadturopathe",
+   "https://www.instagram.com/think_vitality/",
+   "https://www.linkedin.com/in/nadia-a%C3%AFssaoui-430197152/"
+  ],
+  "alertes": []
  },
  {
   "id": "unasdebruja",
@@ -3459,14 +4467,22 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 3.7,
-   "n": 1,
-   "fams": 1,
-   "cats": 2,
+   "score": 7.4,
+   "n": 3,
+   "fams": 2,
+   "cats": 4,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "vingtdeux",
@@ -3502,7 +4518,15 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "vif",
@@ -3533,14 +4557,25 @@
   "source": "tableur + plan",
   "logo": "plan",
   "acu": {
-   "score": 16.45,
-   "n": 4,
-   "fams": 3,
+   "score": 18.45,
+   "n": 5,
+   "fams": 4,
    "cats": 7,
    "note": "Santé publique, enfance, alimentation, collectivités : un relais institutionnel pour les ateliers et le bien-être.",
    "top": true,
-   "rank": 1
-  }
+   "rank": 3
+  },
+  "offre": "Programme VIF® de prévention santé des collectivités : >300 villes adhérentes, >250 000 enfants de 3 à 12 ans touchés, >3 200 acteurs formés.",
+  "formats": "",
+  "publicsDetail": "Villes, professionnels de l'enfance, enfants 3–12 ans",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/vivonsenforme",
+   "https://www.instagram.com/vivons_en_forme_/",
+   "https://www.linkedin.com/company/programme-vivons-en-forme/",
+   "https://www.youtube.com/channel/UC7LaXG4E_pSKQR_oSnLHsjg"
+  ],
+  "alertes": []
  },
  {
   "id": "willrh",
@@ -3575,7 +4610,16 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "Recrutement CDD/CDI ; spécialité France ↔ Espagne (offres francophones en Espagne).",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [
+   "https://www.facebook.com/Will.Recrute",
+   "https://www.linkedin.com/company/84884297/"
+  ],
+  "alertes": []
  },
  {
   "id": "zeste",
@@ -3603,14 +4647,22 @@
   "source": "site + plan",
   "logo": null,
   "acu": {
-   "score": 3.35,
-   "n": 1,
-   "fams": 1,
+   "score": 5.35,
+   "n": 2,
+   "fams": 2,
    "cats": 1,
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  },
  {
   "id": "lemahieu",
@@ -3645,6 +4697,14 @@
    "note": null,
    "top": false,
    "rank": null
-  }
+  },
+  "offre": "",
+  "formats": "",
+  "publicsDetail": "",
+  "agenda": [],
+  "reseaux": [],
+  "alertes": [
+   "Pas de site exploitable (Instagram / LinkedIn / rien) : à compléter en entretien."
+  ]
  }
 ]

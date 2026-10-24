@@ -49,3 +49,9 @@
 
 ## Mise en ligne
 - Version publique (sans coordonnées) servie par GitHub Pages depuis `docs/` ; version complète réservée au serveur interne.
+
+## Enrichissement et micro-systèmes (24/10/2026)
+- Passage sur les 64 sites exploitables (accueil + pages agenda / ateliers / tarifs / contact) → `src/enrichissement.json` : offre, formats/tarifs, publics précis, agenda daté, réseaux, contacts trouvés (ajoutés seulement hors PUBLIC), alertes qualité (sites morts, contacts fictifs, Atelier Bouillon ↔ Au Fil de Soi à vérifier).
+- `src/niches.json` : 18 micro-systèmes (famille « Micro-systèmes ») avec premier pas et sources ; fusionnés par convergences.py. Dans le score d'acupuncture, une niche compte 1 (une grande convergence 2).
+- Fiche : blocs « Ce qu'elle propose », « À venir » (dates passées masquées automatiquement), réseaux, « À vérifier ». Accueil : agenda commun, micro-systèmes puis grandes convergences.
+- 36 structures sans site exploitable (Instagram seul ou rien) : à compléter en entretien.

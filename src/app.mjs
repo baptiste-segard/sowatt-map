@@ -47,7 +47,7 @@ function convsForProfile(limit=6){ if(!profile) return []; const me=meOrg(); ret
 
 // ---------- filtres ----------
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-function textMatch(o){ if(!query) return true; const q=norm(query); return norm(o.name).includes(q)||norm(o.people).includes(q)||norm(o.desc).includes(q)||norm(o.room).includes(q); }
+function textMatch(o){ if(!query) return true; const q=norm(query); return norm(o.name).includes(q)||norm(o.people).includes(q)||norm(o.desc).includes(q)||norm(o.offre).includes(q)||norm(o.room).includes(q); }
 function matches(o){
   if(!textMatch(o)) return false;
   for(const d in active){ const set=active[d]; if(!set.size) continue; const v=vals(o,DIMS[d].key); if(!v.some(x=>set.has(x))) return false; }
@@ -57,7 +57,7 @@ function anyFilter(){ return query || Object.values(active).some(s=>s.size); }
 function visible(o){ return (!profile || profileMatch(o)) && (!anyFilter() || matches(o)); }
 function anyDim(){ return anyFilter() || !!profile; }
 let convHits=[];
-function matchConv(){ convHits = query ? CONV.filter(c=>norm(c.title).includes(norm(query))||norm(c.summary).includes(norm(query))) : []; }
+function matchConv(){ convHits = query ? CONV.filter(c=>norm(c.title).includes(norm(query))||norm(c.summary).includes(norm(query))||norm(c.potential).includes(norm(query))) : []; }
 
 // ---------- relations ----------
 const DECL=CONVD.relations||[];
@@ -141,7 +141,7 @@ function draw(){
   svg.on('click',()=>{ if(selected) select(null); else if(selectedConv) selectConv(null); });
 }
 
-function applyState(){
+function applyState(){ updateBurgerCount?.();
   const f=anyDim();
   gNodes.selectAll('circle.node').classed('off',d=>f && !visible(d.data.org)).classed('sel',d=>d.data.org===selected);
   gGroups.selectAll('circle').classed('focus',d=>d===focusGroup);
@@ -301,9 +301,13 @@ function renderFilters(){
   wrap.querySelectorAll('details.fgroup').forEach(dt=>dt.addEventListener('toggle',()=>{ fstate.open[dt.dataset.dim]=dt.open; }));
   aside.scrollTop=scrollTop;
 }
+const TODAY=new Date().toISOString().slice(0,10);
+const upcoming=o=>(o.agenda||[]).filter(a=>a.end>=TODAY);
+function agendaLi(a,o){ return `<li><span class="adate">${esc(a.label)}</span><span class="aq">${esc(a.quoi)}${a.lieu?` <span class="al">· ${esc(a.lieu)}</span>`:''}${o?` <button class="aorg" data-id="${o.id}">${esc(o.name)}</button>`:''}</span></li>`; }
+function agendaAll(limit=10){ const all=[]; RAW.forEach(o=>upcoming(o).forEach(a=>all.push({a,o}))); all.sort((x,y)=>(x.a.end<y.a.end?-1:1)); return all.slice(0,limit); }
 function convCard(c,compact){
   const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o);
-  return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
+  return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>${c.first_step?`<p class="rstep"><b>Premier pas ·</b> ${esc(c.first_step)}</p>`:''}${c.evidence?`<p class="rev">Repéré sur : ${esc(c.evidence)}</p>`:''}`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
 }
 function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
 function convHitsHtml(){ if(!query||!convHits.length) return ''; return `<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
@@ -336,9 +340,12 @@ function renderDetail(){
     bindConvCards(el); renderPopover(); syncDetailSheet(); return;
   }
   if(!selected){
-    el.innerHTML=`${convHitsHtml()}<div class="empty"><p style="font-size:12.5px;margin:0 0 8px"><button id="setupProfile" class="btn" style="padding:6px 10px">Personnaliser cette carte</button></p><h2>Comment lire cette carte</h2><p>Chaque point est une structure du Sowatt, colorée par catégorie. ${RAW.length} structures, ${CONV.length} convergences.</p><ol><li><b>Qui est là ?</b> Grappes par catégorie, thème, étage ou public ; filtres à gauche.</li><li><b>Où ?</b> La vue <button class="chip" id="goLieu">Le lieu 3D</button> pose chacun·e sur son bureau, étage par étage.</li><li><b>Avec qui ?</b> Ouvrir une fiche : relations déclarées, convergences communes, affinités, voisin·e·s.</li><li><b>Où appuyer ?</b> Les <b>convergences</b> sont des chantiers communs possibles ; les <b>points d'acupuncture</b> sont les structures qui relient le plus de mondes différents.</li></ol></div>
+    el.innerHTML=`${convHitsHtml()}<div class="empty"><p style="font-size:12.5px;margin:0 0 8px"><button id="setupProfile" class="btn" style="padding:6px 10px">Personnaliser cette carte</button></p><h2>Comment lire cette carte</h2><p>Chaque point est une structure du Sowatt, colorée par catégorie. ${RAW.length} structures, ${CONV.length} convergences.</p><ol><li><b>Qui est là ?</b> Grappes par catégorie, thème, étage ou public ; filtres derrière le bouton ☰ en haut à gauche.</li><li><b>Où ?</b> La vue <button class="chip" id="goLieu">Le lieu 3D</button> pose chacun·e sur son bureau, étage par étage.</li><li><b>Avec qui ?</b> Ouvrir une fiche : relations déclarées, convergences communes, affinités, voisin·e·s.</li><li><b>Où appuyer ?</b> Les <b>convergences</b> sont des chantiers communs possibles ; les <b>points d'acupuncture</b> sont les structures qui relient le plus de mondes différents.</li></ol></div>
     <div class="ksec"><dt>Points d'acupuncture <span class="n">· les 12 structures les plus reliantes</span></dt><ul class="rel acu-list">${acuList().map(o=>`<li><button data-id="${o.id}"><span class="rank">${o.acu.rank}</span>${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${o.acu.n} conv. · ${o.acu.cats} cat.</span></button></li>`).join('')}</ul></div>
-    <div class="ksec"><dt>Convergences</dt><ul class="reslist">${CONV.map(c=>convCard(c,true)).join('')}</ul></div>`;
+    ${agendaAll().length?`<div class="ksec"><dt>À venir chez les occupant·e·s <span class="n">· relevé sur leurs sites</span></dt><ul class="agenda">${agendaAll().map(x=>agendaLi(x.a,x.o)).join('')}</ul></div>`:''}
+    <div class="ksec"><dt>Micro-systèmes <span class="n">· ${CONV.filter(c=>c.family==='niche').length} petits chantiers précis</span></dt><ul class="reslist">${CONV.filter(c=>c.family==='niche').map(c=>convCard(c,true)).join('')}</ul></div>
+    <div class="ksec"><dt>Grandes convergences</dt><ul class="reslist">${CONV.filter(c=>c.family!=='niche').map(c=>convCard(c,true)).join('')}</ul></div>`;
+    el.querySelectorAll('.agenda .aorg').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
     el.querySelector('#goLieu').onclick=()=>setView('lieu'); el.querySelector('#setupProfile').onclick=()=>startOnboarding(2);
     el.querySelectorAll('.acu-list button').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
     bindConvCards(el); syncDetailSheet(); return; }
@@ -351,7 +358,10 @@ function renderDetail(){
     ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
     <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
-    <div class="contact">${site?`<span>${site}</span>`:''}${o.mails.map(m=>`<span><a href="mailto:${esc(m)}">${esc(m)}</a></span>`).join('')}${o.phone?`<span><a href="tel:${esc(o.phone.replace(/\s/g,''))}">${esc(o.phone)}</a></span>`:''}</div>
+    ${o.offre?`<div class="offer"><dt>Ce qu'elle propose</dt><p>${esc(o.offre)}</p>${o.formats?`<p class="fmt">${esc(o.formats)}</p>`:''}${o.publicsDetail?`<p class="fmt">Pour : ${esc(o.publicsDetail)}</p>`:''}</div>`:''}
+    ${upcoming(o).length?`<div class="ksec"><dt>À venir <span class="n">${upcoming(o).length}</span></dt><ul class="agenda">${upcoming(o).map(a=>agendaLi(a)).join('')}</ul></div>`:''}
+    <div class="contact">${site?`<span>${site}</span>`:''}${o.mails.map(m=>`<span><a href="mailto:${esc(m)}">${esc(m)}</a></span>`).join('')}${o.phone?`<span><a href="tel:${esc(o.phone.replace(/\s/g,''))}">${esc(o.phone)}</a></span>`:''}${(o.reseaux||[]).length?`<span class="soc">${o.reseaux.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc((u.match(/(instagram|facebook|linkedin|youtube|tiktok|vimeo)/)||['','lien'])[1])} ↗</a>`).join(' · ')}</span>`:''}</div>
+    ${(o.alertes||[]).length?`<p class="alerte">À vérifier · ${o.alertes.map(esc).join(' ')}</p>`:''}
     ${ACU.has(o.id)&&o.acu.note?`<div class="acu-note"><b>Pourquoi un point d'acupuncture ·</b> ${esc(o.acu.note)}</div>`:''}
     <dl class="meta">${tagList('Thèmes',o.themes,'theme')}${tagList('Publics',o.publics,'public')}</dl>
     <div class="ksec"><dt>Convergences <span class="n">${o.convs.length}</span></dt>${o.convs.length?`<ul class="reslist">${o.convs.map(x=>convCard(x.c,true)).join('')}</ul>`:'<p class="kempty">Aucune convergence identifiée pour l’instant.</p>'}</div>
@@ -393,17 +403,20 @@ document.getElementById('viewClusters').onclick=()=>setView('clusters');
 document.getElementById('viewLieu').onclick=()=>setView('lieu');
 document.getElementById('viewConv').onclick=()=>setView('conv');
 document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; selected=null; selectedConv=null; if(viewMode!=='clusters') setView('clusters'); startOnboarding(0); };
-function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
+function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
 function setDetailOpen(open){ const d=document.getElementById('detail'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(open){ d.scrollTop=0; setFiltersOpen(false); } }
 let convDismissed=false, forYouOpen=false;
 function syncDetailSheet(){ setDetailOpen(!!(selected||selectedConv||(profile&&forYouOpen)||(query&&convHits.length&&!convDismissed))); }
 function closeDetailSheet(){ forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
 document.getElementById('toggleFilters').onclick=()=>setFiltersOpen(document.getElementById('filters').hidden);
 document.getElementById('closeFilters').onclick=()=>setFiltersOpen(false);
+document.getElementById('burger').onclick=e=>{ e.stopPropagation(); setFiltersOpen(document.getElementById('filters').hidden); };
+document.addEventListener('pointerdown',e=>{ if(narrowMQ.matches) return; const f=document.getElementById('filters'); if(!f.hidden && !f.contains(e.target) && !e.target.closest('#burger')) setFiltersOpen(false); });
+function updateBurgerCount(){ const n=Object.values(active).reduce((a,s)=>a+s.size,0); const b=document.getElementById('burgerCount'); if(!b) return; b.hidden=!n; b.textContent=n; }
 document.getElementById('closeDetailSheet').onclick=closeDetailSheet;
-addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ setPopover(false); return; } if(narrowMQ.matches){ if(!document.getElementById('filters').hidden) setFiltersOpen(false); else if(!document.getElementById('detail').hidden && obStep<0) closeDetailSheet(); } else if(selected) select(null); else if(selectedConv) selectConv(null); });
+addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ setPopover(false); return; } if(!narrowMQ.matches && !document.getElementById('filters').hidden){ setFiltersOpen(false); document.getElementById('burger').focus(); return; } if(narrowMQ.matches){ if(!document.getElementById('filters').hidden) setFiltersOpen(false); else if(!document.getElementById('detail').hidden && obStep<0) closeDetailSheet(); } else if(selected) select(null); else if(selectedConv) selectConv(null); });
 function placeViewSeg(){ const seg=document.getElementById('viewSeg'); if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
-function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { document.getElementById('filters').hidden=false; document.getElementById('toggleFilters').setAttribute('aria-pressed','false'); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
+function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { setFiltersOpen(false); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
 narrowMQ.addEventListener('change',applyNarrow);
 let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ layout(); },150); });
 
