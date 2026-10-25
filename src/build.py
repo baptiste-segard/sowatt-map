@@ -80,12 +80,12 @@ tpl = open('template.html').read().replace('__SOWATT_LOGO__', LOGO)
 geo_js = open('geo.json').read()
 
 
-def render(three_url, d3_url):
-    return tpl.replace('__THREE_URL__', three_url).replace('__D3_URL__', d3_url).replace('__DATA__', data_js).replace('__CONV__', conv_js).replace('__GEO__', geo_js).replace('__APP_JS__', app)
+def render(three_url, d3_url, gsap_url='vendor/gsap.min.js'):
+    return tpl.replace('__THREE_URL__', three_url).replace('__D3_URL__', d3_url).replace('__GSAP_URL__', gsap_url).replace('__DATA__', data_js).replace('__CONV__', conv_js).replace('__GEO__', geo_js).replace('__APP_JS__', app)
 
 
 # ---- artifact (le wrapper ajoute doctype/head/body) : CDN autorisés
-art = render('https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js')
+art = render('https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js')
 os.makedirs(SITE, exist_ok=True)
 open(os.path.join(SITE, 'artifact.html'), 'w').write(art)
 
@@ -135,13 +135,14 @@ import base64
 def b64(p, mime): return f'data:{mime};base64,' + base64.b64encode(open(p, 'rb').read()).decode()
 three_src = open(os.path.join(SITE, 'vendor', 'three.module.min.js')).read()
 three_data = 'data:text/javascript;base64,' + base64.b64encode(three_src.encode()).decode()
+gsap_src = open(os.path.join(SITE, 'vendor', 'gsap.min.js'), encoding='utf-8').read().replace('</script', '<\\/script')
 d3_src = open(os.path.join(SITE, 'vendor', 'd3.min.js')).read().replace('</script', '<\\/script')
 app_sa = app
 for f in sorted(os.listdir(os.path.join(SITE, 'plans'))):
     app_sa = app_sa.replace(f"'plans/{f}'", "'" + b64(os.path.join(SITE, 'plans', f), 'image/webp') + "'")
 logo_map = {o['id']: b64(os.path.join(SITE, 'logos', o['id'] + '.webp'), 'image/webp') for o in occ if o['logo']}
 app_sa = app_sa.replace("const logoUrl = o => o.logo ? `logos/${o.id}.webp` : null;", "const LOGOS=" + json.dumps(logo_map) + ";\nconst logoUrl = o => o.logo ? LOGOS[o.id] : null;")
-sa = tpl.replace('__THREE_URL__', three_data).replace('<script src="__D3_URL__"></script>', '<script>' + d3_src + '</script>').replace('__DATA__', data_js).replace('__CONV__', conv_js).replace('__GEO__', geo_js).replace('__APP_JS__', app_sa)
+sa = tpl.replace('__THREE_URL__', three_data).replace('<script src="__D3_URL__"></script>', '<script>' + d3_src + '</script>').replace('<script src="__GSAP_URL__"></script>', '<script>' + gsap_src + '</script>').replace('__DATA__', data_js).replace('__CONV__', conv_js).replace('__GEO__', geo_js).replace('__APP_JS__', app_sa)
 he = sa.index('</style>') + len('</style>')
 open(os.path.join(SITE, 'sowatt-carte-autonome.html'), 'w').write(html.replace(head_part, sa[:he]).replace(body_part, sa[he:]))
 print('autonome', round(os.path.getsize(os.path.join(SITE, 'sowatt-carte-autonome.html')) / 1024), 'Ko')

@@ -177,6 +177,9 @@ body.lieu svg.map{visibility:hidden}
 .rel .why{margin-left:auto;font:500 10.5px var(--font-data);color:var(--muted);white-space:nowrap}
 .rel.aff li button{opacity:.75}
 .close{float:right;background:none;border:0;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px}
+.dhead .dhead-row{display:flex;gap:14px;align-items:flex-start;margin-top:4px}
+.dhead h2{margin-top:8px}
+.dhead .dhead-title{margin:4px 0 10px}
 .lg{width:28px;height:28px;border-radius:7px;object-fit:contain;background:#fff;border:1px solid var(--line);flex:none;padding:2px;box-sizing:border-box}
 .lg-dot{width:28px;height:28px;border-radius:7px;border:0;padding:0;opacity:.85}
 .lg.big{width:64px;height:64px;border-radius:14px;padding:5px}
@@ -251,6 +254,14 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   aside.detail::before{content:"";position:sticky;top:-22px;display:block;width:36px;height:4px;border-radius:2px;background:var(--line-strong);margin:-12px auto 10px}
   aside.detail[hidden]{display:none}
   aside.detail .close{display:none}
+  body.detail-full aside.detail{top:max(8px,env(safe-area-inset-top,0px));max-height:none;padding-top:0;border-radius:18px 18px 0 0}
+  body.detail-full aside.detail::before{display:none}
+  body.detail-full #closeDetailSheet{display:none}
+  body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
+  body.detail-full aside.detail .dhead .close{display:flex;position:absolute;top:10px;right:12px;width:36px;height:36px;align-items:center;justify-content:center;background:var(--surface2);border-radius:50%;font-size:20px;padding:0;margin:0;float:none}
+  body.detail-full aside.detail .dhead .dhead-row{padding-right:44px;margin-top:0}
+  body.detail-full aside.detail .dhead .dhead-title{padding-right:44px}
+  body.detail-full aside.detail .profile-bar{margin-top:12px}
   body.detail-open .mobile-bar{z-index:8}
   body.detail-open .zoomctl{display:none}
   aside.detail{padding-bottom:calc(max(12px,env(safe-area-inset-bottom,0px)) + 60px)!important}
@@ -340,7 +351,7 @@ body.onboarding .canvas::before{opacity:1}
 .pop-actions .btn{padding:5px 11px;font-size:12.5px}
 .popover details summary{cursor:pointer;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .btn.has-profile{background:var(--accent-soft);border-color:var(--accent)}
-@media (max-width:980px){ .onb{justify-content:flex-start;padding-block:16px;box-sizing:border-box} .onb .card{padding:22px 18px 18px} }
+@media (max-width:980px){ body.onboarding svg.map{visibility:hidden} .onb{justify-content:flex-start;padding-block:12px;box-sizing:border-box;background:var(--bg)} .onb .card{max-width:none;height:100%;max-height:none;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none;border:0;padding:12px 6px 8px;display:flex;flex-direction:column;justify-content:center} }
 @media (max-height:500px){ .onb{padding-block:8px} .onb .card{padding:14px 18px 12px;border-radius:16px} .onb h2{font-size:22px;margin-bottom:6px} .onb p{font-size:13.5px;margin-bottom:10px} .onb .big{font-size:38px} .onb .choices{max-height:none;margin-bottom:10px} .onb .nav{position:sticky;bottom:-12px;padding:8px 0;background:color-mix(in srgb,var(--surface) 94%,transparent)} .onb .dots{margin-top:10px} .onb .kbd{display:none} }
 /* ---- tactile : cibles d'au moins ~36-44 px ---- */
 @media (pointer:coarse){
@@ -517,6 +528,7 @@ aside.detail{font-size:14.5px;line-height:1.5}
 <dialog id="helpDlg" class="help-dlg" aria-labelledby="helpT"><button class="help-x" id="helpClose" aria-label="Fermer l’aide">×</button><div id="helpBody"></div></dialog>
 <script type="importmap">{"imports":{"three":"__THREE_URL__"}}</script>
 <script src="__D3_URL__"></script>
+<script src="__GSAP_URL__"></script>
 <script id="data" type="application/json">__DATA__</script>
 <script id="conv" type="application/json">__CONV__</script>
 <script id="geo" type="application/json">__GEO__</script>

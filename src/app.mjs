@@ -34,6 +34,17 @@ let viewMode = 'clusters'; // 'clusters' | 'lieu' | 'conv'
 let query = '';
 let selected = null, selectedConv=null, focusGroup = null;
 let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// ---------- FX : micro-animations GSAP (désactivées si prefers-reduced-motion ou si gsap absent) ----------
+const G=window.gsap; const fx=()=>!!G&&!reduced;
+const FX={
+  slideIn(el,axis,from){ if(!fx()) return; G.killTweensOf(el); G.fromTo(el,{[axis]:from,opacity:.5},{[axis]:0,opacity:1,duration:.38,ease:'power3.out',clearProps:'transform,opacity'}); },
+  slideOut(el,axis,to,done){ if(!fx()){ done(); return; } G.killTweensOf(el); G.to(el,{[axis]:to,opacity:.5,duration:.24,ease:'power2.in',onComplete:()=>{ G.set(el,{clearProps:'transform,opacity'}); done(); }}); },
+  pop(el){ if(!fx()) return; G.killTweensOf(el); G.fromTo(el,{opacity:0,y:-6,scale:.98},{opacity:1,y:0,scale:1,duration:.22,ease:'power2.out',clearProps:'transform,opacity'}); },
+  content(el,max=14){ if(!fx()||!el) return; const kids=[...el.children].slice(0,max); if(!kids.length) return; G.killTweensOf(kids); G.fromTo(kids,{opacity:0,y:8},{opacity:1,y:0,duration:.3,stagger:.03,ease:'power2.out',clearProps:'transform,opacity'}); },
+  expand(ul){ if(!fx()||!ul) return; G.fromTo(ul,{height:0,opacity:0,overflow:'hidden'},{height:'auto',opacity:1,duration:.3,ease:'power2.out',clearProps:'height,opacity,overflow'}); const rows=[...ul.children].slice(0,14); G.fromTo(rows,{opacity:0,y:6},{opacity:1,y:0,duration:.25,stagger:.02,delay:.05,ease:'power2.out',clearProps:'transform,opacity'}); },
+  fade(el){ if(!fx()||!el) return; G.killTweensOf(el); G.fromTo(el,{opacity:0},{opacity:1,duration:.28,ease:'power1.out',clearProps:'opacity'}); },
+  rise(el,delay=0){ if(!fx()||!el) return; G.fromTo(el,{opacity:0,y:16},{opacity:1,y:0,duration:.5,delay,ease:'power3.out',clearProps:'transform,opacity'}); },
+};
 const narrowMQ = matchMedia('(max-width:980px)');
 
 // ---------- profil (repris d'eco-map : rôle → structure, thèmes, chantiers) ----------
@@ -367,7 +378,7 @@ function renderList(force){
   el.querySelector('[data-clear]')?.addEventListener('click',()=>document.getElementById('clearAll').click());
   el.querySelector('[data-openfilters]')?.addEventListener('click',()=>setFiltersOpen(true));
   el.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{ const k=d.dataset.key; if(d.open===openGroups.has(k)) return; dirHintSeen=true;
-    if(d.open){ openGroups.clear(); openGroups.add(k); renderList(true); const nd=el.querySelector(`details[data-key="${CSS.escape(k)}"]`); nd?.scrollIntoView({block:'start',behavior:reduced?'auto':'smooth'}); }
+    if(d.open){ openGroups.clear(); openGroups.add(k); renderList(true); const nd=el.querySelector(`details[data-key="${CSS.escape(k)}"]`); FX.expand(nd?.querySelector('.rel')); nd?.scrollIntoView({block:'start',behavior:reduced?'auto':'smooth'}); }
     else { openGroups.delete(k); const top=d.offsetTop-el.scrollTop; renderList(true); const nd=el.querySelector(`details[data-key="${CSS.escape(k)}"]`); if(nd && top<0) nd.scrollIntoView({block:'start'}); } }));
   el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t){ select(t); b.scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'}); } });
 }
@@ -377,7 +388,7 @@ function setView(mode){
   document.body.classList.toggle('lieu',mode==='lieu');
   focusGroup=null; svg.call(zoom.transform,d3.zoomIdentity);
   if(mode==='lieu'){ LIEU.show(); } else { LIEU.hide(); }
-  layout(); renderHint(); renderLegend(); applyState();
+  layout(); renderHint(); renderLegend(); applyState(); FX.fade(canvas);
 }
 function resetView(){ focusGroup=null; if(selectedConv){ selectedConv=null; renderDetail(); } if(viewMode==='lieu') LIEU.home(); else (reduced?svg:svg.transition().duration(500)).call(zoom.transform,d3.zoomIdentity); renderHint(); applyState(); }
 function selectConv(c){ if(c) sheetPref=null; selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
@@ -507,10 +518,12 @@ function helpHtml(){ return `<h2 id="helpT">Comment lire cette carte</h2><p>Chaq
   <p class="help-n">Thèmes, convergences et rôles sont déduits des descriptifs publics : à faire valider par les occupant·e·s.</p>`; }
 function openHelp(){ const d=document.getElementById('helpDlg'); document.getElementById('helpBody').innerHTML=helpHtml(); if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
 
-function renderDetail(){
+let detailKey='';
+function renderDetail(){ renderDetailInner(); const key=selectedConv?'c:'+selectedConv.id:selected?'o:'+selected.id:(profile&&forYouOpen)?'foryou':'home'; if(key!==detailKey){ detailKey=key; FX.content(document.getElementById('detailBody').firstElementChild?.classList.contains('home')?document.getElementById('detailBody').firstElementChild:document.getElementById('detailBody')); } }
+function renderDetailInner(){
   const el=document.getElementById('detailBody');
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
-    el.innerHTML=`<button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">Convergence</div><ul class="reslist">${convCard(c,false)}</ul>
+    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${FAMS[c.family].icon} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2></div><ul class="reslist">${convCard(c,false)}</ul>
     ${acus.length?`<div class="ksec"><dt>Connecteurs dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
     <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Convergences et rôles ont été déduits des descriptifs ; à faire valider et enrichir par les occupant·e·s.</p>`;
     el.querySelector('#closeDetail').onclick=()=>selectConv(null); el.querySelectorAll('.rorgs .chip[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); }); syncDetailSheet(); return; }
@@ -537,9 +550,9 @@ function renderDetail(){
   const o=selected; const rel=related(o,8); const know=convLinks(o); const decl=declared(o); const nb=neighbours(o);
   const tagList=(label,arr,dim)=>arr&&arr.length?`<div><dt>${label}</dt><dd class="chips">${arr.map(v=>`<button class="chip" data-dim="${dim}" data-val="${esc(v)}" aria-pressed="${active[dim].has(v)}">${esc(v)}</button>`).join('')}</dd></div>`:'';
   const site=o.website?`<a href="${esc(o.website)}" target="_blank" rel="noopener">${esc(o.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))} ↗</a>`:'';
-  el.innerHTML=`<button class="close" id="closeDetail" aria-label="Fermer">×</button>${profileBarHtml(true)}
-    <div style="display:flex;gap:14px;align-items:flex-start;margin-top:4px">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Connecteur n°${o.acu.rank} : relie le plus de mondes différents">◌ connecteur n°${o.acu.rank}</span>`:''}
-    <h2 style="margin-top:8px">${esc(o.name)}</h2></div></div>
+  el.innerHTML=`${profileBarHtml(true)}<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button>
+    <div class="dhead-row">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Connecteur n°${o.acu.rank} : relie le plus de mondes différents">◌ connecteur n°${o.acu.rank}</span>`:''}
+    <h2>${esc(o.name)}</h2></div></div></div>
     ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
     <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
@@ -568,7 +581,7 @@ function renderDetail(){
 let searchT=0; document.getElementById('search').addEventListener('input',e=>{ clearTimeout(searchT); const v=e.target.value.trim(); searchT=setTimeout(()=>{ query=v.toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(!selected) renderDetail(); applyState(); },query&&!v?0:140); });
 document.getElementById('searchToggle').onclick=e=>{ const h=document.querySelector('header.top'); const open=h.classList.toggle('search-open'); e.currentTarget.setAttribute('aria-expanded',String(open)); if(open) document.getElementById('search').focus(); };
 const pop=document.getElementById('aboutPop'), popBtn=document.getElementById('aboutBtn');
-function setPopover(open){ pop.hidden=!open; popBtn.setAttribute('aria-expanded',String(open)); if(open) renderPopover(); }
+function setPopover(open){ const was=pop.hidden; pop.hidden=!open; popBtn.setAttribute('aria-expanded',String(open)); if(open){ renderPopover(); if(was) FX.pop(pop); } }
 popBtn.onclick=()=>setPopover(pop.hidden);
 document.addEventListener('click',e=>{ if(!pop.hidden && !pop.contains(e.target) && e.target!==popBtn) setPopover(false); });
 document.getElementById('clearAll').onclick=()=>{ const had=anyFilter(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; matchConv(); if(viewMode==='lieu'){ LIEU.setFloor(null); renderHint(); } if(!had && profile){ profile=null; saveProfile(); } if(!selected&&!selectedConv) renderDetail(); applyState(); renderPopover(); };
@@ -589,8 +602,8 @@ document.getElementById('viewClusters').onclick=()=>setView('clusters');
 document.getElementById('viewLieu').onclick=()=>setView('lieu');
 document.getElementById('viewConv').onclick=()=>setView('conv');
 document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; selected=null; selectedConv=null; if(viewMode!=='clusters') setView('clusters'); startOnboarding(0); };
-function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; if(open&&narrowMQ.matches) sheetPref=null; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
-function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
+function setFiltersOpen(open){ const f=document.getElementById('filters'); if(open&&f.hidden){ f.hidden=false; FX.slideIn(f,'x','-100%'); } else if(!open&&!f.hidden){ FX.slideOut(f,'x','-100%',()=>{ f.hidden=true; }); } if(open&&narrowMQ.matches) sheetPref=null; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
+function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); document.body.classList.toggle('detail-full',!!(open&&(selected||selectedConv))); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } if(open&&d.hidden){ d.hidden=false; FX.slideIn(d,'y','100%'); } else if(!open&&!d.hidden){ FX.slideOut(d,'y','100%',()=>{ d.hidden=true; }); } document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
 let convDismissed=false, forYouOpen=false, sheetPref=null; // sheetPref : choix explicite Carte / Infos sur mobile (null = automatique)
 function syncDetailSheet(){ const auto=!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed)); setDetailOpen(sheetPref===null?auto:sheetPref); }
 function closeDetailSheet(){ sheetPref=null; forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
@@ -608,6 +621,7 @@ addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ se
 function placeViewSeg(){ const seg=document.getElementById('viewSeg'); document.getElementById('viewClusters').textContent=narrowMQ.matches?'Annuaire':'Grappes'; if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
 function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { setFiltersOpen(false); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
 narrowMQ.addEventListener('change',applyNarrow);
+if(narrowMQ.matches) FX.rise(document.getElementById('mobileBar'),.25);
 let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ layout(); },150); });
 
 // ---------- Le lieu : WebGL (three.js) — bâtiment réel orienté sur l'orthophoto IGN ----------
@@ -784,7 +798,7 @@ function startOnboarding(step){
 function goStep(i){
   obStep=Math.max(0,Math.min(STEPS.length-1,i)); const s=STEPS[obStep];
   onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">${TOUCH?'Balayez ← → pour avancer':'Molette ou flèches ← → pour avancer'}</div>`;
-  s.enter();
+  s.enter(); FX.content(onbCard,10);
   onbCard.querySelector('[data-next]')?.addEventListener('click',()=>goStep(obStep+1));
   onbCard.querySelector('[data-prev]')?.addEventListener('click',()=>goStep(obStep-1));
   onbCard.querySelector('[data-skip]')?.addEventListener('click',()=>endOnboarding(false));
