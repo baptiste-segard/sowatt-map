@@ -55,3 +55,7 @@
 - `src/niches.json` : 18 micro-systèmes (famille « Micro-systèmes ») avec premier pas et sources ; fusionnés par convergences.py. Dans le score d'acupuncture, une niche compte 1 (une grande convergence 2).
 - Fiche : blocs « Ce qu'elle propose », « À venir » (dates passées masquées automatiquement), réseaux, « À vérifier ». Accueil : agenda commun, micro-systèmes puis grandes convergences.
 - 36 structures sans site exploitable (Instagram seul ou rien) : à compléter en entretien.
+
+## Renommage (25/10/2026)
+- « Points d'acupuncture » → **Connecteurs** dans toute l'interface (accueil, fiches, légende, intro, À propos), en écho à l'énergie du So Watt. Les noms techniques (`acu`, `ACU_NOTES`) sont inchangés.
+- Audit mobile UX/UI du 25/10 : cibles tactiles ≥ 34–44 px, intro qui tient en paysage, balayage, recherche qui liste les structures, panneau « pour vous » ouvert en fin d'intro, notes internes masquées en public.

@@ -6,7 +6,7 @@ Chaque convergence = un point de rencontre possible (atelier commun, offre group
 mutualisation). Les membres sont des ids de occupants.py. Le rôle précise ce que la structure
 apporte dans cette convergence.
 
-Les "points d'acupuncture" sont calculés dans build.py : structures présentes dans le plus de
+Les "connecteurs" (ex-points d'acupuncture) sont calculés dans build.py : structures présentes dans le plus de
 convergences ET reliant des catégories différentes ; une liste de curations commentées complète le calcul.
 """
 import json, os
@@ -103,7 +103,7 @@ CONV = [
          members=[('capstone', 'propriétaire'), ('intermede', 'gestion'), ('studiocad', 'site web'), ('bonallure', 'livraisons'), ('kpro', 'stockage'), ('astreos', 'sécurité'), ('litha', 'machines à café'), ('consignerie', 'événements')]),
 ]
 
-# Curations : pourquoi ces structures sont des points d'acupuncture (en plus du score calculé)
+# Curations : pourquoi ces structures sont des connecteurs (en plus du score calculé)
 ACU_NOTES = {
     'intermede': "Gestionnaire du lieu : seul acteur en contact avec tout le monde. Tout programme transversal passe par là.",
     'maze': "Organisme de formation aux arts visuels au milieu de 25 artistes : le levier de professionnalisation le plus évident du lieu.",
