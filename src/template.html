@@ -273,7 +273,7 @@ body.onboarding .canvas::before{opacity:1}
 .onb .chip{font-size:13px;padding:6px 12px}
 .onb .chip .lg{width:18px;height:18px;border-radius:4px;padding:1px}
 .onb .nav{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
-.onb .primary{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 35%,transparent)}
+.onb .primary{background:var(--accent-ink);color:#fff;border:0;border-radius:999px;padding:10px 20px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 35%,transparent)}
 .onb .primary:disabled{opacity:.45;cursor:default;box-shadow:none}
 .onb .ghost{background:none;border:0;color:var(--muted);cursor:pointer;padding:10px 12px}
 .onb .dots{display:flex;gap:6px;justify-content:center;margin-top:18px}
@@ -315,6 +315,104 @@ body.onboarding .canvas::before{opacity:1}
 }
 @media (max-width:980px){ .hint .crumb .sub{display:none} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+/* ---------- Panneau gauche : hiérarchie visuelle (25/10) ---------- */
+aside.detail{font-size:14.5px;line-height:1.5}
+@media (min-width:981px){ aside.detail{padding:22px 26px 28px} }
+.detail h2{font:600 24px/1.2 var(--font-display);letter-spacing:-.015em}
+.ksec{margin-top:26px}
+.ksec dt,.meta dt,.offer dt,.foryou h3{font:600 16px/1.3 var(--font-display);letter-spacing:-.005em;text-transform:none;color:var(--fg);margin:0 0 10px}
+.ksec dt .n{font:500 13px var(--font-body,inherit);color:var(--muted)}
+.meta{gap:18px!important}
+.offer p{font-size:14.5px}
+.rel{gap:6px}
+.rel li button{padding:10px 12px;border-radius:12px;font-size:14.5px;gap:12px}
+.rel li button .lg{width:32px;height:32px;border-radius:8px}
+.rel .why{font:500 12.5px inherit;font-family:inherit;color:var(--muted)}
+.rescard{padding:14px 16px;border-radius:14px}
+.rescard .rt{font:500 12.5px inherit;font-family:inherit;letter-spacing:0;text-transform:none}
+.rescard .rtitle{font:600 16px/1.3 var(--font-display)}
+.rescard .rsum,.rescard .rpot,.rescard .rstep{font-size:13.5px}
+.chip{font-size:13px}
+.home{display:flex;flex-direction:column;gap:34px}
+.home .hero h2{font:600 28px/1.12 var(--font-display);letter-spacing:-.025em;margin:0 0 10px;text-wrap:balance}
+.home .hero p{margin:0;color:var(--muted);font-size:15px;max-width:52ch}
+.hero-a{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn-p{background:var(--accent-ink);color:#fff;border:0;border-radius:999px;padding:10px 18px;font:600 14px var(--font-display);cursor:pointer}
+.btn-p:hover{background:#963726}
+.btn-g{background:var(--surface2);color:var(--fg);border:0;border-radius:999px;padding:10px 16px;font:500 14px inherit;font-family:inherit;cursor:pointer}
+.sec{display:flex;flex-direction:column}
+.sec-h{margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--fg)}
+.sec-h h3{font:650 21px/1.15 var(--font-display);letter-spacing:-.02em;margin:0}
+.sec-h p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+.evlist>.xtra,.ecogrid>.xtra{display:none}.evlist.open>.xtra{display:block}.ecogrid.open>.xtra{display:flex}
+.evc.static{cursor:default}.evc.static:hover{border-color:var(--line)}
+.more-btn{align-self:flex-start;margin-top:12px;background:none;border:0;padding:6px 0;color:var(--accent-ink);font:600 14px var(--font-display);cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+/* événements */
+.evlist{display:grid;gap:10px}
+.evc{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:68px 1fr;gap:14px;align-items:stretch;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;transition:border-color .15s}
+.evc:hover,.evc:focus-visible{border-color:var(--accent)}
+.evc:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.evd{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--accent-soft);border-radius:10px;padding:8px 4px;color:var(--accent-ink);text-align:center}
+.evd b{font:650 26px/1 var(--font-display);letter-spacing:-.02em}
+.evd small{font-size:12.5px;font-weight:600;margin-top:3px}
+.evd i{font-style:normal;font-size:11.5px;margin-top:3px;font-weight:600}
+.evb{display:flex;flex-direction:column;gap:5px;min-width:0;padding:2px 0}
+.evt{font:600 15px/1.3 var(--font-display);color:var(--fg)}
+.evo{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);min-width:0}
+.evo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evo .lg{width:20px;height:20px;border-radius:5px;flex:none}
+.evl{align-self:flex-start;font-size:12px;color:var(--muted);background:var(--surface2);border-radius:999px;padding:2px 9px}
+.evl.here{background:var(--accent-ink);color:#fff;font-weight:600}
+/* écosystème */
+.ecogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.ecogrid>div{display:flex}
+.eco{all:unset;box-sizing:border-box;width:100%;display:flex;flex-direction:column;gap:8px;cursor:pointer;background:var(--surface2);border-radius:16px;padding:16px 16px 14px;border-top:4px solid var(--accent)}
+.eco:hover{background:var(--accent-soft)}
+.eco:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eco-t{font:650 17px/1.2 var(--font-display);letter-spacing:-.01em;color:var(--fg)}
+.eco-s{font-size:13.5px;color:var(--fg);opacity:.8;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.eco-f{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:6px}
+.eco-n{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.stack{display:flex;align-items:center}
+.stack .lg{width:28px;height:28px;border-radius:50%;border:2px solid var(--surface2);background:#fff;margin-left:-8px;object-fit:contain}
+.stack .lg:first-child{margin-left:0}
+.stack .more{margin-left:-8px;width:28px;height:28px;border-radius:50%;background:var(--fg);color:#fff;font:600 11px/28px var(--font-display);text-align:center;border:2px solid var(--surface2)}
+/* connecteurs */
+.congrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.con{all:unset;box-sizing:border-box;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;cursor:pointer;border:1px solid var(--line);border-radius:14px;padding:14px 12px 12px}
+.con:hover{border-color:var(--accent)}
+.con:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.con .lg{width:44px;height:44px;border-radius:10px}
+.con-r{position:absolute;top:10px;right:12px;font:650 15px var(--font-display);color:var(--accent)}
+.con-n{font:600 14.5px/1.25 var(--font-display)}
+.con-m{font-size:12.5px;color:var(--muted)}
+/* grandes convergences */
+.fam{margin-top:6px}
+.fam+.fam{margin-top:18px}
+.fam h4{font:600 14px var(--font-display);margin:0 0 6px;color:var(--muted)}
+.cvrow{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer;font-size:14.5px}
+.cvrow:hover .cv-t{color:var(--accent-ink)}
+.cvrow:focus-visible{outline:2px solid var(--accent)}
+.cv-i{color:var(--accent);width:18px;text-align:center}
+.cv-t{flex:1;min-width:0}
+.cv-n{font-size:12.5px;color:var(--muted);background:var(--surface2);border-radius:999px;padding:1px 9px}
+.help-foot{margin:0;font-size:13.5px;color:var(--muted)}
+.help-foot button{background:none;border:0;padding:0;color:var(--accent-ink);cursor:pointer;font:inherit;text-decoration:underline;text-underline-offset:3px}
+.foryou .profile-bar{margin-bottom:0}
+/* aide */
+.help-btn{font:700 15px var(--font-display);color:var(--fg)}
+.help-dlg{border:0;border-radius:20px;padding:28px 30px;max-width:560px;width:calc(100% - 32px);box-shadow:0 30px 80px rgba(40,25,15,.25);color:var(--fg);font-size:15px;line-height:1.5}
+.help-dlg::backdrop{background:rgba(31,27,23,.35)}
+.help-dlg h2{font:650 24px/1.2 var(--font-display);margin:0 0 8px;letter-spacing:-.02em}
+.help-dlg>div>p{color:var(--muted);margin:0 0 16px}
+.help-l{margin:0;display:grid;gap:12px}
+.help-l dt{font:600 16px var(--font-display);color:var(--accent-ink)}
+.help-l dd{margin:2px 0 0}
+.help-n{font-size:13px;color:var(--muted);margin:18px 0 0}
+.help-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface2);font-size:20px;cursor:pointer}
+@media (max-width:980px){ .home{gap:28px} .home .hero h2{font-size:24px} .ecogrid{grid-template-columns:1fr 1fr} .congrid{grid-template-columns:1fr 1fr} }
+@media (max-width:420px){ .ecogrid{grid-template-columns:1fr} .brand-sub{display:none} }
 </style>
 
 <header class="top">
@@ -326,6 +424,7 @@ body.onboarding .canvas::before{opacity:1}
   <div class="controls">
     <button class="icon-btn search-toggle" id="searchToggle" aria-label="Rechercher" aria-expanded="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
     <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="search" type="search" placeholder="Un nom, un métier, un besoin… (ex. anniversaire)" aria-label="Rechercher une structure, une personne ou une convergence"></label>
+    <button class="icon-btn help-btn" id="helpBtn" aria-label="Aide : comment lire la carte" title="Aide">?</button>
     <div class="pop-anchor">
       <button class="btn" id="aboutBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="aboutPop">Votre vue</button>
       <div class="popover" id="aboutPop" role="dialog" aria-label="Votre vue" hidden>
@@ -363,6 +462,7 @@ body.onboarding .canvas::before{opacity:1}
   <aside class="detail" id="detail"><button class="sheet-close" id="closeDetailSheet" aria-label="Fermer" >×</button><div id="detailBody"></div></aside>
 </main>
 
+<dialog id="helpDlg" class="help-dlg" aria-labelledby="helpT"><button class="help-x" id="helpClose" aria-label="Fermer l’aide">×</button><div id="helpBody"></div></dialog>
 <script type="importmap">{"imports":{"three":"__THREE_URL__"}}</script>
 <script src="__D3_URL__"></script>
 <script id="data" type="application/json">__DATA__</script>

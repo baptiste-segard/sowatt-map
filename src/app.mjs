@@ -426,6 +426,45 @@ function profileBarHtml(compact){ if(!profile) return ''; const who=esc(profileW
 function bindProfileBar(el){ el.querySelector('#editProfile')?.addEventListener('click',()=>startOnboarding(2)); el.querySelector('#showAll')?.addEventListener('click',()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); applyState(); renderDetail(); renderPopover(); }); }
 function orgLi(x,why,title){ return `<li><button data-id="${x.id}"${title?` title="${esc(title)}"`:''}>${logoImg(x)}<span class="nm">${esc(x.name)}</span><span class="why">${esc(why)}</span></button></li>`; }
 function acuList(limit=12){ return RAW.filter(o=>o.acu&&o.acu.top).sort((a,b)=>a.acu.rank-b.acu.rank).slice(0,limit); }
+// ---------- Panneau d'accueil : sections visuelles ----------
+const MOIS_C=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+function evDate(a){ const p=a.date.split('/'); const [y,m,d]=p[0].split('-'); if(!m) return {big:y,small:'',extra:''}; const mo=MOIS_C[+m-1]+(y!=='2026'?' '+y:''); if(!d) return {big:mo.split(' ')[0],small:y,extra:''}; const extra=p.length===2?'au '+(+p[1]):p.length>2?'+'+(p.length-1)+' dates':''; return {big:+d,small:mo,extra}; }
+function evCard(a,o,showOrg=true){ const d=evDate(a); const here=/so ?watt/i.test(a.lieu||''); return `<button class="evc" data-id="${o.id}"><span class="evd"><b>${d.big}</b><small>${esc(d.small)}</small>${d.extra?`<i>${esc(d.extra)}</i>`:''}</span><span class="evb"><span class="evt">${esc(a.quoi)}</span>${showOrg?`<span class="evo">${logoImg(o)}<span>${esc(o.name)}</span></span>`:''}${a.lieu?`<span class="evl${here?' here':''}">${here?'Au So Watt':esc(a.lieu)}</span>`:''}</span></button>`; }
+function stack(c,n=5){ const ms=c.members.map(m=>orgById.get(m.id)).filter(Boolean); return `<span class="stack">${ms.slice(0,n).map(o=>logoImg(o)).join('')}${ms.length>n?`<span class="more">+${ms.length-n}</span>`:''}</span>`; }
+function ecoCard(c){ return `<button class="eco" data-conv="${c.id}"><span class="eco-t">${esc(c.title)}</span><span class="eco-s">${esc(c.summary)}</span><span class="eco-f">${stack(c)}<span class="eco-n">${c.members.length} structures</span></span></button>`; }
+function conCard(o){ return `<button class="con" data-id="${o.id}"><span class="con-r">${o.acu.rank}</span>${logoImg(o,'lg')}<span class="con-n">${esc(o.name)}</span><span class="con-m">${o.acu.n} chantiers, ${o.acu.cats} métiers</span></button>`; }
+function cvRow(c){ return `<button class="cvrow" data-conv="${c.id}"><span class="cv-i">${FAMS[c.family].icon}</span><span class="cv-t">${esc(c.title)}</span><span class="cv-n">${c.members.length}</span></button>`; }
+function secHead(t,sub){ return `<header class="sec-h"><h3>${t}</h3>${sub?`<p>${sub}</p>`:''}</header>`; }
+function openConv(r){ if(!r) return; if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); }
+function bindHome(el){
+  el.querySelectorAll('.evc[data-id], .con[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+  el.querySelectorAll('.eco[data-conv], .cvrow[data-conv]').forEach(b=>b.onclick=()=>openConv(convById.get(b.dataset.conv)));
+  el.querySelectorAll('[data-help]').forEach(b=>b.onclick=openHelp);
+  el.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>{ const box=el.querySelector('#'+b.dataset.more); box.classList.add('open'); b.remove(); });
+}
+function agendaSection(limit=4,filter){ const all=agendaAll(200).filter(x=>!filter||filter(x.o)); if(!all.length) return ''; return `<section class="sec">${secHead('À venir',`${all.length} rendez-vous relevés sur les sites des occupant·e·s`)}<div class="evlist" id="evMore">${all.map((x,i)=>`<div class="${i>=limit?'xtra':''}">${evCard(x.a,x.o)}</div>`).join('')}</div>${all.length>limit?`<button class="more-btn" data-more="evMore">Voir les ${all.length-limit} autres dates</button>`:''}</section>`; }
+function ecoSection(list,title,sub,limit=6,id='ecoMore'){ if(!list.length) return ''; return `<section class="sec">${secHead(title,sub)}<div class="ecogrid" id="${id}">${list.map((c,i)=>`<div class="${i>=limit?'xtra':''}">${ecoCard(c)}</div>`).join('')}</div>${list.length>limit?`<button class="more-btn" data-more="${id}">Voir les ${list.length-limit} autres</button>`:''}</section>`; }
+function homeHtml(){
+  const niches=CONV.filter(c=>c.family==='niche'); const big=CONV.filter(c=>c.family!=='niche'); const nEv=agendaAll(200).length;
+  const famBlocks=Object.keys(FAMS).filter(f=>f!=='niche').map(f=>{ const cs=big.filter(c=>c.family===f); return cs.length?`<div class="fam"><h4>${FAMS[f].icon} ${esc(FAMS[f].label)}</h4>${cs.map(cvRow).join('')}</div>`:''; }).join('');
+  return `<div class="home">
+    <section class="hero"><h2>Qui fait quoi au So Watt</h2><p>${RAW.length} structures sous un même toit, ${CONV.length} chantiers communs possibles${nEv?` et ${nEv} rendez-vous à venir`:''}. Touchez un point de la carte, ou explorez ci-dessous.</p>
+      <div class="hero-a"><button class="btn-p" id="setupProfile">Personnaliser la carte</button><button class="btn-g" data-help>Comment lire la carte</button></div></section>
+    ${agendaSection()}
+    ${ecoSection(niches,'L’écosystème',`${niches.length} micro-systèmes : des petits chantiers précis entre voisin·e·s`)}
+    <section class="sec">${secHead('Les connecteurs','Les structures qui relient le plus de mondes différents')}<div class="congrid">${acuList().map(conCard).join('')}</div></section>
+    <section class="sec">${secHead('Grandes convergences',`${big.length} chantiers à l’échelle du lieu`)}${famBlocks}</section>
+    <p class="help-foot"><button data-help>Aide : comment lire cette carte</button></p></div>`;
+}
+function helpHtml(){ return `<h2 id="helpT">Comment lire cette carte</h2><p>Chaque point est une structure du So Watt, colorée selon sa famille de métier. ${RAW.length} structures, ${CONV.length} convergences.</p>
+  <dl class="help-l"><dt>Qui est là ?</dt><dd>Les grappes regroupent les structures par métier, thème, étage ou public. Les filtres sont derrière le bouton ☰ en haut à gauche (« Filtres » sur mobile).</dd>
+  <dt>Où ?</dt><dd>La vue « Le lieu 3D » pose chacun·e sur son bureau, étage par étage, sur la vraie photo aérienne du bâtiment.</dd>
+  <dt>Avec qui ?</dt><dd>Ouvrez une fiche : relations déclarées, convergences communes, affinités de thèmes et voisin·e·s de palier.</dd>
+  <dt>Qui fait le lien ?</dt><dd>Les convergences sont des chantiers communs possibles entre structures de métiers différents. Les connecteurs sont les structures qui relient le plus de mondes.</dd>
+  <dt>Chercher</dt><dd>Tapez un nom, un métier ou un besoin (« anniversaire », « céramique », « RDC ») : la recherche tolère les fautes et connaît des synonymes.</dd></dl>
+  <p class="help-n">Thèmes, convergences et rôles sont déduits des descriptifs publics : à faire valider par les occupant·e·s.</p>`; }
+function openHelp(){ const d=document.getElementById('helpDlg'); document.getElementById('helpBody').innerHTML=helpHtml(); if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
+
 function renderDetail(){
   const el=document.getElementById('detailBody');
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
@@ -436,30 +475,22 @@ function renderDetail(){
   if(!selected && profile){
     const me=meOrg(); const pool=orgs.filter(o=>o!==me&&profileMatch(o)).map(o=>({o,s:profileScore(o)})).sort((a,b)=>b.s-a.s).slice(0,8);
     const nMatch=orgs.filter(o=>profileMatch(o)&&o!==me).length; const nb=me?neighbours(me):null;
-    el.innerHTML=`<div class="foryou">${profileBarHtml()}${convHitsHtml()}
-      <h2 style="font-size:16px">${nMatch} structures correspondent à votre profil</h2>
-      <p style="color:var(--muted);font-size:12.5px;margin:0">Elles restent en avant sur la carte ; le reste du lieu attend en arrière-plan. Ouvrez-en une pour voir qui elle relie.</p>
-      ${me?`<h3>Votre structure</h3><ul class="rel">${orgLi(me,me.room?'bureau '+me.room:me.floorLabel)}</ul>`:''}
-      <h3>Les plus proches de vous</h3>
-      <ul class="rel">${pool.map(r=>orgLi(r.o,me&&r.o.floor===me.floor?'même étage':(r.o.themes.filter(x=>profile.themes?.includes(x)).length+' thèmes'))).join('')||'<li class="kempty">Élargissez vos thèmes ou vos chantiers.</li>'}</ul>
-      <h3>Chantiers pour vous</h3>
-      <ul class="reslist">${convsForProfile(6).map(x=>convCard(x.c,true)).join('')||'<li class="kempty">Rien ne correspond encore.</li>'}</ul>
-      ${nb&&(nb.sameRoom.length||nb.sameFloor.length)?`<h3>Vos voisin·e·s de palier</h3><ul class="rel aff">${nb.sameRoom.map(x=>orgLi(x,'même bureau')).join('')}${nb.sameFloor.slice(0,8).map(x=>orgLi(x,x.room||'')).join('')}</ul>`:''}
-      <p style="font-size:11.5px;margin-top:12px"><button id="replayIntro" style="background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0">Revoir l'introduction</button></p></div>`;
-    bindProfileBar(el); el.querySelector('#replayIntro').onclick=()=>startOnboarding(0);
-    el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+    const mine=convsForProfile(8).map(x=>x.c);
+    el.innerHTML=`<div class="home foryou">${profileBarHtml()}${convHitsHtml()}
+      <section class="hero"><h2>${nMatch} structures pour vous</h2><p>Elles restent en avant sur la carte ; le reste du lieu attend en arrière-plan. Ouvrez-en une pour voir qui elle relie.</p></section>
+      ${me?`<section class="sec">${secHead('Votre structure')}<ul class="rel">${orgLi(me,me.room?'bureau '+me.room:me.floorLabel)}</ul></section>`:''}
+      <section class="sec">${secHead('Les plus proches de vous','Mêmes thèmes, mêmes chantiers ou même métier')}<ul class="rel">${pool.map(r=>orgLi(r.o,me&&r.o.floor===me.floor?'même étage':r.o.catLabel)).join('')||'<li class="kempty">Élargissez vos thèmes ou vos chantiers.</li>'}</ul></section>
+      ${ecoSection(mine,'Chantiers pour vous','Les convergences où votre profil compte',4,'ecoMine')}
+      ${agendaSection(3,o=>profileMatch(o))}
+      ${nb&&(nb.sameRoom.length||nb.sameFloor.length)?`<section class="sec">${secHead('Vos voisin·e·s de palier')}<ul class="rel aff">${nb.sameRoom.map(x=>orgLi(x,'même bureau')).join('')}${nb.sameFloor.slice(0,8).map(x=>orgLi(x,x.room||'')).join('')}</ul></section>`:''}
+      <p class="help-foot"><button id="replayIntro">Revoir l'introduction</button> · <button data-help>Aide</button></p></div>`;
+    bindProfileBar(el); el.querySelector('#replayIntro').onclick=()=>startOnboarding(0); bindHome(el);
     bindConvCards(el); renderPopover(); syncDetailSheet(); return;
   }
   if(!selected){
-    el.innerHTML=`${convHitsHtml()}<div class="empty"><p style="font-size:12.5px;margin:0 0 8px"><button id="setupProfile" class="btn" style="padding:6px 10px">Personnaliser cette carte</button></p><h2>Comment lire cette carte</h2><p>Chaque point est une structure du Sowatt, colorée par catégorie. ${RAW.length} structures, ${CONV.length} convergences.</p><ol><li><b>Qui est là ?</b> Grappes par catégorie, thème, étage ou public ; filtres derrière le bouton ☰ en haut à gauche.</li><li><b>Où ?</b> La vue <button class="chip" id="goLieu">Le lieu 3D</button> pose chacun·e sur son bureau, étage par étage.</li><li><b>Avec qui ?</b> Ouvrir une fiche : relations déclarées, convergences communes, affinités, voisin·e·s.</li><li><b>Qui fait le lien ?</b> Les <b>convergences</b> sont des chantiers communs possibles ; les <b>connecteurs</b> sont les structures qui font circuler l'énergie entre les mondes du So Watt.</li></ol></div>
-    <div class="ksec"><dt>Connecteurs <span class="n">· les 12 structures qui relient le plus de mondes</span></dt><ul class="rel acu-list">${acuList().map(o=>`<li><button data-id="${o.id}"><span class="rank">${o.acu.rank}</span>${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${o.acu.n} conv. · ${o.acu.cats} cat.</span></button></li>`).join('')}</ul></div>
-    ${agendaAll().length?`<div class="ksec"><dt>À venir chez les occupant·e·s <span class="n">· relevé sur leurs sites</span></dt><ul class="agenda">${agendaAll().map(x=>agendaLi(x.a,x.o)).join('')}</ul></div>`:''}
-    <div class="ksec"><dt>Micro-systèmes <span class="n">· ${CONV.filter(c=>c.family==='niche').length} petits chantiers précis</span></dt><ul class="reslist">${CONV.filter(c=>c.family==='niche').map(c=>convCard(c,true)).join('')}</ul></div>
-    <div class="ksec"><dt>Grandes convergences</dt><ul class="reslist">${CONV.filter(c=>c.family!=='niche').map(c=>convCard(c,true)).join('')}</ul></div>`;
-    el.querySelectorAll('.agenda .aorg').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+    el.innerHTML=`${convHitsHtml()}${homeHtml()}`;
+    bindHome(el); el.querySelector('#setupProfile').onclick=()=>startOnboarding(2);
     el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
-    el.querySelector('#goLieu').onclick=()=>setView('lieu'); el.querySelector('#setupProfile').onclick=()=>startOnboarding(2);
-    el.querySelectorAll('.acu-list button').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
     bindConvCards(el); syncDetailSheet(); return; }
   const o=selected; const rel=related(o,8); const know=convLinks(o); const decl=declared(o); const nb=neighbours(o);
   const tagList=(label,arr,dim)=>arr&&arr.length?`<div><dt>${label}</dt><dd class="chips">${arr.map(v=>`<button class="chip" data-dim="${dim}" data-val="${esc(v)}" aria-pressed="${active[dim].has(v)}">${esc(v)}</button>`).join('')}</dd></div>`:'';
@@ -471,7 +502,7 @@ function renderDetail(){
     <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
     ${o.offre?`<div class="offer"><dt>Ce qu'elle propose</dt><p>${esc(o.offre)}</p>${o.formats?`<p class="fmt">${esc(o.formats)}</p>`:''}${o.publicsDetail?`<p class="fmt">Pour : ${esc(o.publicsDetail)}</p>`:''}</div>`:''}
-    ${upcoming(o).length?`<div class="ksec"><dt>À venir <span class="n">${upcoming(o).length}</span></dt><ul class="agenda">${upcoming(o).map(a=>agendaLi(a)).join('')}</ul></div>`:''}
+    ${upcoming(o).length?`<div class="ksec"><dt>À venir <span class="n">${upcoming(o).length}</span></dt><div class="evlist">${upcoming(o).map(a=>evCard(a,o,false).replace('<button class="evc"','<div class="evc static"').replace(/<\/button>$/,'</div>')).join('')}</div></div>`:''}
     <div class="contact">${site?`<span>${site}</span>`:''}${o.mails.map(m=>`<span><a href="mailto:${esc(m)}">${esc(m)}</a></span>`).join('')}${o.phone?`<span><a href="tel:${esc(o.phone.replace(/\s/g,''))}">${esc(o.phone)}</a></span>`:''}${(o.reseaux||[]).length?`<span class="soc">${o.reseaux.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc((u.match(/(instagram|facebook|linkedin|youtube|tiktok|vimeo)/)||['','lien'])[1])} ↗</a>`).join(' · ')}</span>`:''}</div>
     ${(o.alertes||[]).length?`<p class="alerte">À vérifier · ${o.alertes.map(esc).join(' ')}</p>`:''}
     ${ACU.has(o.id)&&o.acu.note?`<div class="acu-note"><b>Pourquoi un connecteur ·</b> ${esc(o.acu.note)}</div>`:''}
@@ -504,6 +535,7 @@ function renderPopover(){
   el.innerHTML = profile ? `<b>${esc(profileWho())}</b>${me?` · ${esc(me.floorLabel)}`:''}<br><span class="muted" style="color:var(--muted)">${profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'}${profile.wants?.length?' · chantiers : '+esc(profile.wants.map(id=>convById.get(id)?.title).filter(Boolean).join(', ')):''}</span>` : `<span style="color:var(--muted)">Pas encore de profil : la carte montre tout.</span>`;
   document.getElementById('popShowAll').hidden=!profile; document.getElementById('popForYou').hidden=!(profile && narrowMQ.matches); popBtn.classList.toggle('has-profile',!!profile);
 }
+document.getElementById('helpBtn').onclick=openHelp; document.getElementById('helpClose').onclick=()=>document.getElementById('helpDlg').close(); document.getElementById('helpDlg').addEventListener('click',e=>{ if(e.target.id==='helpDlg') e.target.close(); });
 document.getElementById('profileBtn').onclick=()=>{ setPopover(false); startOnboarding(2); };
 document.getElementById('popReplay').onclick=()=>{ setPopover(false); startOnboarding(0); };
 document.getElementById('popForYou').onclick=()=>{ forYouOpen=true; select(null); setPopover(false); };
