@@ -271,6 +271,34 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
 }
 @media (max-width:400px){ .mobile-bar .toggle-infos span{display:none} .mobile-bar .toggle-infos{padding:7px 9px} .mobile-bar .toggle-filters{padding:7px 10px} .mobile-bar .seg button{padding:6px 7px;font-size:12px} }
 
+/* ---------- annuaire en accordéon (mobile, remplace les grappes) ---------- */
+.dirlist{position:absolute;inset:0;z-index:2;overflow:auto;-webkit-overflow-scrolling:touch;padding:62px 12px calc(max(12px,env(safe-area-inset-bottom,0px)) + 64px);background:var(--bg);overscroll-behavior:contain}
+.dirlist[hidden]{display:none}
+.dirlist .dsum{font-size:12px;color:var(--muted);margin:0 2px 10px}
+.dirlist .dsum b{color:var(--fg);font-weight:600}
+.dgrp{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px;overflow:hidden}
+.dgrp summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;min-height:44px;box-sizing:border-box;font-weight:600;font-size:14.5px}
+.dgrp summary::-webkit-details-marker{display:none}
+.dgrp summary .sw{width:14px;height:14px;border-radius:50%;flex:none;background:var(--line-strong)}
+.dgrp summary .ico{font-size:16px;flex:none;width:18px;text-align:center}
+.dgrp summary .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dgrp summary .cnt{font:500 12px var(--font-data);color:var(--muted);flex:none;background:var(--surface2);border-radius:999px;padding:3px 8px}
+.dgrp summary .chev{flex:none;width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.dgrp[open] > summary .chev{transform:rotate(180deg)}
+.dgrp[open] > summary{border-bottom:1px solid var(--line)}
+.dgrp .rel{padding:8px 8px 10px;gap:4px}
+.dgrp .rel li button{border:0;background:transparent;padding:8px 6px;min-height:44px;border-radius:10px}
+.dgrp .rel li button:active{background:var(--surface2)}
+.dgrp .rel li button[aria-current="true"]{background:var(--accent-soft)}
+.dgrp .rel .why{font-size:11px;max-width:40%;overflow:hidden;text-overflow:ellipsis}
+.dgrp .dsub{margin:0 8px 8px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.dgrp .dsub summary{min-height:40px;padding:9px 10px;font-size:13.5px;font-weight:500}
+.dgrp .dsub[open] > summary{border-bottom:1px solid var(--line)}
+.dgrp .dsub .rel{padding:6px 6px 8px}
+.dirlist .dempty{color:var(--muted);text-align:center;padding:40px 12px;font-size:13.5px}
+body.listmode svg.map{visibility:hidden}
+body.listmode .zoomctl, body.listmode .legend, body.listmode .legend-pill{display:none!important}
+
 /* ---------- onboarding ---------- */
 body.onboarding header.top .controls, body.onboarding #viewSeg, body.onboarding aside, body.onboarding .legend, body.onboarding .legend-pill, body.onboarding .hint, body.onboarding .zoomctl, body.onboarding .mobile-bar{display:none!important}
 body.onboarding main{grid-template-columns:1fr} body.onboarding .canvas{grid-column:1} body.onboarding .burger{display:none}
@@ -475,6 +503,7 @@ aside.detail{font-size:14.5px;line-height:1.5}
   <section class="canvas" id="canvas">
     <svg class="map" id="map" aria-label="Carte des structures du Sowatt"></svg>
     <canvas class="gl" id="gl" aria-label="Vue 3D du bâtiment"></canvas>
+    <div class="dirlist" id="dirlist" hidden aria-label="Annuaire des structures"></div>
     <div class="hint" id="hint"></div>
     <div class="legend" id="legend"></div>
     <div class="zoomctl"><button id="zin" aria-label="Zoomer">+</button><button id="zout" aria-label="Dézoomer">−</button><button id="zreset" aria-label="Vue d'ensemble" title="Vue d'ensemble">⌂</button></div>
@@ -691,7 +720,9 @@ let W=800,H=600, root=null, leafByOrg=new Map();
 
 function layout(){
   const r=canvas.getBoundingClientRect(); W=Math.max(320,r.width); H=Math.max(320,r.height);
+  syncListMode();
   if(viewMode==='lieu'){ LIEU.resize(); LIEU.render(); return; }
+  if(listMode()){ renderList(); return; }
   if(viewMode==='conv'){
     const fams=Object.keys(FAMS).map(f=>({name:FAMS[f].label,fam:f,children:CONV.filter(c=>c.family===f).map(c=>({name:c.title,conv:c,children:c.members.map(m=>({org:orgById.get(m.id),role:m.role,value:1})).filter(x=>x.org)}))}));
     root=d3.hierarchy({children:fams}).sum(d=>d.value||0).sort((a,b)=>b.value-a.value);
@@ -747,6 +778,7 @@ function draw(){
 
 function applyState(){ updateBurgerCount?.();
   const f=anyDim();
+  if(listMode()) renderList();
   gNodes.selectAll('circle.node').classed('off',d=>f && !visible(d.data.org)).classed('sel',d=>d.data.org===selected);
   gGroups.selectAll('circle').classed('focus',d=>d===focusGroup);
   drawLinks();
@@ -824,6 +856,33 @@ function zoomTo(x,y,r,dur){
   (dur&&!reduced? svg.transition().duration(dur): svg).call(zoom.transform,tr);
 }
 function focusOn(g){ focusGroup=g; if(viewMode!=='lieu') zoomTo(g.x,g.y,g.r,650); renderHint(); applyState(); }
+// ---------- annuaire en accordéon : remplace les grappes sur mobile (les cercles sont illisibles au doigt) ----------
+const openGroups=new Set();
+function listMode(){ return narrowMQ.matches && obStep<0 && viewMode!=='lieu'; }
+function syncListMode(){ const on=listMode(); document.body.classList.toggle('listmode',on); const el=document.getElementById('dirlist'); if(!on){ el.hidden=true; el.innerHTML=''; } }
+function dirRow(o,why){ return `<li><button data-id="${o.id}" aria-current="${o===selected}">${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${esc(why||'')}</span></button></li>`; }
+function dirGroup(key,html,label,count,extra,sub){ const open=openGroups.has(key); return `<details class="dgrp${sub?' dsub':''}" data-key="${esc(key)}"${open?' open':''}><summary>${extra}<span class="nm">${esc(label)}</span><span class="cnt">${count}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>${open?html:''}</details>`; }
+function renderList(){
+  const el=document.getElementById('dirlist'); el.hidden=false; const hh=document.getElementById('hint')?.offsetHeight||44; el.style.paddingTop=(hh+22)+'px';
+  const f=anyDim(); const pool=orgs.filter(o=>!f||visible(o));
+  let body='';
+  if(viewMode==='conv'){
+    const fams=Object.keys(FAMS).map(fm=>{ const cs=CONV.filter(c=>c.family===fm).map(c=>{ const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o&&pool.includes(x.o)); return {c,ms}; }).filter(x=>x.ms.length); return {fm,cs,n:cs.reduce((a,x)=>a+x.ms.length,0)}; }).filter(x=>x.cs.length);
+    body=fams.map(({fm,cs,n})=>dirGroup('fam:'+fm, cs.map(({c,ms})=>dirGroup('conv:'+c.id, `<ul class="rel">${ms.map(x=>dirRow(x.o,x.role)).join('')}</ul>`, c.title, ms.length, '', true)).join(''), FAMS[fm].label, cs.length+' · '+n, `<span class="ico">${FAMS[fm].icon}</span>`)).join('');
+    el.innerHTML=`<p class="dsum"><b>${CONV.length}</b> convergences en <b>${Object.keys(FAMS).length}</b> familles · touchez pour déplier</p>${body||'<p class="dempty">Aucune convergence ne correspond aux filtres.</p>'}`;
+  } else {
+    const key=DIMS[groupBy].key; const m=new Map();
+    pool.forEach(o=>(DIMS[groupBy].multi?vals(o,key):[vals(o,key)[0]]).forEach(v=>{ if(!m.has(v)) m.set(v,[]); m.get(v).push(o); }));
+    let gs=[...m].map(([name,items])=>({name,items:items.slice().sort((a,b)=>a.name.localeCompare(b.name,'fr'))}));
+    if(groupBy==='floor') gs.sort((a,b)=>FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===a.name))-FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===b.name))); else gs.sort((a,b)=>b.items.length-a.items.length||a.name.localeCompare(b.name,'fr'));
+    const why=o=>groupBy==='cat'?(o.room?o.floorLabel+' · '+o.room:o.floorLabel):groupBy==='floor'?(o.room?'bureau '+o.room:o.catLabel):o.catLabel;
+    const sw=name=>{ if(groupBy==='cat'){ const o=m.get(name)[0]; return `<span class="sw" style="background:${catColor(o.cat)}"></span>`; } return `<span class="sw"></span>`; };
+    body=gs.map(g=>dirGroup(groupBy+':'+g.name, `<ul class="rel">${g.items.map(o=>dirRow(o,why(o))).join('')}</ul>`, g.name, g.items.length, sw(g.name))).join('');
+    el.innerHTML=`<p class="dsum"><b>${pool.length}</b> structure${pool.length>1?'s':''}${f?' (filtrées)':''} · ${gs.length} ${DIMS[groupBy].label.toLowerCase()}${gs.length>1&&groupBy!=='theme'&&groupBy!=='public'?'s':''} · touchez pour déplier</p>${body||'<p class="dempty">Aucune structure ne correspond. Élargissez les filtres.</p>'}`;
+  }
+  el.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{ const k=d.dataset.key; if(d.open){ openGroups.add(k); if(!d.querySelector('ul,details')) renderList(); } else openGroups.delete(k); }));
+  el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+}
 function setView(mode){
   viewMode=mode;
   for(const [id,m] of [['viewClusters','clusters'],['viewLieu','lieu'],['viewConv','conv']]) document.getElementById(id).setAttribute('aria-pressed',mode===m);
@@ -1058,7 +1117,7 @@ document.getElementById('toggleInfos').onclick=toggleInfos;
 // iOS Safari : pas de pinch-zoom de la page hors carte (la carte gère ses propres gestes)
 for(const ev of ['gesturestart','gesturechange']) document.addEventListener(ev,e=>{ if(!e.target.closest?.('svg.map, canvas.gl')) e.preventDefault(); },{passive:false});
 addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ setPopover(false); return; } if(!narrowMQ.matches && !document.getElementById('filters').hidden){ setFiltersOpen(false); document.getElementById('burger').focus(); return; } if(narrowMQ.matches){ if(!document.getElementById('filters').hidden) setFiltersOpen(false); else if(!document.getElementById('detail').hidden && obStep<0) closeDetailSheet(); } else if(selected) select(null); else if(selectedConv) selectConv(null); });
-function placeViewSeg(){ const seg=document.getElementById('viewSeg'); if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
+function placeViewSeg(){ const seg=document.getElementById('viewSeg'); document.getElementById('viewClusters').textContent=narrowMQ.matches?'Annuaire':'Grappes'; if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
 function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { setFiltersOpen(false); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
 narrowMQ.addEventListener('change',applyNarrow);
 let rt; addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ layout(); },150); });
@@ -1070,8 +1129,8 @@ const LIEU=(()=>{
   const PW=842.25, PH=1190.25, LIFT=22, PPM=GEO.ptsPerM;  // 1 m ≈ 12,3 points de plan
   const GAPS={compact:3.6*PPM*1.25, eclate:11*PPM}; let gapMode='eclate'; let GAP=GAPS[gapMode];
   // bâtiment B (Family Forme) : le bâtiment gris au bord du parking, relevé sur l'orthophoto IGN (coordonnées en points de plan RDC, approximatives)
-  const ANNEX={pts:[[965.8,271.2],[704.7,165.9],[769.3,-166.1],[1018.1,-214.4]],cx:864,cy:14,label:'Bâtiment B'};
-  const HORS={bonallure:[560,700,'RDC'],familyforme:[ANNEX.cx,ANNEX.cy,'RDC'],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
+  const ANNEX={pts:[[965.8,271.2],[704.7,165.9],[769.3,-166.1],[1018.1,-214.4]],cx:864,cy:14,h:5.5*PPM,label:'Bâtiment B'}; // volume plein de 5,5 m, Family Forme posé sur le toit
+  const HORS={bonallure:[560,700,'RDC'],familyforme:[ANNEX.cx,ANNEX.cy,'RDC',ANNEX.h],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
   const el=document.getElementById('gl');
   let renderer, scene, camera, ray=new THREE.Raycaster(), inited=false, lieuOn=false, needs=true, raf=0, shown=false;
   const nodes=new Map(), labels=new Map(); const floorGroups=new Map(); let building, linkGroup, haloSprite, pins;
@@ -1080,8 +1139,8 @@ const LIEU=(()=>{
   const homeR=()=>{ const r=canvas.getBoundingClientRect(); const a=Math.max(0.3,r.width/Math.max(1,r.height)); return Math.min(9000,Math.max(2500,1750/(0.69*a))); };
   const homeTarget=()=>new THREE.Vector3(0,GAP*1.3,0);
   const floorY=F=>F.y*GAP;
-  const local=o=>{ const h=HORS[o.id]; const f=h?h[2]:o.floor; const F=FLOORS.find(x=>x.id===f)||FLOORS[1]; const px=h?h[0]:(o.px??421), py=h?h[1]:(o.py??595); return {x:px-GEO.pcx, z:py-GEO.pcy, F}; };
-  const worldPos=o=>{ const p=local(o); const v=new THREE.Vector3(p.x,floorY(p.F)+LIFT,p.z); building.localToWorld(v); return v; };
+  const local=o=>{ const h=HORS[o.id]; const f=h?h[2]:o.floor; const F=FLOORS.find(x=>x.id===f)||FLOORS[1]; const px=h?h[0]:(o.px??421), py=h?h[1]:(o.py??595); return {x:px-GEO.pcx, z:py-GEO.pcy, F, dy:(h&&h[3])||0}; };
+  const worldPos=o=>{ const p=local(o); const v=new THREE.Vector3(p.x,floorY(p.F)+p.dy+LIFT,p.z); building.localToWorld(v); return v; };
   function circleTex(o){
     const S=128, c=document.createElement('canvas'); c.width=c.height=S; const g=c.getContext('2d');
     const col=CATHEX[o.cat]; g.clearRect(0,0,S,S);
@@ -1102,7 +1161,7 @@ const LIEU=(()=>{
   function footprintShape(){ const sh=new THREE.Shape(); GEO.footprint.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
   function annexShape(){ const sh=new THREE.Shape(); ANNEX.pts.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
   function addWalls(grp,shape,wallH,opacity){ const geo=new THREE.ExtrudeGeometry(shape,{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0); const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges); }
-  function buildAnnex(grp){ const A=ANNEX; const geo=new THREE.ShapeGeometry(annexShape()); geo.rotateX(Math.PI/2); const slab=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xEBE7E0,transparent:true,opacity:0.92,side:THREE.DoubleSide,depthWrite:false})); slab.position.y=0.6; slab.renderOrder=11; slab.userData.slab=true; grp.add(slab); const lp=A.pts.map(([x,y])=>new THREE.Vector3(x-GEO.pcx,0.9,y-GEO.pcy)); const line=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineDashedMaterial({color:0xB0A79D,dashSize:12,gapSize:8})); line.computeLineDistances(); line.renderOrder=12; grp.add(line); const t=textTex(A.label,{size:18,color:'#8B8178',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(A.pts[1][0]-GEO.pcx-10,6,A.pts[1][1]-GEO.pcy-10); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp); }
+  function buildAnnex(grp){ const A=ANNEX; const geo=new THREE.ExtrudeGeometry(annexShape(),{depth:A.h,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,A.h,0); const box=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xD8D3CB,transparent:true,opacity:0.95,depthWrite:true})); box.renderOrder=8; grp.add(box); const roof=new THREE.Mesh(new THREE.ShapeGeometry(annexShape()).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xC9C3BA,side:THREE.DoubleSide})); roof.position.y=A.h+0.3; roof.renderOrder=9; grp.add(roof); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.6})); edges.renderOrder=10; grp.add(edges); const t=textTex(A.label,{size:18,color:'#8B8178',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(A.pts[1][0]-GEO.pcx-10,A.h+6,A.pts[1][1]-GEO.pcy-10); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp); }
   function buildFloors(){
     const loader=new THREE.TextureLoader();
     FLOORS.forEach(F=>{
@@ -1112,7 +1171,7 @@ const LIEU=(()=>{
       else { const c=document.createElement('canvas'); c.width=842; c.height=1190; const g=c.getContext('2d'); g.fillStyle='rgba(235,231,224,.85)'; g.beginPath(); g.roundRect(180,440,500,320,24); g.fill(); g.strokeStyle='#B0A79D'; g.setLineDash([8,8]); g.lineWidth=3; g.stroke(); const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,depthWrite:false}); }
       const slab=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),mat); slab.rotation.x=-Math.PI/2; slab.position.set(PW/2-GEO.pcx,0.5,PH/2-GEO.pcy); slab.renderOrder=10+F.y; slab.userData.slab=true; grp.add(slab);
       if(F.plan){ // murs translucides sur l'emprise réelle (+ annexe bâtiment B au RDC)
-        addWalls(grp,footprintShape(),GAP*0.88,0.22); if(F.id==='RDC'){ buildAnnex(grp); addWalls(grp,annexShape(),GAP*0.6,0.22); }
+        addWalls(grp,footprintShape(),GAP*0.88,0.22); if(F.id==='RDC') buildAnnex(grp);
       }
       const t=textTex(F.label,{size:22,color:'#EC644B',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(33-GEO.pcx-30,8,1115-GEO.pcy+30); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp);
     });
@@ -1131,7 +1190,7 @@ const LIEU=(()=>{
     buildFloors();
     RAW.forEach(o=>{
       const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
-      const sp=new THREE.Sprite(mat); sp.position.set(p.x,LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
+      const sp=new THREE.Sprite(mat); sp.position.set(p.x,p.dy+LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
     });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
@@ -1141,8 +1200,8 @@ const LIEU=(()=>{
     const nt=textTex('N ↑',{size:20,color:'#6B625A',bg:'rgba(255,255,255,.85)'}); const ns=screenSprite(nt,0.5); ns.position.set(0,4,-size*0.42); scene.add(ns);
     bindControls(); resize(); updateCamera();
   }
-  function buildPins(){ if(pins){ scene.remove(pins); pins.geometry.dispose(); } const arr=[]; RAW.forEach(o=>{ const p=local(o); const a=new THREE.Vector3(p.x,floorY(p.F)+1,p.z), b=new THREE.Vector3(p.x,floorY(p.F)+LIFT-12,p.z); building.localToWorld(a); building.localToWorld(b); arr.push(a.x,a.y,a.z,b.x,b.y,b.z); }); const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3)); pins=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:.7})); scene.add(pins); }
-  function setGap(mode){ gapMode=mode; GAP=GAPS[mode]; FLOORS.forEach(F=>{ const grp=floorGroups.get(F.id); grp.position.y=floorY(F); grp.children.forEach(ch=>{ if(ch.userData.wall||ch.userData.edge){ grp.remove(ch); } }); if(F.plan){ addWalls(grp,footprintShape(),GAP*0.88,0.22); if(F.id==='RDC') addWalls(grp,annexShape(),GAP*0.6,0.22); } }); buildPins(); if(floor){ const F=FLOORS.find(x=>x.id===floor); flyTarget(new THREE.Vector3(0,floorY(F),0),sph.r); } else flyTarget(homeTarget(),sph.r); setState(); }
+  function buildPins(){ if(pins){ scene.remove(pins); pins.geometry.dispose(); } const arr=[]; RAW.forEach(o=>{ const p=local(o); const a=new THREE.Vector3(p.x,floorY(p.F)+p.dy+1,p.z), b=new THREE.Vector3(p.x,floorY(p.F)+p.dy+LIFT-12,p.z); building.localToWorld(a); building.localToWorld(b); arr.push(a.x,a.y,a.z,b.x,b.y,b.z); }); const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3)); pins=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:.7})); scene.add(pins); }
+  function setGap(mode){ gapMode=mode; GAP=GAPS[mode]; FLOORS.forEach(F=>{ const grp=floorGroups.get(F.id); grp.position.y=floorY(F); grp.children.forEach(ch=>{ if(ch.userData.wall||ch.userData.edge){ grp.remove(ch); } }); if(F.plan){ addWalls(grp,footprintShape(),GAP*0.88,0.22); } }); buildPins(); if(floor){ const F=FLOORS.find(x=>x.id===floor); flyTarget(new THREE.Vector3(0,floorY(F),0),sph.r); } else flyTarget(homeTarget(),sph.r); setState(); }
   function updateCamera(){ const {r,theta,phi}=sph; camera.position.set(target.x+r*Math.sin(phi)*Math.sin(theta), target.y+r*Math.cos(phi), target.z+r*Math.sin(phi)*Math.cos(theta)); camera.lookAt(target); request(); }
   function resize(){ if(!inited) return; const r=canvas.getBoundingClientRect(); const w=Math.max(1,r.width), h=Math.max(1,r.height); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
   function request(){ needs=true; if(lieuOn&&!raf) raf=requestAnimationFrame(frame); }

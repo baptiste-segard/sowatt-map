@@ -260,6 +260,34 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
 }
 @media (max-width:400px){ .mobile-bar .toggle-infos span{display:none} .mobile-bar .toggle-infos{padding:7px 9px} .mobile-bar .toggle-filters{padding:7px 10px} .mobile-bar .seg button{padding:6px 7px;font-size:12px} }
 
+/* ---------- annuaire en accordéon (mobile, remplace les grappes) ---------- */
+.dirlist{position:absolute;inset:0;z-index:2;overflow:auto;-webkit-overflow-scrolling:touch;padding:62px 12px calc(max(12px,env(safe-area-inset-bottom,0px)) + 64px);background:var(--bg);overscroll-behavior:contain}
+.dirlist[hidden]{display:none}
+.dirlist .dsum{font-size:12px;color:var(--muted);margin:0 2px 10px}
+.dirlist .dsum b{color:var(--fg);font-weight:600}
+.dgrp{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px;overflow:hidden}
+.dgrp summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;min-height:44px;box-sizing:border-box;font-weight:600;font-size:14.5px}
+.dgrp summary::-webkit-details-marker{display:none}
+.dgrp summary .sw{width:14px;height:14px;border-radius:50%;flex:none;background:var(--line-strong)}
+.dgrp summary .ico{font-size:16px;flex:none;width:18px;text-align:center}
+.dgrp summary .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dgrp summary .cnt{font:500 12px var(--font-data);color:var(--muted);flex:none;background:var(--surface2);border-radius:999px;padding:3px 8px}
+.dgrp summary .chev{flex:none;width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.dgrp[open] > summary .chev{transform:rotate(180deg)}
+.dgrp[open] > summary{border-bottom:1px solid var(--line)}
+.dgrp .rel{padding:8px 8px 10px;gap:4px}
+.dgrp .rel li button{border:0;background:transparent;padding:8px 6px;min-height:44px;border-radius:10px}
+.dgrp .rel li button:active{background:var(--surface2)}
+.dgrp .rel li button[aria-current="true"]{background:var(--accent-soft)}
+.dgrp .rel .why{font-size:11px;max-width:40%;overflow:hidden;text-overflow:ellipsis}
+.dgrp .dsub{margin:0 8px 8px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.dgrp .dsub summary{min-height:40px;padding:9px 10px;font-size:13.5px;font-weight:500}
+.dgrp .dsub[open] > summary{border-bottom:1px solid var(--line)}
+.dgrp .dsub .rel{padding:6px 6px 8px}
+.dirlist .dempty{color:var(--muted);text-align:center;padding:40px 12px;font-size:13.5px}
+body.listmode svg.map{visibility:hidden}
+body.listmode .zoomctl, body.listmode .legend, body.listmode .legend-pill{display:none!important}
+
 /* ---------- onboarding ---------- */
 body.onboarding header.top .controls, body.onboarding #viewSeg, body.onboarding aside, body.onboarding .legend, body.onboarding .legend-pill, body.onboarding .hint, body.onboarding .zoomctl, body.onboarding .mobile-bar{display:none!important}
 body.onboarding main{grid-template-columns:1fr} body.onboarding .canvas{grid-column:1} body.onboarding .burger{display:none}
@@ -461,6 +489,7 @@ aside.detail{font-size:14.5px;line-height:1.5}
   <section class="canvas" id="canvas">
     <svg class="map" id="map" aria-label="Carte des structures du Sowatt"></svg>
     <canvas class="gl" id="gl" aria-label="Vue 3D du bâtiment"></canvas>
+    <div class="dirlist" id="dirlist" hidden aria-label="Annuaire des structures"></div>
     <div class="hint" id="hint"></div>
     <div class="legend" id="legend"></div>
     <div class="zoomctl"><button id="zin" aria-label="Zoomer">+</button><button id="zout" aria-label="Dézoomer">−</button><button id="zreset" aria-label="Vue d'ensemble" title="Vue d'ensemble">⌂</button></div>
