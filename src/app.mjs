@@ -376,7 +376,7 @@ function renderLegend(){
   pill.innerHTML=`<span class="dots">${CATS.map(a=>`<i style="background:${catColor(a)}"></i>`).join('')}</span>Légende`;
   pill.setAttribute('aria-expanded',String(legendOpen)); pill.hidden=legendOpen; l.hidden=!legendOpen;
   const linkNote = `<p><span style="color:var(--fg)">━</span> relation déclarée · <span style="color:var(--accent)">━</span> convergence commune · <span style="color:var(--dim)">┄</span> affinité thématique · <span style="color:var(--accent)">◌</span> connecteur</p>`;
-  const note = viewMode==='conv' ? `<p>Chaque cercle est une convergence ; les points à l'intérieur sont ses membres (une structure peut apparaître plusieurs fois).</p>` : viewMode==='lieu' ? `<p>Plans : MAJ du 20 oct. 2026 ; sous-sol, bâtiment B et cour placés hors plan. Orthophoto © IGN (Géoplateforme) · emprise © contributeurs OpenStreetMap.</p>` : DIMS[groupBy].multi ? `<p>Une structure apparaît dans chacun de ses groupes.</p>` : '';
+  const note = viewMode==='conv' ? `<p>Chaque cercle est une convergence ; les points à l'intérieur sont ses membres (une structure peut apparaître plusieurs fois).</p>` : viewMode==='lieu' ? `<p>Plans : MAJ du 20 oct. 2026 ; sous-sol et cour placés hors plan ; bâtiment B relevé sur l'orthophoto (position approximative). Orthophoto © IGN (Géoplateforme) · emprise © contributeurs OpenStreetMap.</p>` : DIMS[groupBy].multi ? `<p>Une structure apparaît dans chacun de ses groupes.</p>` : '';
   l.innerHTML=`<button class="lclose" id="legendClose" aria-label="Masquer la légende">×</button><h4>Couleur = catégorie</h4><ul>${CATS.map(a=>`<li><span class="sw" style="background:${catColor(a)}"></span>${esc(CATLABEL[a])}</li>`).join('')}</ul>${linkNote}${note}`;
   l.querySelector('#legendClose').onclick=()=>{ legendOpen=false; try{localStorage.setItem('sowatt.legend','0');}catch(e){} renderLegend(); };
 }
@@ -574,7 +574,9 @@ const LIEU=(()=>{
   const FLOORS=[{id:'SS',label:'Sous-sol',y:-1,plan:null},{id:'RDC',label:'RDC',y:0,plan:'plans/floor0.webp'},{id:'R1',label:'1er',y:1,plan:'plans/floor1.webp'},{id:'R2',label:'2e',y:2,plan:'plans/floor2.webp'},{id:'R3',label:'3e',y:3,plan:'plans/floor3.webp'}];
   const PW=842.25, PH=1190.25, LIFT=22, PPM=GEO.ptsPerM;  // 1 m ≈ 12,3 points de plan
   const GAPS={compact:3.6*PPM*1.25, eclate:11*PPM}; let gapMode='eclate'; let GAP=GAPS[gapMode];
-  const HORS={bonallure:[560,700,'RDC'],familyforme:[150,330,'RDC'],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
+  // bâtiment B (Family Forme) : le bâtiment gris au bord du parking, relevé sur l'orthophoto IGN (coordonnées en points de plan RDC, approximatives)
+  const ANNEX={pts:[[965.8,271.2],[704.7,165.9],[769.3,-166.1],[1018.1,-214.4]],cx:864,cy:14,label:'Bâtiment B'};
+  const HORS={bonallure:[560,700,'RDC'],familyforme:[ANNEX.cx,ANNEX.cy,'RDC'],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
   const el=document.getElementById('gl');
   let renderer, scene, camera, ray=new THREE.Raycaster(), inited=false, lieuOn=false, needs=true, raf=0, shown=false;
   const nodes=new Map(), labels=new Map(); const floorGroups=new Map(); let building, linkGroup, haloSprite, pins;
@@ -603,6 +605,9 @@ const LIEU=(()=>{
   }
   function screenSprite(t,px){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t.tex,transparent:true,depthTest:false,sizeAttenuation:false})); const k=px/Math.max(1,el.clientHeight); sp.scale.set(t.w*k,t.h*k,1); return sp; }
   function footprintShape(){ const sh=new THREE.Shape(); GEO.footprint.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
+  function annexShape(){ const sh=new THREE.Shape(); ANNEX.pts.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
+  function addWalls(grp,shape,wallH,opacity){ const geo=new THREE.ExtrudeGeometry(shape,{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0); const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges); }
+  function buildAnnex(grp){ const A=ANNEX; const geo=new THREE.ShapeGeometry(annexShape()); geo.rotateX(Math.PI/2); const slab=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xEBE7E0,transparent:true,opacity:0.92,side:THREE.DoubleSide,depthWrite:false})); slab.position.y=0.6; slab.renderOrder=11; slab.userData.slab=true; grp.add(slab); const lp=A.pts.map(([x,y])=>new THREE.Vector3(x-GEO.pcx,0.9,y-GEO.pcy)); const line=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(lp),new THREE.LineDashedMaterial({color:0xB0A79D,dashSize:12,gapSize:8})); line.computeLineDistances(); line.renderOrder=12; grp.add(line); const t=textTex(A.label,{size:18,color:'#8B8178',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(A.pts[1][0]-GEO.pcx-10,6,A.pts[1][1]-GEO.pcy-10); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp); }
   function buildFloors(){
     const loader=new THREE.TextureLoader();
     FLOORS.forEach(F=>{
@@ -611,10 +616,8 @@ const LIEU=(()=>{
       if(F.plan){ const tex=loader.load(F.plan,()=>request()); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=8; mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,depthWrite:false}); }
       else { const c=document.createElement('canvas'); c.width=842; c.height=1190; const g=c.getContext('2d'); g.fillStyle='rgba(235,231,224,.85)'; g.beginPath(); g.roundRect(180,440,500,320,24); g.fill(); g.strokeStyle='#B0A79D'; g.setLineDash([8,8]); g.lineWidth=3; g.stroke(); const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,side:THREE.DoubleSide,depthWrite:false}); }
       const slab=new THREE.Mesh(new THREE.PlaneGeometry(PW,PH),mat); slab.rotation.x=-Math.PI/2; slab.position.set(PW/2-GEO.pcx,0.5,PH/2-GEO.pcy); slab.renderOrder=10+F.y; slab.userData.slab=true; grp.add(slab);
-      if(F.plan){ // murs translucides sur l'emprise réelle
-        const wallH=GAP*0.88; const geo=new THREE.ExtrudeGeometry(footprintShape(),{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0);
-        const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.22,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls);
-        const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges);
+      if(F.plan){ // murs translucides sur l'emprise réelle (+ annexe bâtiment B au RDC)
+        addWalls(grp,footprintShape(),GAP*0.88,0.22); if(F.id==='RDC'){ buildAnnex(grp); addWalls(grp,annexShape(),GAP*0.6,0.22); }
       }
       const t=textTex(F.label,{size:22,color:'#EC644B',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(33-GEO.pcx-30,8,1115-GEO.pcy+30); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp);
     });
@@ -644,7 +647,7 @@ const LIEU=(()=>{
     bindControls(); resize(); updateCamera();
   }
   function buildPins(){ if(pins){ scene.remove(pins); pins.geometry.dispose(); } const arr=[]; RAW.forEach(o=>{ const p=local(o); const a=new THREE.Vector3(p.x,floorY(p.F)+1,p.z), b=new THREE.Vector3(p.x,floorY(p.F)+LIFT-12,p.z); building.localToWorld(a); building.localToWorld(b); arr.push(a.x,a.y,a.z,b.x,b.y,b.z); }); const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3)); pins=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:.7})); scene.add(pins); }
-  function setGap(mode){ gapMode=mode; GAP=GAPS[mode]; FLOORS.forEach(F=>{ const grp=floorGroups.get(F.id); grp.position.y=floorY(F); grp.children.forEach(ch=>{ if(ch.userData.wall||ch.userData.edge){ grp.remove(ch); } }); if(F.plan){ const wallH=GAP*0.88; const geo=new THREE.ExtrudeGeometry(footprintShape(),{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0); const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.22,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges); } }); buildPins(); if(floor){ const F=FLOORS.find(x=>x.id===floor); flyTarget(new THREE.Vector3(0,floorY(F),0),sph.r); } else flyTarget(homeTarget(),sph.r); setState(); }
+  function setGap(mode){ gapMode=mode; GAP=GAPS[mode]; FLOORS.forEach(F=>{ const grp=floorGroups.get(F.id); grp.position.y=floorY(F); grp.children.forEach(ch=>{ if(ch.userData.wall||ch.userData.edge){ grp.remove(ch); } }); if(F.plan){ addWalls(grp,footprintShape(),GAP*0.88,0.22); if(F.id==='RDC') addWalls(grp,annexShape(),GAP*0.6,0.22); } }); buildPins(); if(floor){ const F=FLOORS.find(x=>x.id===floor); flyTarget(new THREE.Vector3(0,floorY(F),0),sph.r); } else flyTarget(homeTarget(),sph.r); setState(); }
   function updateCamera(){ const {r,theta,phi}=sph; camera.position.set(target.x+r*Math.sin(phi)*Math.sin(theta), target.y+r*Math.cos(phi), target.z+r*Math.sin(phi)*Math.cos(theta)); camera.lookAt(target); request(); }
   function resize(){ if(!inited) return; const r=canvas.getBoundingClientRect(); const w=Math.max(1,r.width), h=Math.max(1,r.height); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
   function request(){ needs=true; if(lieuOn&&!raf) raf=requestAnimationFrame(frame); }
