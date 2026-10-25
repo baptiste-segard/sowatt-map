@@ -638,7 +638,9 @@ const SYN_GROUPS=[
  'musique son sonore concert studio groupe label',
  'podcast son audio voix',
  'logo identite graphisme graphiste marque branding',
- 'site web internet digital numerique',
+ 'web digital numerique developpement application appli wordpress ecommerce',
+ 'socialmedia community instagram linkedin tiktok facebook communication marketing contenu',
+ 'seo referencement google visibilite',
  'ia intelligence-artificielle numerique automatisation',
  'informatique it cyber cybersecurite reseau cloud',
  'recrutement rh embauche recruter emploi candidat',
@@ -682,6 +684,15 @@ const SYN_GROUPS=[
  '3e troisieme',
 ];
 const stem=t=>t.length>4?t.replace(/(s|x)$/,''):t;
+// besoins exprimés en langage courant → mot-clé de compétence (évite que « site internet » trouve « propriétaire du site »)
+const NEEDS=[
+ [/\b(creer|faire|refaire|refonte|creation|realiser)\s+(un|une|mon|ma|notre|le|la|de|du|des|d)?\s*/g,' '],
+ [/\bsites?\s*(internet|web|vitrine|e-?commerce|en ligne)?\b/g,' web '],[/\binternet\b/g,' web '],[/\bpage web\b/g,' web '],
+ [/\b(reseaux?|medias?)\s+sociaux?\b/g,' socialmedia '],[/\bsocial media\b/g,' socialmedia '],[/\bcommunity\s*management\b/g,' socialmedia '],[/\b(instagram|insta|tiktok|linkedin|facebook)\b/g,' socialmedia '],
+ [/\bidentite visuelle\b/g,' logo '],[/\bcharte graphique\b/g,' logo '],
+ [/\breferencement\b/g,' seo '],
+];
+const rewriteNeeds=q=>NEEDS.reduce((acc,[re,rep])=>acc.replace(re,rep),q).replace(/\s+/g,' ').trim();
 const toks=s=>norm(s).replace(/['’]/g,' ').split(/[^a-z0-9-]+/).flatMap(w=>w.includes('-')?[w,...w.split('-')]:[w]).filter(w=>w&&!STOP.has(w)).map(stem);
 const SYN=new Map();
 SYN_GROUPS.forEach(g=>{ const ws=g.split(' ').map(w=>stem(norm(w))); ws.forEach(w=>{ if(!SYN.has(w)) SYN.set(w,new Set()); ws.forEach(x=>{ if(x!==w) SYN.get(w).add(x); }); }); });
@@ -715,7 +726,7 @@ let SEARCH=new Map(), searchLoose=false;
 function runSearch(){
   SEARCH=new Map(); searchLoose=false; convHits=[];
   if(!query) return;
-  const qts=[...new Set(toks(query))]; if(!qts.length) return;
+  const qts=[...new Set(toks(rewriteNeeds(norm(query))))]; if(!qts.length) return;
   const nq=norm(query);
   const score=(sx,name)=>{ const r=scoreDoc(qts,sx); r.base=r.total; if(name&&norm(name).includes(nq)) r.total+=20; return r; };
   const all=RAW.map(o=>({o,...score(o._sx,o.name)}));
