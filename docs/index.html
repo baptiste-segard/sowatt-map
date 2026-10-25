@@ -16,7 +16,7 @@
 /* Sowatt map — app shell : barre haute / [filtres | canevas | fiche]. Fond blanc, orange Sowatt en accent, une couleur par catégorie. Dérivé du prototype eco-map (Studio CAD). */
 :root{
   --bg:#FFFFFF; --surface:#FFFFFF; --surface2:#F5F3EF; --fg:#1F1B17; --muted:#6B625A; --line:#E8E3DC; --line-strong:#D2CAC0;
-  --accent:#F05A28; --accent-soft:#FDEBE3; --accent-ink:#B23B12; --dim:#B0A79D;
+  --accent:#EC644B; --accent-soft:#FCE9E5; --accent-ink:#B4432F; --dim:#B0A79D;
   --c-ART:#E2572B; --c-ATELIER:#F2B01E; --c-ARTISANAT:#C2559B; --c-ASSO:#16A34A; --c-COM:#2F80ED; --c-SERV:#0E8C8C; --c-BIENETRE:#7C5CBF; --c-BAT:#6B7280; --c-RESTO:#A8622D;
   --font-ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-display:"Outfit","Figtree",system-ui,sans-serif;
@@ -939,7 +939,7 @@ const LIEU=(()=>{
     const S=128, c=document.createElement('canvas'); c.width=c.height=S; const g=c.getContext('2d');
     const col=CATHEX[o.cat]; g.clearRect(0,0,S,S);
     g.beginPath(); g.arc(S/2,S/2,S/2-2,0,Math.PI*2); g.fillStyle=o.logo?'#fff':col; g.fill(); g.lineWidth=o.logo?7:3; g.strokeStyle=o.logo?col:'#fff'; g.stroke();
-    if(ACU.has(o.id)){ g.setLineDash([6,5]); g.lineWidth=3; g.strokeStyle='#F05A28'; g.beginPath(); g.arc(S/2,S/2,S/2-13,0,Math.PI*2); g.stroke(); g.setLineDash([]); }
+    if(ACU.has(o.id)){ g.setLineDash([6,5]); g.lineWidth=3; g.strokeStyle='#EC644B'; g.beginPath(); g.arc(S/2,S/2,S/2-13,0,Math.PI*2); g.stroke(); g.setLineDash([]); }
     const tex=new THREE.CanvasTexture(c); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=4;
     if(o.logo){ const im=new Image(); im.onload=()=>{ g.save(); g.beginPath(); g.arc(S/2,S/2,S/2-9,0,Math.PI*2); g.clip(); g.drawImage(im,10,10,S-20,S-20); g.restore(); tex.needsUpdate=true; request(); }; im.src=logoUrl(o); }
     return tex;
@@ -966,7 +966,7 @@ const LIEU=(()=>{
         const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.22,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls);
         const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges);
       }
-      const t=textTex(F.label,{size:22,color:'#F05A28',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(33-GEO.pcx-30,8,1115-GEO.pcy+30); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp);
+      const t=textTex(F.label,{size:22,color:'#EC644B',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(33-GEO.pcx-30,8,1115-GEO.pcy+30); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp);
     });
   }
   function init(){
@@ -987,7 +987,7 @@ const LIEU=(()=>{
     });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
-    const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#F05A28'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
+    const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#EC644B'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
     haloSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:ht,transparent:true,depthTest:false})); haloSprite.visible=false; haloSprite.renderOrder=200; scene.add(haloSprite);
     // boussole
     const nt=textTex('N ↑',{size:20,color:'#6B625A',bg:'rgba(255,255,255,.85)'}); const ns=screenSprite(nt,0.5); ns.position.set(0,4,-size*0.42); scene.add(ns);
@@ -1034,8 +1034,8 @@ const LIEU=(()=>{
     while(linkGroup.children.length) linkGroup.remove(linkGroup.children[0]);
     const mk=(a,b,color,op,dash)=>{ const mid=new THREE.Vector3().addVectors(a,b).multiplyScalar(0.5); mid.y+=Math.max(30,a.distanceTo(b)*0.16); const curve=new THREE.QuadraticBezierCurve3(a,mid,b); const g=new THREE.BufferGeometry().setFromPoints(curve.getPoints(28)); const m=dash?new THREE.LineDashedMaterial({color,transparent:true,opacity:op,dashSize:10,gapSize:8}):new THREE.LineBasicMaterial({color,transparent:true,opacity:op}); const line=new THREE.Line(g,m); if(dash) line.computeLineDistances(); line.renderOrder=90; linkGroup.add(line); };
     haloSprite.visible=false;
-    if(selectedConv){ const pts=[...relSet].map(o=>worldPos(o)); if(pts.length){ const c=new THREE.Vector3(); pts.forEach(p=>c.add(p)); c.multiplyScalar(1/pts.length); c.y+=70; pts.forEach(p=>mk(c,p,0xF05A28,0.6,false)); haloSprite.position.copy(c); haloSprite.scale.set(50,50,1); haloSprite.visible=true; } }
-    else if(selected){ const a=worldPos(selected); relKind.forEach((k,x)=>{ const b=worldPos(x); mk(a,b,k.kind==='decl'?0x1F1B17:k.kind==='know'?0xF05A28:0xB0A79D,k.kind==='aff'?0.55:0.75,k.kind==='aff'); }); haloSprite.position.copy(a); haloSprite.scale.set(46,46,1); haloSprite.visible=true; }
+    if(selectedConv){ const pts=[...relSet].map(o=>worldPos(o)); if(pts.length){ const c=new THREE.Vector3(); pts.forEach(p=>c.add(p)); c.multiplyScalar(1/pts.length); c.y+=70; pts.forEach(p=>mk(c,p,0xEC644B,0.6,false)); haloSprite.position.copy(c); haloSprite.scale.set(50,50,1); haloSprite.visible=true; } }
+    else if(selected){ const a=worldPos(selected); relKind.forEach((k,x)=>{ const b=worldPos(x); mk(a,b,k.kind==='decl'?0x1F1B17:k.kind==='know'?0xEC644B:0xB0A79D,k.kind==='aff'?0.55:0.75,k.kind==='aff'); }); haloSprite.position.copy(a); haloSprite.scale.set(46,46,1); haloSprite.visible=true; }
     request();
   }
   function home(){ floor=null; flyTarget(homeTarget(),homeR(),2.3,0.92); setState(); }

@@ -112,7 +112,7 @@ html = f"""<!doctype html>
 </html>
 """
 open(os.path.join(SITE, 'index.html'), 'w').write(html)
-open(os.path.join(SITE, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,1 19.5,11.5 31,11.5 21.7,18.3 25.2,29 16,22.4 6.8,29 10.3,18.3 1,11.5 12.5,11.5" fill="#F05A28"/></svg>')
+open(os.path.join(SITE, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><polygon points="16,1 19.5,11.5 31,11.5 21.7,18.3 25.2,29 16,22.4 6.8,29 10.3,18.3 1,11.5 12.5,11.5" fill="#EC644B"/></svg>')
 os.makedirs(os.path.join(SITE, 'data'), exist_ok=True)
 json.dump(occ, open(os.path.join(SITE, 'data', 'occupants.json'), 'w'), ensure_ascii=False, indent=1)
 json.dump(conv_out, open(os.path.join(SITE, 'data', 'convergences.json'), 'w'), ensure_ascii=False, indent=1)
