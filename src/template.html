@@ -254,7 +254,8 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   aside.detail::before{content:"";position:sticky;top:-22px;display:block;width:36px;height:4px;border-radius:2px;background:var(--line-strong);margin:-12px auto 10px}
   aside.detail[hidden]{display:none}
   aside.detail .close{display:none}
-  body.detail-full aside.detail{top:max(8px,env(safe-area-inset-top,0px));max-height:none;padding-top:0;border-radius:18px 18px 0 0}
+  body.detail-full aside.detail{top:0;max-height:none;padding-top:0;border-radius:0;border-top:0;box-shadow:none}
+  body.detail-full main::after{content:"";position:absolute;inset:0;background:var(--bg);z-index:6}
   body.detail-full aside.detail::before{display:none}
   body.detail-full #closeDetailSheet{display:none}
   body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
