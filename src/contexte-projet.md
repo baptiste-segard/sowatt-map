@@ -59,3 +59,4 @@
 ## Renommage (25/10/2026)
 - « Points d'acupuncture » → **Connecteurs** dans toute l'interface (accueil, fiches, légende, intro, À propos), en écho à l'énergie du So Watt. Les noms techniques (`acu`, `ACU_NOTES`) sont inchangés.
 - Audit mobile UX/UI du 25/10 : cibles tactiles ≥ 34–44 px, intro qui tient en paysage, balayage, recherche qui liste les structures, panneau « pour vous » ouvert en fin d'intro, notes internes masquées en public.
+- Recherche (25/10) : mots séparés (ET, puis « approchants » si rien), accents/majuscules ignorés, fautes tolérées (Levenshtein 1–2 selon longueur), ~55 groupes de synonymes (enfant/gamin, poterie/céramique, mois…), champs pondérés (nom, personnes, métier, thèmes, publics, offre, descriptif, bureau/étage, agenda, convergences), classement par pertinence avec le champ qui a répondu affiché à droite, seuil de bruit à 30 % du meilleur score. Code : bloc « Recherche » d'app.mjs (SYN_GROUPS à enrichir librement).

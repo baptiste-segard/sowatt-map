@@ -48,7 +48,7 @@ function convsForProfile(limit=6){ if(!profile) return []; const me=meOrg(); ret
 
 // ---------- filtres ----------
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-function textMatch(o){ if(!query) return true; const q=norm(query); return norm(o.name).includes(q)||norm(o.people).includes(q)||norm(o.desc).includes(q)||norm(o.offre).includes(q)||norm(o.room).includes(q); }
+function textMatch(o){ if(!query) return true; return SEARCH.has(o.id); }
 function matches(o){
   if(!textMatch(o)) return false;
   for(const d in active){ const set=active[d]; if(!set.size) continue; const v=vals(o,DIMS[d].key); if(!v.some(x=>set.has(x))) return false; }
@@ -58,7 +58,115 @@ function anyFilter(){ return query || Object.values(active).some(s=>s.size); }
 function visible(o){ return (!profile || profileMatch(o)) && (!anyFilter() || matches(o)); }
 function anyDim(){ return anyFilter() || !!profile; }
 let convHits=[];
-function matchConv(){ convHits = query ? CONV.filter(c=>norm(c.title).includes(norm(query))||norm(c.summary).includes(norm(query))||norm(c.potential).includes(norm(query))) : []; }
+// ---------- Recherche : mots séparés, fautes tolérées, synonymes, classement par pertinence ----------
+const STOP=new Set('le la les l de des du d un une et ou a au aux en avec pour par sur dans chez qui que quoi quel quelle quels quelles je j me m mon ma mes on nous vous il elle ils elles est sont faire fait cherche chercher trouver besoin veux voudrais aimerais peut peux comment ou y ce cet cette ces se sa son ses leur leurs tout tous toute toutes plus tres bien quelqu quelqun quelquun personne quelque'.split(' '));
+const SYN_GROUPS=[
+ 'enfant enfance gamin gosse kid bebe tout-petit jeune-public famille parent creche scolaire ecole',
+ 'janvier janv','fevrier fevr','avril avr','juillet juil','septembre sept','octobre oct','novembre nov','decembre dec',
+ 'anniversaire gouter fete',
+ 'ceramique poterie argile terre faience porcelaine email',
+ 'couture textile retouche tricot maille remaillage vetement',
+ 'reparer reparation repair remaillage retouche reemploi',
+ 'recyclage reemploi upcycling upcycle recycle seconde-main',
+ 'serigraphie impression flocage riso risographie',
+ 'photo photographe photographie shooting portrait',
+ 'video film audiovisuel captation tournage drone',
+ 'cinema film cine kino',
+ 'musique son sonore concert studio groupe label',
+ 'podcast son audio voix',
+ 'logo identite graphisme graphiste marque branding',
+ 'site web internet digital numerique',
+ 'ia intelligence-artificielle numerique automatisation',
+ 'informatique it cyber cybersecurite reseau cloud',
+ 'recrutement rh embauche recruter emploi candidat',
+ 'rh ressources-humaines management manager equipe qvct',
+ 'formation former apprendre cours atelier stage initiation',
+ 'massage bien-etre soin relaxation detente',
+ 'therapie therapeute psy psychotherapie art-therapie ecoute',
+ 'naturopathie naturopathe hypnose energetique lithotherapie aromatherapie',
+ 'yoga danse sport cirque mouvement forme',
+ 'manger restauration traiteur cafe cuisine repas alimentation dejeuner buffet',
+ 'cafe coffee espresso barista',
+ 'bio biologique local',
+ 'batiment travaux renovation chantier btp artisan',
+ 'architecture architecte plan releve 3d',
+ 'deco decoration interieur design amenagement',
+ 'immobilier bureau local locaux',
+ 'assurance assurer mutuelle prevoyance',
+ 'comptable comptabilite compta expert-comptable gestion fiscal',
+ 'argent finance patrimoine placement investissement',
+ 'ongle ongles nail onglerie manucure prothesiste',
+ 'perruque wig cheveux coiffure',
+ 'maquillage make-up sfx effets-speciaux prothese',
+ 'bijou bijoux joaillerie',
+ 'peinture peintre aquarelle tableau toile',
+ 'dessin illustration illustrateur croquis',
+ 'expo exposition vernissage galerie',
+ 'spectacle theatre scene marionnette compagnie',
+ 'evenement evenementiel soiree festival seminaire',
+ 'seminaire team-building entreprise',
+ 'securite gardiennage surveillance agent',
+ 'livraison coursier logistique transport',
+ 'ecologie transition environnement durable climat',
+ 'zero-dechet diy vrac consigne',
+ 'cheval equitation equestre licol',
+ 'jeu ludique murder enquete escape',
+ 'communication com marketing agence publicite pub',
+ 'livre edition zine fanzine',
+ 'rdc rez-de-chaussee',
+ '1er premier',
+ '2e deuxieme',
+ '3e troisieme',
+];
+const stem=t=>t.length>4?t.replace(/(s|x)$/,''):t;
+const toks=s=>norm(s).replace(/['’]/g,' ').split(/[^a-z0-9-]+/).flatMap(w=>w.includes('-')?[w,...w.split('-')]:[w]).filter(w=>w&&!STOP.has(w)).map(stem);
+const SYN=new Map();
+SYN_GROUPS.forEach(g=>{ const ws=g.split(' ').map(w=>stem(norm(w))); ws.forEach(w=>{ if(!SYN.has(w)) SYN.set(w,new Set()); ws.forEach(x=>{ if(x!==w) SYN.get(w).add(x); }); }); });
+function lev(a,b,max){ if(Math.abs(a.length-b.length)>max) return max+1; let prev=Array.from({length:b.length+1},(_,j)=>j); for(let i=1;i<=a.length;i++){ const cur=[i]; let best=i; for(let j=1;j<=b.length;j++){ cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1)); if(cur[j]<best) best=cur[j]; } if(best>max) return max+1; prev=cur; } return prev[b.length]; }
+// champs indexés : [libellé affiché, poids, getter]
+const SFIELDS=[
+ ['nom',10,o=>o.name],['personnes',6,o=>o.people],['métier',3,o=>o.catLabel],['thème',4,o=>o.themes.join(' · ')],
+ ['public',2,o=>(o.publics||[]).join(' · ')],['offre',3,o=>[o.offre,o.formats,o.publicsDetail].join(' ')],['descriptif',3,o=>o.desc],
+ ['bureau',4,o=>[o.floorLabel,o.room&&('bureau '+o.room)].join(' ')],['agenda',3,o=>(o.agenda||[]).map(a=>a.quoi+' '+(a.lieu||'')+' '+a.label).join(' ')],
+ ['convergence',2,o=>o.convs.map(x=>x.c.title+' '+(x.role||'')).join(' ')],
+];
+RAW.forEach(o=>{ o._sx=SFIELDS.map(([lab,w,get])=>({lab,w,txt:get(o)||'',tk:[...new Set(toks(get(o)||''))]})); });
+CONV.forEach(c=>{ c._sx=[['',4,c.title],['',2,c.summary],['',2,c.potential],['',2,c.first_step||''],['',1,(c.members||[]).map(m=>m.role).join(' ')]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
+function tokScore(q,tk,fuzzy=true){ // meilleure correspondance d'un mot de la requête dans une liste de mots
+  let best=0;
+  for(const t of tk){
+    if(t===q) return 1;
+    if(q.length>=2 && t.startsWith(q)) { best=Math.max(best,0.85); continue; }
+    if(fuzzy && q.length>=5 && t.length>=4 && t[0]===q[0]){ const m=q.length>=8?2:1; const d=Math.min(lev(q,t,m), t.length>q.length?lev(q,t.slice(0,q.length),m):m+1); if(d<=m) best=Math.max(best,d===1?0.55:0.4); }
+  }
+  return best;
+}
+function scoreDoc(qts,sx){ let total=0, matched=0, why=null, whyScore=0;
+  for(const q of qts){ let tbest=0, tlab=null;
+    const alts=[[q,1,true],...[...(SYN.get(q)||[])].map(s=>[s,0.7,false])];
+    for(const f of sx){ for(const [a,k,fz] of alts){ const s=tokScore(a,f.tk,fz&&f.lab!=='personnes')*k*f.w; if(s>tbest){ tbest=s; tlab=f; } } }
+    if(tbest>0){ matched++; total+=tbest; if(tbest>whyScore){ whyScore=tbest; why=tlab; } }
+  }
+  return {total,matched,why}; }
+let SEARCH=new Map(), searchLoose=false;
+function runSearch(){
+  SEARCH=new Map(); searchLoose=false; convHits=[];
+  if(!query) return;
+  const qts=[...new Set(toks(query))]; if(!qts.length) return;
+  const nq=norm(query);
+  const score=(sx,name)=>{ const r=scoreDoc(qts,sx); r.base=r.total; if(name&&norm(name).includes(nq)) r.total+=20; return r; };
+  const all=RAW.map(o=>({o,...score(o._sx,o.name)}));
+  let hits=all.filter(r=>r.matched===qts.length);
+  if(!hits.length && qts.length>1){ searchLoose=true; const need=Math.ceil(qts.length/2); hits=all.filter(r=>r.matched>=need); }
+  const top=Math.max(0,...hits.map(r=>r.base)); hits=hits.filter(r=>r.total>20||r.base>=Math.max(0.9,top*0.3));
+  hits.forEach(r=>SEARCH.set(r.o.id,r));
+  const ch=CONV.map(c=>({c,...score(c._sx,c.title)}));
+  let cH=ch.filter(r=>r.matched===qts.length); if(!cH.length && qts.length>1){ const need=Math.ceil(qts.length/2); cH=ch.filter(r=>r.matched>=need); }
+  const ctop=Math.max(0,...cH.map(r=>r.base)); convHits=cH.filter(r=>r.total>20||r.base>=Math.max(0.9,ctop*0.3)).sort((a,b)=>b.total-a.total).map(r=>r.c);
+}
+function whyLabel(o){ const r=SEARCH.get(o.id); if(!r||!r.why) return o.catLabel; const f=r.why; if(f.lab==='nom') return o.catLabel; if(f.lab==='thème'||f.lab==='public') return f.lab+' · '+f.txt.split(' · ').find(x=>toks(x).some(t=>toks(query).some(q=>tokScore(q,[t])>0||[...(SYN.get(q)||[])].some(s=>tokScore(s,[t],false)>0))))||f.lab; if(f.lab==='bureau') return f.txt.trim(); return f.lab; }
+
+function matchConv(){ runSearch(); }
 
 // ---------- relations ----------
 const DECL=CONVD.relations||[];
@@ -311,8 +419,8 @@ function convCard(c,compact){
   return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>${c.first_step?`<p class="rstep"><b>Premier pas ·</b> ${esc(c.first_step)}</p>`:''}${c.evidence?`<p class="rev">Repéré sur : ${esc(c.evidence)}</p>`:''}`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
 }
 function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
-function orgHits(){ return query? RAW.filter(textMatch).sort((a,b)=>a.name.localeCompare(b.name,'fr')) : []; }
-function orgHitsHtml(){ if(!query) return ''; const h=orgHits(); return `<div class="ksec" style="margin:0 0 16px"><dt>Structures pour « ${esc(query)} » <span class="n">${h.length}</span></dt>${h.length?`<ul class="rel">${h.slice(0,12).map(o=>orgLi(o,o.catLabel)).join('')}</ul>${h.length>12?`<p class="kempty">… et ${h.length-12} autres, en surbrillance sur la carte.</p>`:''}`:'<p class="kempty">Aucune structure ne correspond.</p>'}</div>`; }
+function orgHits(){ return query? RAW.filter(textMatch).sort((a,b)=>(SEARCH.get(b.id).total-SEARCH.get(a.id).total)||a.name.localeCompare(b.name,'fr')) : []; }
+function orgHitsHtml(){ if(!query) return ''; const h=orgHits(); return `<div class="ksec" style="margin:0 0 16px"><dt>Structures pour « ${esc(query)} » <span class="n">${h.length}${searchLoose?' · résultats approchants':''}</span></dt>${h.length?`<ul class="rel">${h.slice(0,12).map(o=>orgLi(o,whyLabel(o))).join('')}</ul>${h.length>12?`<p class="kempty">… et ${h.length-12} autres, en surbrillance sur la carte.</p>`:''}`:`<p class="kempty">Aucune structure ne correspond. Essayez un métier (céramique, photo, couture), un besoin (anniversaire, recrutement, logo) ou un étage (RDC, 2e).</p>`}</div>`; }
 function convHitsHtml(){ if(!query) return ''; if(!convHits.length) return orgHitsHtml(); return orgHitsHtml()+`<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
 function profileBarHtml(compact){ if(!profile) return ''; const who=esc(profileWho()); const th=profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'; if(compact) return `<div class="profile-bar" style="padding:6px 10px;margin-right:28px"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${who} · ${th}</span><button id="editProfile">Modifier</button></div>`; return `<div class="profile-bar"><b>${who}</b><span style="color:var(--muted);font-size:12px">${th}${profile.wants?.length?' · '+profile.wants.length+' chantier'+(profile.wants.length>1?'s':''):''}</span><span style="margin-left:auto;display:flex;gap:10px"><button id="editProfile">Modifier</button><button id="showAll">Tout afficher</button></span></div>`; }
 function bindProfileBar(el){ el.querySelector('#editProfile')?.addEventListener('click',()=>startOnboarding(2)); el.querySelector('#showAll')?.addEventListener('click',()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); applyState(); renderDetail(); renderPopover(); }); }
@@ -384,7 +492,7 @@ function renderDetail(){
   syncDetailSheet();
 }
 
-document.getElementById('search').addEventListener('input',e=>{ query=e.target.value.trim().toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(!selected) renderDetail(); applyState(); });
+let searchT=0; document.getElementById('search').addEventListener('input',e=>{ clearTimeout(searchT); const v=e.target.value.trim(); searchT=setTimeout(()=>{ query=v.toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(!selected) renderDetail(); applyState(); },query&&!v?0:140); });
 document.getElementById('searchToggle').onclick=e=>{ const h=document.querySelector('header.top'); const open=h.classList.toggle('search-open'); e.currentTarget.setAttribute('aria-expanded',String(open)); if(open) document.getElementById('search').focus(); };
 const pop=document.getElementById('aboutPop'), popBtn=document.getElementById('aboutBtn');
 function setPopover(open){ pop.hidden=!open; popBtn.setAttribute('aria-expanded',String(open)); if(open) renderPopover(); }
