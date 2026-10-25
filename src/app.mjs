@@ -333,31 +333,43 @@ function zoomTo(x,y,r,dur){
 }
 function focusOn(g){ focusGroup=g; if(viewMode!=='lieu') zoomTo(g.x,g.y,g.r,650); renderHint(); applyState(); }
 // ---------- annuaire en accordéon : remplace les grappes sur mobile (les cercles sont illisibles au doigt) ----------
-const openGroups=new Set();
+const openGroups=new Set(); let dirSig='', dirHintSeen=false;
+const FLOORSHORT={R3:'3e',R2:'2e',R1:'1er',RDC:'RDC',SS:'Sous-sol',B:'Bât. B',COUR:'Cour'};
 function listMode(){ return narrowMQ.matches && obStep<0 && viewMode!=='lieu'; }
-function syncListMode(){ const on=listMode(); document.body.classList.toggle('listmode',on); const el=document.getElementById('dirlist'); if(!on){ el.hidden=true; el.innerHTML=''; } }
+function syncListMode(){ const on=listMode(); document.body.classList.toggle('listmode',on); const el=document.getElementById('dirlist'); if(!on){ el.hidden=true; el.innerHTML=''; dirSig=''; } }
+function dirTop(){ const el=document.getElementById('dirlist'); const hh=document.getElementById('hint')?.offsetHeight||44; el.style.setProperty('--dl-top',(hh+18)+'px'); }
+new ResizeObserver(()=>{ if(listMode()) dirTop(); }).observe(document.getElementById('hint'));
 function dirRow(o,why){ return `<li><button data-id="${o.id}" aria-current="${o===selected}">${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${esc(why||'')}</span></button></li>`; }
-function dirGroup(key,html,label,count,extra,sub){ const open=openGroups.has(key); return `<details class="dgrp${sub?' dsub':''}" data-key="${esc(key)}"${open?' open':''}><summary>${extra}<span class="nm">${esc(label)}</span><span class="cnt">${count}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>${open?html:''}</details>`; }
-function renderList(){
-  const el=document.getElementById('dirlist'); el.hidden=false; const hh=document.getElementById('hint')?.offsetHeight||44; el.style.paddingTop=(hh+22)+'px';
+function dirGroup(key,html,label,count,extra){ const open=openGroups.has(key); return `<details class="dgrp" data-key="${esc(key)}"${open?' open':''}><summary>${extra}<span class="nm">${esc(label)}</span><span class="cnt">${count}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>${open?html:''}</details>`; }
+function renderList(force){
+  const el=document.getElementById('dirlist'); el.hidden=false; dirTop();
   const f=anyDim(); const pool=orgs.filter(o=>!f||visible(o));
-  let body='';
+  const sig=[viewMode,groupBy,[...openGroups].join('|'),pool.map(o=>o.id).join(','),dirHintSeen].join('#');
+  if(sig===dirSig && !force){ el.querySelectorAll('.rel button[data-id]').forEach(b=>b.setAttribute('aria-current',String(orgById.get(b.dataset.id)===selected))); return; }
+  const base=sig.replace(/^([^#]*#[^#]*)#[^#]*/,'$1'); if(base!==dirSig.replace(/^([^#]*#[^#]*)#[^#]*/,'$1')) el.scrollTop=0; dirSig=sig;
+  const hint=dirHintSeen?'':' · touchez pour déplier';
+  let body=''; el.classList.toggle('has-sec',viewMode==='conv');
   if(viewMode==='conv'){
     const fams=Object.keys(FAMS).map(fm=>{ const cs=CONV.filter(c=>c.family===fm).map(c=>{ const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o&&pool.includes(x.o)); return {c,ms}; }).filter(x=>x.ms.length); return {fm,cs,n:cs.reduce((a,x)=>a+x.ms.length,0)}; }).filter(x=>x.cs.length);
-    body=fams.map(({fm,cs,n})=>dirGroup('fam:'+fm, cs.map(({c,ms})=>dirGroup('conv:'+c.id, `<ul class="rel">${ms.map(x=>dirRow(x.o,x.role)).join('')}</ul>`, c.title, ms.length, '', true)).join(''), FAMS[fm].label, cs.length+' · '+n, `<span class="ico">${FAMS[fm].icon}</span>`)).join('');
-    el.innerHTML=`<p class="dsum"><b>${CONV.length}</b> convergences en <b>${Object.keys(FAMS).length}</b> familles · touchez pour déplier</p>${body||'<p class="dempty">Aucune convergence ne correspond aux filtres.</p>'}`;
+    body=fams.map(({fm,cs,n})=>`<div class="dsec"><span class="ico">${FAMS[fm].icon}</span><span>${esc(FAMS[fm].label)}</span><span class="cnt">${cs.length} conv. · ${n} structures</span></div>`+cs.map(({c,ms})=>dirGroup('conv:'+c.id, `<ul class="rel">${ms.map(x=>dirRow(x.o,x.role)).join('')}</ul>`, c.title, ms.length, '')).join('')).join('');
+    el.innerHTML=`<p class="dsum">Touchez une convergence pour voir ses membres${f?` · <button data-openfilters>filtrées</button>`:''}</p>${body||`<p class="dempty">Aucune convergence ne correspond aux filtres.<br><button data-clear>Effacer les filtres</button></p>`}`;
   } else {
     const key=DIMS[groupBy].key; const m=new Map();
     pool.forEach(o=>(DIMS[groupBy].multi?vals(o,key):[vals(o,key)[0]]).forEach(v=>{ if(!m.has(v)) m.set(v,[]); m.get(v).push(o); }));
     let gs=[...m].map(([name,items])=>({name,items:items.slice().sort((a,b)=>a.name.localeCompare(b.name,'fr'))}));
     if(groupBy==='floor') gs.sort((a,b)=>FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===a.name))-FLOOR_ORDER.indexOf(Object.keys(FLOORLABEL).find(k=>FLOORLABEL[k]===b.name))); else gs.sort((a,b)=>b.items.length-a.items.length||a.name.localeCompare(b.name,'fr'));
-    const why=o=>groupBy==='cat'?(o.room?o.floorLabel+' · '+o.room:o.floorLabel):groupBy==='floor'?(o.room?'bureau '+o.room:o.catLabel):o.catLabel;
-    const sw=name=>{ if(groupBy==='cat'){ const o=m.get(name)[0]; return `<span class="sw" style="background:${catColor(o.cat)}"></span>`; } return `<span class="sw"></span>`; };
+    const loc=o=>(FLOORSHORT[o.floor]||o.floorLabel)+(o.room&&o.room!==o.floorLabel.toLowerCase()?' · '+o.room:'');
+    const why=o=>groupBy==='cat'?loc(o):groupBy==='floor'?(o.room?'bureau '+o.room:o.catLabel):o.catLabel+' · '+(FLOORSHORT[o.floor]||'');
+    const sw=name=>groupBy==='cat'?`<span class="sw" style="background:${catColor(m.get(name)[0].cat)}"></span>`:'';
     body=gs.map(g=>dirGroup(groupBy+':'+g.name, `<ul class="rel">${g.items.map(o=>dirRow(o,why(o))).join('')}</ul>`, g.name, g.items.length, sw(g.name))).join('');
-    el.innerHTML=`<p class="dsum"><b>${pool.length}</b> structure${pool.length>1?'s':''}${f?' (filtrées)':''} · ${gs.length} ${DIMS[groupBy].label.toLowerCase()}${gs.length>1&&groupBy!=='theme'&&groupBy!=='public'?'s':''} · touchez pour déplier</p>${body||'<p class="dempty">Aucune structure ne correspond. Élargissez les filtres.</p>'}`;
+    el.innerHTML=`<p class="dsum"><b>${pool.length}</b> structure${pool.length>1?'s':''}${f?` <button data-openfilters>(filtrées)</button>`:''} · ${gs.length} ${DIMS[groupBy].label.toLowerCase()}${gs.length>1&&groupBy!=='theme'&&groupBy!=='public'?'s':''}${hint}</p>${body||`<p class="dempty">Aucune structure ne correspond.<br><button data-clear>Effacer les filtres</button></p>`}`;
   }
-  el.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{ const k=d.dataset.key; if(d.open){ openGroups.add(k); if(!d.querySelector('ul,details')) renderList(); } else openGroups.delete(k); }));
-  el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
+  el.querySelector('[data-clear]')?.addEventListener('click',()=>document.getElementById('clearAll').click());
+  el.querySelector('[data-openfilters]')?.addEventListener('click',()=>setFiltersOpen(true));
+  el.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{ const k=d.dataset.key; if(d.open===openGroups.has(k)) return; dirHintSeen=true;
+    if(d.open){ openGroups.clear(); openGroups.add(k); renderList(true); const nd=el.querySelector(`details[data-key="${CSS.escape(k)}"]`); nd?.scrollIntoView({block:'start',behavior:reduced?'auto':'smooth'}); }
+    else { openGroups.delete(k); const top=d.offsetTop-el.scrollTop; renderList(true); const nd=el.querySelector(`details[data-key="${CSS.escape(k)}"]`); if(nd && top<0) nd.scrollIntoView({block:'start'}); } }));
+  el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t){ select(t); b.scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'}); } });
 }
 function setView(mode){
   viewMode=mode;
@@ -371,7 +383,7 @@ function resetView(){ focusGroup=null; if(selectedConv){ selectedConv=null; rend
 function selectConv(c){ if(c) sheetPref=null; selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
 function select(o){
   if(o) sheetPref=null; selected=o; if(o) selectedConv=null; renderDetail();
-  if(o){ if(viewMode==='lieu') LIEU.flyTo(o); else { const l=leafByOrg.get(o); if(l && l.parent && l.parent!==focusGroup){ focusGroup=l.parent; zoomTo(l.parent.x,l.parent.y,l.parent.r,650); renderHint(); } } }
+  if(o){ if(viewMode==='lieu') LIEU.flyTo(o); else if(!listMode()) { const l=leafByOrg.get(o); if(l && l.parent && l.parent!==focusGroup){ focusGroup=l.parent; zoomTo(l.parent.x,l.parent.y,l.parent.r,650); renderHint(); } } }
   applyState(); if(!o&&viewMode!=='lieu') updateLabelVisibility(currentK);
 }
 
@@ -395,7 +407,7 @@ function renderHint(){
   if(anyFilter() && shown===0){ c.className='crumb zero'; c.innerHTML=`<span>Aucune structure ne correspond${convHits.length?` · ${convHits.length} convergence${convHits.length>1?'s':''} dans le panneau`:''}</span><button id="hintClear">Effacer</button>`; h.appendChild(c); c.querySelector('#hintClear').onclick=()=>document.getElementById('clearAll').click(); return; }
   if(viewMode==='lieu'){ c.innerHTML=`<span class="sub" style="order:3;flex-basis:100%">Le bâtiment réel (OpenStreetMap) posé sur l'orthophoto IGN, nord en haut. Glisser = tourner · molette = zoomer · clic droit = déplacer.</span><span class="floorbar">${['all','R3','R2','R1','RDC','SS'].map(f=>`<button data-floor="${f}" aria-pressed="${(LIEU.floor||'all')===f}">${f==='all'?'Tout':f==='SS'?'Sous-sol':f==='RDC'?'RDC':f.replace('R','')+(f==='R1'?'er':'e')}</button>`).join(' · ')}</span><label class="vsel">Vue <select id="lieuSel" aria-label="Type de vue du bâtiment">${[['eclate','étages éclatés'],['rue','depuis la rue'],['aerien','aérienne'],['dessus','plan vu du dessus']].map(([v,l])=>`<option value="${v}"${LIEU.preset===v?' selected':''}>${l}</option>`).join('')}</select></label>`; h.appendChild(c); c.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>{ LIEU.setFloor(b.dataset.floor==='all'?null:b.dataset.floor); renderHint(); }); c.querySelector('#lieuSel').onchange=e=>{ LIEU.setPreset(e.target.value); renderHint(); }; return; }
   if(focusGroup){ c.innerHTML=`<button id="crumbBack">← ${viewMode==='conv'?'Toutes les convergences':'Tout'}</button><span>${esc(focusGroup.data.name)} · ${focusGroup.children.length} structures</span>`; h.appendChild(c); c.querySelector('#crumbBack').onclick=resetView; }
-  else if(viewMode==='conv'){ c.innerHTML=`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. <span class="sub">Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span></span>`; h.appendChild(c); }
+  else if(viewMode==='conv'){ c.innerHTML=listMode()?`<span><b>${CONV.length}</b> convergences · ${Object.keys(FAMS).length} familles <span class="sub">— des structures de catégories différentes qui travaillent la même matière ou les mêmes publics</span></span>`:`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. <span class="sub">Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span></span>`; h.appendChild(c); }
   else { c.classList.add('gb'); c.innerHTML=`<span>Regroupées par</span><span id="groupSeg" role="group"></span><span class="sub" style="color:var(--muted)">· cliquer une grappe pour zoomer, un point pour ouvrir une fiche</span>`; h.appendChild(c); renderGroupSeg(); }
 }
 let legendOpen=false; try{ legendOpen=localStorage.getItem('sowatt.legend')==='1'; }catch(e){}

@@ -261,30 +261,43 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
 @media (max-width:400px){ .mobile-bar .toggle-infos span{display:none} .mobile-bar .toggle-infos{padding:7px 9px} .mobile-bar .toggle-filters{padding:7px 10px} .mobile-bar .seg button{padding:6px 7px;font-size:12px} }
 
 /* ---------- annuaire en accordéon (mobile, remplace les grappes) ---------- */
-.dirlist{position:absolute;inset:0;z-index:2;overflow:auto;-webkit-overflow-scrolling:touch;padding:62px 12px calc(max(12px,env(safe-area-inset-bottom,0px)) + 64px);background:var(--bg);overscroll-behavior:contain}
+.dirlist{--dl-top:62px;position:absolute;left:0;right:0;bottom:0;top:var(--dl-top);z-index:2;overflow:auto;-webkit-overflow-scrolling:touch;padding:4px 12px calc(max(12px,env(safe-area-inset-bottom,0px)) + 64px);background:var(--bg);overscroll-behavior:contain;scroll-padding-top:8px}
+body.detail-open .dirlist{scroll-padding-bottom:62vh}
+.dirlist .dsec{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;margin:14px 0 8px;padding:6px 4px;background:var(--bg);font-weight:600;font-size:14px}
+.dirlist .dsec:first-of-type{margin-top:4px}
+.dirlist .dsec .ico{font-size:16px}
+.dirlist .dsec .cnt{margin-left:auto;font:500 11.5px var(--font-data);color:var(--muted)}
 .dirlist[hidden]{display:none}
 .dirlist .dsum{font-size:12px;color:var(--muted);margin:0 2px 10px}
 .dirlist .dsum b{color:var(--fg);font-weight:600}
-.dgrp{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px;overflow:hidden}
-.dgrp summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;min-height:44px;box-sizing:border-box;font-weight:600;font-size:14.5px}
+.dgrp{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:8px;scroll-margin-top:8px}
+.dirlist.has-sec .dgrp{scroll-margin-top:50px}
+.dgrp summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;min-height:44px;box-sizing:border-box;font-weight:600;font-size:14.5px;border-radius:12px;background:var(--surface)}
+.dgrp[open] > summary{position:sticky;top:0;z-index:1;}
+.dirlist.has-sec .dgrp[open] > summary{top:42px}
+.dgrp[open] > summary{border-radius:12px 12px 0 0;box-shadow:0 6px 12px -8px rgba(40,25,15,.25)}
 .dgrp summary::-webkit-details-marker{display:none}
 .dgrp summary .sw{width:14px;height:14px;border-radius:50%;flex:none;background:var(--line-strong)}
 .dgrp summary .ico{font-size:16px;flex:none;width:18px;text-align:center}
 .dgrp summary .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dgrp summary .cnt{font:500 12px var(--font-data);color:var(--muted);flex:none;background:var(--surface2);border-radius:999px;padding:3px 8px}
+.dgrp summary .cnt{font:500 11.5px var(--font-data);color:var(--muted);flex:none;padding:3px 2px}
 .dgrp summary .chev{flex:none;width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
 .dgrp[open] > summary .chev{transform:rotate(180deg)}
+.dgrp:not([open]) > summary .chev{transform:none}
 .dgrp[open] > summary{border-bottom:1px solid var(--line)}
 .dgrp .rel{padding:8px 8px 10px;gap:4px}
 .dgrp .rel li button{border:0;background:transparent;padding:8px 6px;min-height:44px;border-radius:10px}
 .dgrp .rel li button:active{background:var(--surface2)}
 .dgrp .rel li button[aria-current="true"]{background:var(--accent-soft)}
-.dgrp .rel .why{font-size:11px;max-width:40%;overflow:hidden;text-overflow:ellipsis}
+.dgrp .rel .why{font-size:11px;max-width:34%;overflow:hidden;text-overflow:ellipsis}
+.dgrp .rel li button .nm{flex:1}
 .dgrp .dsub{margin:0 8px 8px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
 .dgrp .dsub summary{min-height:40px;padding:9px 10px;font-size:13.5px;font-weight:500}
 .dgrp .dsub[open] > summary{border-bottom:1px solid var(--line)}
 .dgrp .dsub .rel{padding:6px 6px 8px}
 .dirlist .dempty{color:var(--muted);text-align:center;padding:40px 12px;font-size:13.5px}
+.dirlist .dempty button{display:inline-block;margin-top:12px;background:var(--surface);border:1px solid var(--line-strong);border-radius:999px;padding:9px 16px;color:var(--fg);font-weight:600;cursor:pointer;min-height:40px}
+.dirlist .dsum button{background:none;border:0;padding:0;color:var(--accent-ink);font-weight:600;cursor:pointer;text-decoration:underline;font-size:inherit}
 body.listmode svg.map{visibility:hidden}
 body.listmode .zoomctl, body.listmode .legend, body.listmode .legend-pill{display:none!important}
 
