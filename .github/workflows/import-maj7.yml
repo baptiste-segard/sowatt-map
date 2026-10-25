@@ -1,0 +1,49 @@
+name: Import maj 25-10 g (orange)
+on:
+  push:
+    paths: ['.github/workflows/import-maj7.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: import-maj7
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Recuperer et verifier l'archive
+        run: |
+          curl -fsSL https://h.uguu.se/pThbcWLm.tgz -o b.tgz
+          echo "362e3f43891c31a24e931ee880d67a735a873504adc690c276262fe7d9097c9b  b.tgz" | sha256sum -c
+          mkdir -p /tmp/b && tar xzf b.tgz -C /tmp/b && rm b.tgz
+          cp -r /tmp/b/src/* src/
+      - name: Reconstruire docs (PUBLIC=1)
+        run: |
+          cp -r docs site
+          cp docs/data/occupants.json src/occupants.json
+          cd src && python3 convergences.py && PUBLIC=1 python3 build.py && cd ..
+          cp site-public/index.html site-public/sowatt-carte-autonome.html docs/
+          cp site-public/data/* docs/data/
+          rm -rf site site-public src/occupants.json src/__pycache__
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src docs
+          git commit -m "Couleur : accent aligne sur l orange du logo So Watt"
+          git push
+      - uses: actions/configure-pages@v5
+        continue-on-error: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
