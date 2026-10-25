@@ -236,8 +236,13 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   .search-toggle{display:inline-flex}
   .search{width:0;overflow:hidden;transition:width .2s}
   .search input{width:100%;max-width:none;padding-left:30px}
-  header.top.search-open .search{width:min(60vw,320px)}
+  header.top.search-open .search{width:auto;flex:1;min-width:0}
   header.top.search-open .brand{display:none}
+  header.top.search-open .controls{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+  header.top.search-open .help-btn, header.top.search-open .pop-anchor{display:none}
+  header.top.search-open .search-toggle{order:2;width:auto;padding:0 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--accent-ink)}
+  header.top.search-open .search-toggle svg{display:none}
+  header.top.search-open .search-toggle::after{content:'Fermer'}
   .mobile-bar{display:flex;position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));gap:8px;align-items:center;justify-content:center;z-index:5;pointer-events:none}
   .mobile-bar>*{pointer-events:auto}
   .mobile-bar .toggle-filters{box-shadow:0 4px 14px rgba(40,25,15,.12);background:var(--surface);flex:none}
@@ -263,6 +268,7 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   body.detail-full aside.detail::before{display:none}
   body.detail-full #closeDetailSheet{position:fixed;top:calc(var(--header-h,58px) + 8px);right:12px;z-index:9;width:36px;height:36px;box-shadow:0 2px 8px rgba(40,25,15,.12)}
   body.detail-full aside.detail:has(.dhead) #closeDetailSheet{display:none}
+  body:has(header.top.search-open) #closeDetailSheet{display:none}
   body.detail-full aside.detail .home{padding-top:6px}
   body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
   body.detail-full aside.detail .dhead .close{display:flex;position:absolute;top:10px;right:12px;width:36px;height:36px;align-items:center;justify-content:center;background:var(--surface2);border-radius:50%;font-size:20px;padding:0;margin:0;float:none}

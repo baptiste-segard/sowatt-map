@@ -247,8 +247,13 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   .search-toggle{display:inline-flex}
   .search{width:0;overflow:hidden;transition:width .2s}
   .search input{width:100%;max-width:none;padding-left:30px}
-  header.top.search-open .search{width:min(60vw,320px)}
+  header.top.search-open .search{width:auto;flex:1;min-width:0}
   header.top.search-open .brand{display:none}
+  header.top.search-open .controls{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+  header.top.search-open .help-btn, header.top.search-open .pop-anchor{display:none}
+  header.top.search-open .search-toggle{order:2;width:auto;padding:0 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--accent-ink)}
+  header.top.search-open .search-toggle svg{display:none}
+  header.top.search-open .search-toggle::after{content:'Fermer'}
   .mobile-bar{display:flex;position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));gap:8px;align-items:center;justify-content:center;z-index:5;pointer-events:none}
   .mobile-bar>*{pointer-events:auto}
   .mobile-bar .toggle-filters{box-shadow:0 4px 14px rgba(40,25,15,.12);background:var(--surface);flex:none}
@@ -274,6 +279,7 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   body.detail-full aside.detail::before{display:none}
   body.detail-full #closeDetailSheet{position:fixed;top:calc(var(--header-h,58px) + 8px);right:12px;z-index:9;width:36px;height:36px;box-shadow:0 2px 8px rgba(40,25,15,.12)}
   body.detail-full aside.detail:has(.dhead) #closeDetailSheet{display:none}
+  body:has(header.top.search-open) #closeDetailSheet{display:none}
   body.detail-full aside.detail .home{padding-top:6px}
   body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
   body.detail-full aside.detail .dhead .close{display:flex;position:absolute;top:10px;right:12px;width:36px;height:36px;align-items:center;justify-content:center;background:var(--surface2);border-radius:50%;font-size:20px;padding:0;margin:0;float:none}
@@ -745,7 +751,7 @@ function runSearch(){
   let cH=ch.filter(r=>r.matched===qts.length); if(!cH.length && qts.length>1){ const need=Math.ceil(qts.length/2); cH=ch.filter(r=>r.matched>=need); }
   const ctop=Math.max(0,...cH.map(r=>r.base)); convHits=cH.filter(r=>r.total>20||r.base>=Math.max(0.9,ctop*0.3)).sort((a,b)=>b.total-a.total).map(r=>r.c);
 }
-function whyLabel(o){ const r=SEARCH.get(o.id); if(!r||!r.why) return o.catLabel; const f=r.why; if(f.lab==='nom') return o.catLabel; if(f.lab==='thème'||f.lab==='public') return f.lab+' · '+f.txt.split(' · ').find(x=>toks(x).some(t=>toks(query).some(q=>tokScore(q,[t])>0||[...(SYN.get(q)||[])].some(s=>tokScore(s,[t],false)>0))))||f.lab; if(f.lab==='bureau') return f.txt.trim(); return f.lab; }
+function whyLabel(o){ const r=SEARCH.get(o.id); if(!r||!r.why) return o.catLabel; const f=r.why; if(f.lab==='nom') return o.catLabel; if(f.lab==='thème'||f.lab==='public'){ const qs=toks(rewriteNeeds(norm(query))); const hit=f.txt.split(' · ').find(x=>toks(x).some(t=>qs.some(q=>tokScore(q,[t])>0||[...(SYN.get(q)||[])].some(s=>tokScore(s,[t],false)>0)))); return hit?f.lab+' · '+hit:f.lab; } if(f.lab==='bureau') return f.txt.trim(); return f.lab; }
 
 function matchConv(){ runSearch(); }
 
@@ -1150,8 +1156,8 @@ function renderDetailInner(){
   syncDetailSheet();
 }
 
-let searchT=0; document.getElementById('search').addEventListener('input',e=>{ clearTimeout(searchT); const v=e.target.value.trim(); searchT=setTimeout(()=>{ query=v.toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(!selected) renderDetail(); applyState(); },query&&!v?0:140); });
-document.getElementById('searchToggle').onclick=e=>{ const h=document.querySelector('header.top'); const open=h.classList.toggle('search-open'); e.currentTarget.setAttribute('aria-expanded',String(open)); if(open) document.getElementById('search').focus(); };
+let searchT=0; document.getElementById('search').addEventListener('input',e=>{ clearTimeout(searchT); const v=e.target.value.trim(); searchT=setTimeout(()=>{ query=v.toLowerCase(); matchConv(); convDismissed=false; if(selectedConv) selectedConv=null; if(narrowMQ.matches){ sheetPref=null; if(query&&selected) select(null); } if(!selected) renderDetail(); applyState(); },query&&!v?0:140); });
+document.getElementById('searchToggle').onclick=e=>{ const h=document.querySelector('header.top'); const open=h.classList.toggle('search-open'); e.currentTarget.setAttribute('aria-expanded',String(open)); if(open) document.getElementById('search').focus(); else { const i=document.getElementById('search'); if(i.value){ i.value=''; i.dispatchEvent(new Event('input')); } if(narrowMQ.matches){ sheetPref=null; setDetailOpen(false); } } };
 const pop=document.getElementById('aboutPop'), popBtn=document.getElementById('aboutBtn');
 function setPopover(open){ const was=pop.hidden; pop.hidden=!open; popBtn.setAttribute('aria-expanded',String(open)); if(open){ renderPopover(); if(was) FX.pop(pop); } }
 popBtn.onclick=()=>setPopover(pop.hidden);
@@ -1257,9 +1263,9 @@ const LIEU=(()=>{
     const loader=new THREE.TextureLoader();
     // sol : orthophoto IGN, nord vers -z, centrée sur le centroïde de l'emprise OSM
     const o=GEO.ortho, k=o.mpp*PPM, size=o.size*k;
-    const gtex=loader.load('plans/ortho.webp',()=>request()); gtex.colorSpace=THREE.SRGBColorSpace; gtex.anisotropy=8;
+    const gtex=loader.load('plans/ortho.webp',()=>request()); gtex.colorSpace=THREE.SRGBColorSpace; gtex.generateMipmaps=false; gtex.minFilter=THREE.LinearFilter; gtex.anisotropy=4;
     const ground=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:gtex,transparent:true,opacity:0.92,depthWrite:false})); ground.rotation.x=-Math.PI/2; ground.position.set((o.size/2-o.cx)*k,-2,(o.size/2-o.cy)*k); ground.renderOrder=0; scene.add(ground);
-    const vc=document.createElement('canvas'); vc.width=vc.height=512; const vg=vc.getContext('2d'); const grd=vg.createRadialGradient(256,256,120,256,256,256); grd.addColorStop(0,'rgba(255,255,255,0)'); grd.addColorStop(0.75,'rgba(255,255,255,0.55)'); grd.addColorStop(1,'rgba(255,255,255,1)'); vg.fillStyle=grd; vg.fillRect(0,0,512,512); const vt=new THREE.CanvasTexture(vc); const fade=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:vt,transparent:true,depthWrite:false})); fade.rotation.x=-Math.PI/2; fade.position.copy(ground.position); fade.position.y=-1; fade.renderOrder=1; scene.add(fade);
+    const vc=document.createElement('canvas'); vc.width=vc.height=512; const vg=vc.getContext('2d'); const grd=vg.createRadialGradient(256,256,120,256,256,256); grd.addColorStop(0,'rgba(255,255,255,0)'); grd.addColorStop(0.75,'rgba(255,255,255,0.55)'); grd.addColorStop(1,'rgba(255,255,255,1)'); vg.fillStyle=grd; vg.fillRect(0,0,512,512); const vt=new THREE.CanvasTexture(vc); vt.generateMipmaps=false; vt.minFilter=THREE.LinearFilter; const fade=new THREE.Mesh(new THREE.PlaneGeometry(size,size),new THREE.MeshBasicMaterial({map:vt,transparent:true,depthWrite:false})); fade.rotation.x=-Math.PI/2; fade.position.copy(ground.position); fade.position.y=-1; fade.renderOrder=1; scene.add(fade);
     building=new THREE.Group(); building.rotation.y=THREE.MathUtils.degToRad(GEO.theta); scene.add(building);
     buildFloors();
     RAW.forEach(o=>{
