@@ -73,7 +73,10 @@ conv_out = dict(conv, relations=[dict(a=a, b=b, why=w) for a, b, w in RELATIONS]
 data_js = json.dumps(occ, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 conv_js = json.dumps(conv_out, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 app = open('app.mjs').read().replace('</script', '<\\/script')
-tpl = open('template.html').read()
+import base64
+def _datauri(p): return 'data:image/png;base64,' + base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'brand', p), 'rb').read()).decode()
+LOGO = _datauri('sowatt-logo.png'); icon64 = _datauri('sowatt-icon-64.png'); icon180 = _datauri('sowatt-icon-180.png')
+tpl = open('template.html').read().replace('__SOWATT_LOGO__', LOGO)
 geo_js = open('geo.json').read()
 
 
@@ -97,7 +100,9 @@ html = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Carte interactive des occupant·e·s du Sowatt, tiers-lieu de Saint-André-lez-Lille : qui est là, où, avec qui, et où converger.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="{icon64}" type="image/png">
+<link rel="apple-touch-icon" href="{icon180}">
+<meta name="theme-color" content="#EC644B">
 <style>html{{color-scheme:light}}body{{margin:0}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
 {head_part}
 </head>

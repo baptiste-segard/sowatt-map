@@ -27,7 +27,10 @@ header.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;ga
 .brand h1{font:600 17px var(--font-display);margin:0;letter-spacing:-.01em;white-space:nowrap;display:flex;align-items:center;gap:8px}
 .brand-btn{all:unset;cursor:pointer;font:inherit;color:inherit}
 .brand-btn:hover{color:var(--accent)}
-.brand h1::before{content:"";width:14px;height:14px;background:var(--accent);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.brand-btn{display:inline-flex;align-items:center;gap:10px}
+.brand-logo{height:28px;width:auto;display:block}
+.brand-sub{font:600 16px var(--font-display);letter-spacing:-.01em;color:var(--fg);padding-left:10px;border-left:1px solid var(--line-strong);line-height:20px}
+.brand-btn:hover .brand-sub{color:var(--accent)}
 .brand .tag{font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line-strong);border-radius:4px;padding:2px 6px}
 .controls{display:flex;align-items:center;gap:8px;margin-left:auto;justify-self:end;min-width:0}
 .view-seg{justify-self:center}
@@ -317,7 +320,7 @@ body.onboarding .canvas::before{opacity:1}
 <header class="top">
   <div class="brand">
     <button class="burger" id="burger" aria-label="Filtres" aria-expanded="false" aria-controls="filters"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg><span class="bcnt" id="burgerCount" hidden></span></button>
-    <h1><button id="brandHome" class="brand-btn" title="Revenir au début">Sowatt · occupant·e·s</button></h1>
+    <h1><button id="brandHome" class="brand-btn" title="Revenir au début"><img class="brand-logo" src="__SOWATT_LOGO__" alt="So Watt !" width="92" height="28"><span class="brand-sub">occupant·e·s</span></button></h1>
     <span class="tag">prototype · oct. 2026</span>
   </div>
   <div class="seg view-seg" id="viewSeg" role="group" aria-label="Vue"><button id="viewClusters" aria-pressed="true">Grappes</button><button id="viewLieu" aria-pressed="false">Le lieu 3D</button><button id="viewConv" aria-pressed="false">Convergences</button></div>
