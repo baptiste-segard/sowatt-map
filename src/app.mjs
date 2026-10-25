@@ -534,10 +534,10 @@ function renderDetail(){ renderDetailInner(); const key=selectedConv?'c:'+select
 function renderDetailInner(){
   const el=document.getElementById('detailBody');
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
-    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${FAMS[c.family].icon} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2></div><ul class="reslist">${convCard(c,false)}</ul>
+    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${FAMS[c.family].icon} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2><button class="btn btn-lieu" id="goLieuConv">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button></div><ul class="reslist">${convCard(c,false)}</ul>
     ${acus.length?`<div class="ksec"><dt>Connecteurs dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
     <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Convergences et rôles ont été déduits des descriptifs ; à faire valider et enrichir par les occupant·e·s.</p>`;
-    el.querySelector('#closeDetail').onclick=()=>selectConv(null); el.querySelectorAll('.rorgs .chip[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); }); syncDetailSheet(); return; }
+    el.querySelector('#closeDetail').onclick=()=>selectConv(null); el.querySelector('#goLieuConv').onclick=()=>{ const keep=selectedConv; if(viewMode!=='lieu') setView('lieu'); selectedConv=keep; LIEU.flyToConv(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; el.querySelectorAll('.rorgs .chip[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); }); syncDetailSheet(); return; }
   if(!selected && profile){
     const me=meOrg(); const pool=orgs.filter(o=>o!==me&&profileMatch(o)).map(o=>({o,s:profileScore(o)})).sort((a,b)=>b.s-a.s).slice(0,8);
     const nMatch=orgs.filter(o=>profileMatch(o)&&o!==me).length; const nb=me?neighbours(me):null;
@@ -565,7 +565,7 @@ function renderDetailInner(){
     <div class="dhead-row">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Connecteur n°${o.acu.rank} : relie le plus de mondes différents">◌ connecteur n°${o.acu.rank}</span>`:''}
     <h2>${esc(o.name)}</h2></div></div></div>
     ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
-    <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
+    <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button> <button class="btn btn-lieu" id="goLieu">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
     ${o.offre?`<div class="offer"><dt>Ce qu'elle propose</dt><p>${esc(o.offre)}</p>${o.formats?`<p class="fmt">${esc(o.formats)}</p>`:''}${o.publicsDetail?`<p class="fmt">Pour : ${esc(o.publicsDetail)}</p>`:''}</div>`:''}
     ${upcoming(o).length?`<div class="ksec"><dt>À venir <span class="n">${upcoming(o).length}</span></dt><div class="evlist">${upcoming(o).map(a=>evCard(a,o,false).replace('<button class="evc"','<div class="evc static"').replace(/<\/button>$/,'</div>')).join('')}</div></div>`:''}
@@ -580,7 +580,8 @@ function renderDetailInner(){
     ${(nb.sameRoom.length||nb.sameFloor.length)?`<div class="ksec"><dt>Voisin·e·s <span class="n">${nb.sameRoom.length?nb.sameRoom.length+' même bureau · ':''}${nb.sameFloor.length} même étage</span></dt><ul class="rel aff">${nb.sameRoom.map(x=>orgLi(x,'même bureau')).join('')}${nb.sameFloor.slice(0,6).map(x=>orgLi(x,x.room||'')).join('')}</ul></div>`:''}
     <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : ${esc(o.source)}.</p>`;
   el.querySelector('#closeDetail').onclick=()=>select(null); bindProfileBar(el);
-  el.querySelector('#goRoom').onclick=()=>{ const keep=selected; if(viewMode!=='lieu') setView('lieu'); selected=keep; LIEU.flyTo(keep); applyState(); };
+  const goLieu=()=>{ const keep=selected; if(viewMode!=='lieu') setView('lieu'); selected=keep; LIEU.flyTo(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } };
+  el.querySelector('#goRoom').onclick=goLieu; el.querySelector('#goLieu').onclick=goLieu;
   el.querySelectorAll('.meta .chip').forEach(b=>b.onclick=()=>{ const d=b.dataset.dim,v=b.dataset.val; active[d].has(v)?active[d].delete(v):active[d].add(v); applyState(); renderDetail(); });
   el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
   bindConvCards(el);
