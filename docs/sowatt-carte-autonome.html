@@ -62,6 +62,7 @@ header.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;ga
 .legend[hidden],.legend-pill[hidden]{display:none}
 .legend .lclose{float:right;background:none;border:0;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;padding:0 2px;margin:-2px -4px 0 8px}
 .mobile-bar{display:none}
+.hint .vsel{display:inline-flex;align-items:center;gap:6px;font-weight:500;order:-1;padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
 .hint select{font:inherit;font-weight:600;color:var(--fg);border:0;background:var(--surface2);border-radius:999px;padding:3px 8px;cursor:pointer}
 .hint .crumb.zero{border-color:var(--accent);color:var(--fg)}
 .search input{width:230px;max-width:50vw;padding:7px 10px 7px 30px;border:1px solid transparent;border-radius:999px;background:var(--surface2)}
@@ -851,7 +852,7 @@ function renderHint(){
   const c=document.createElement('div'); c.className='crumb';
   const shown=orgs.filter(visible).length;
   if(anyFilter() && shown===0){ c.className='crumb zero'; c.innerHTML=`<span>Aucune structure ne correspond${convHits.length?` · ${convHits.length} convergence${convHits.length>1?'s':''} dans le panneau`:''}</span><button id="hintClear">Effacer</button>`; h.appendChild(c); c.querySelector('#hintClear').onclick=()=>document.getElementById('clearAll').click(); return; }
-  if(viewMode==='lieu'){ c.innerHTML=`<span class="sub">Le bâtiment réel (OpenStreetMap) posé sur l'orthophoto IGN, nord en haut. Glisser = tourner · molette = zoomer · clic droit = déplacer.</span><span class="floorbar">${['all','R3','R2','R1','RDC','SS'].map(f=>`<button data-floor="${f}" aria-pressed="${(LIEU.floor||'all')===f}">${f==='all'?'Tout':f==='SS'?'Sous-sol':f==='RDC'?'RDC':f.replace('R','')+(f==='R1'?'er':'e')}</button>`).join(' · ')}</span><span class="floorbar" style="margin-left:6px;border-left:1px solid var(--line);padding-left:8px"><button data-gap="eclate" aria-pressed="${LIEU.gap==='eclate'}">Éclaté</button> · <button data-gap="compact" aria-pressed="${LIEU.gap==='compact'}">Compact</button></span>`; h.appendChild(c); c.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>{ LIEU.setFloor(b.dataset.floor==='all'?null:b.dataset.floor); renderHint(); }); c.querySelectorAll('[data-gap]').forEach(b=>b.onclick=()=>{ LIEU.setGap(b.dataset.gap); renderHint(); }); return; }
+  if(viewMode==='lieu'){ c.innerHTML=`<span class="sub" style="order:3;flex-basis:100%">Le bâtiment réel (OpenStreetMap) posé sur l'orthophoto IGN, nord en haut. Glisser = tourner · molette = zoomer · clic droit = déplacer.</span><span class="floorbar">${['all','R3','R2','R1','RDC','SS'].map(f=>`<button data-floor="${f}" aria-pressed="${(LIEU.floor||'all')===f}">${f==='all'?'Tout':f==='SS'?'Sous-sol':f==='RDC'?'RDC':f.replace('R','')+(f==='R1'?'er':'e')}</button>`).join(' · ')}</span><label class="vsel">Vue <select id="lieuSel" aria-label="Type de vue du bâtiment">${[['eclate','étages éclatés'],['rue','depuis la rue'],['aerien','aérienne'],['dessus','plan vu du dessus']].map(([v,l])=>`<option value="${v}"${LIEU.preset===v?' selected':''}>${l}</option>`).join('')}</select></label>`; h.appendChild(c); c.querySelectorAll('[data-floor]').forEach(b=>b.onclick=()=>{ LIEU.setFloor(b.dataset.floor==='all'?null:b.dataset.floor); renderHint(); }); c.querySelector('#lieuSel').onchange=e=>{ LIEU.setPreset(e.target.value); renderHint(); }; return; }
   if(focusGroup){ c.innerHTML=`<button id="crumbBack">← ${viewMode==='conv'?'Toutes les convergences':'Tout'}</button><span>${esc(focusGroup.data.name)} · ${focusGroup.children.length} structures</span>`; h.appendChild(c); c.querySelector('#crumbBack').onclick=resetView; }
   else if(viewMode==='conv'){ c.innerHTML=`<span>${CONV.length} convergences : là où des structures de catégories différentes travaillent la même matière ou les mêmes publics. <span class="sub">Cliquer une convergence pour lire ce qu'elle pourrait devenir.</span></span>`; h.appendChild(c); }
   else { c.classList.add('gb'); c.innerHTML=`<span>Regroupées par</span><span id="groupSeg" role="group"></span><span class="sub" style="color:var(--muted)">· cliquer une grappe pour zoomer, un point pour ouvrir une fiche</span>`; h.appendChild(c); renderGroupSeg(); }
@@ -1172,14 +1173,18 @@ const LIEU=(()=>{
     else if(selected){ const a=worldPos(selected); relKind.forEach((k,x)=>{ const b=worldPos(x); mk(a,b,k.kind==='decl'?0x1F1B17:k.kind==='know'?0xEC644B:0xB0A79D,k.kind==='aff'?0.55:0.75,k.kind==='aff'); }); haloSprite.position.copy(a); haloSprite.scale.set(46,46,1); haloSprite.visible=true; }
     request();
   }
-  function home(){ floor=null; flyTarget(homeTarget(),homeR(),2.3,0.92); setState(); }
+  // préréglages de vue : écartement des étages + angle de caméra
+  const PRESETS={eclate:{gap:'eclate',th:2.3,ph:0.92,k:1},rue:{gap:'compact',th:2.3,ph:1.2,k:0.8},aerien:{gap:'compact',th:2.8,ph:0.6,k:1.1},dessus:{gap:'compact',th:0,ph:0.12,k:1.05}};
+  let preset='eclate';
+  function setPreset(p){ if(!PRESETS[p]) return; preset=p; const P=PRESETS[p]; if(gapMode!==P.gap) setGap(P.gap); floor=null; flyTarget(homeTarget(),homeR()*P.k,P.th,P.ph); setState(); }
+  function home(){ floor=null; const P=PRESETS[preset]; flyTarget(homeTarget(),homeR()*P.k,P.th,P.ph); setState(); }
   function flyTo(o){ if(!nodes.get(o.id)) return; const fl=(HORS[o.id]?HORS[o.id][2]:o.floor); if(floor&&floor!==fl){ floor=null; renderHint(); } flyTarget(worldPos(o),Math.min(sph.r,1400)); setState(); }
   function flyToConv(c){ const pts=c.members.map(m=>orgById.get(m.id)).filter(Boolean).map(o=>worldPos(o)); if(!pts.length) return; const ctr=new THREE.Vector3(); pts.forEach(p=>ctr.add(p)); ctr.multiplyScalar(1/pts.length); let far=0; pts.forEach(p=>far=Math.max(far,p.distanceTo(ctr))); floor=null; flyTarget(ctr,Math.max(1200,far*2.4)); }
   function setFloor(f){ floor=f; if(f){ const F=FLOORS.find(x=>x.id===f); flyTarget(new THREE.Vector3(0,floorY(F),0),1500,sph.theta,0.75); } else home(); setState(); }
   function dolly(k){ sph.r=Math.max(250,Math.min(9000,sph.r*k)); updateCamera(); }
   function show(){ init(); lieuOn=true; resize(); if(!shown){ shown=true; sph.r=homeR(); target.copy(homeTarget()); } setState(); updateCamera(); }
   function hide(){ lieuOn=false; hideTip(); }
-  return {show,hide,resize,render:request,setState,flyTo,flyToConv,home,setFloor,setGap,dolly,get floor(){return floor;},get gap(){return gapMode;}};
+  return {show,hide,resize,render:request,setState,flyTo,flyToConv,home,setFloor,setGap,setPreset,dolly,get floor(){return floor;},get gap(){return gapMode;},get preset(){return preset;}};
 })();
 
 // ---------- onboarding (repris d'eco-map) : les structures sont les particules, chaque écran les réorganise ----------
