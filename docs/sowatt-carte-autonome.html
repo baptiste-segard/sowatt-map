@@ -272,7 +272,9 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   body.detail-full aside.detail{top:0;max-height:none;padding-top:0;border-radius:0;border-top:0;box-shadow:none}
   body.detail-full main::after{content:"";position:absolute;inset:0;background:var(--bg);z-index:6}
   body.detail-full aside.detail::before{display:none}
-  body.detail-full #closeDetailSheet{display:none}
+  body.detail-full #closeDetailSheet{position:fixed;top:calc(var(--header-h,58px) + 8px);right:12px;z-index:9;width:36px;height:36px;box-shadow:0 2px 8px rgba(40,25,15,.12)}
+  body.detail-full aside.detail:has(.dhead) #closeDetailSheet{display:none}
+  body.detail-full aside.detail .home{padding-top:6px}
   body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
   body.detail-full aside.detail .dhead .close{display:flex;position:absolute;top:10px;right:12px;width:36px;height:36px;align-items:center;justify-content:center;background:var(--surface2);border-radius:50%;font-size:20px;padding:0;margin:0;float:none}
   body.detail-full aside.detail .dhead .dhead-row{padding-right:44px;margin-top:0}
@@ -932,6 +934,7 @@ function listMode(){ return narrowMQ.matches && obStep<0 && viewMode!=='lieu'; }
 function syncListMode(){ const on=listMode(); document.body.classList.toggle('listmode',on); const el=document.getElementById('dirlist'); if(!on){ el.hidden=true; el.innerHTML=''; dirSig=''; } }
 function dirTop(){ const el=document.getElementById('dirlist'); const hh=document.getElementById('hint')?.offsetHeight||44; el.style.setProperty('--dl-top',(hh+18)+'px'); }
 new ResizeObserver(()=>{ if(listMode()) dirTop(); }).observe(document.getElementById('hint'));
+new ResizeObserver(()=>{ document.documentElement.style.setProperty('--header-h',document.querySelector('header.top').offsetHeight+'px'); }).observe(document.querySelector('header.top'));
 function dirRow(o,why){ return `<li><button data-id="${o.id}" aria-current="${o===selected}">${logoImg(o)}<span class="nm">${esc(o.name)}</span><span class="why">${esc(why||'')}</span></button></li>`; }
 function dirGroup(key,html,label,count,extra){ const open=openGroups.has(key); return `<details class="dgrp" data-key="${esc(key)}"${open?' open':''}><summary>${extra}<span class="nm">${esc(label)}</span><span class="cnt">${count}</span><svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></summary>${open?html:''}</details>`; }
 function renderList(force){
@@ -1186,7 +1189,7 @@ document.getElementById('viewLieu').onclick=()=>setView('lieu');
 document.getElementById('viewConv').onclick=()=>setView('conv');
 document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; selected=null; selectedConv=null; if(viewMode!=='clusters') setView('clusters'); startOnboarding(0); };
 function setFiltersOpen(open){ const f=document.getElementById('filters'); if(open&&f.hidden){ f.hidden=false; FX.slideIn(f,'x','-100%'); } else if(!open&&!f.hidden){ FX.slideOut(f,'x','-100%',()=>{ f.hidden=true; }); } if(open&&narrowMQ.matches) sheetPref=null; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
-function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); document.body.classList.toggle('detail-full',!!(open&&(selected||selectedConv))); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } if(open&&d.hidden){ d.hidden=false; FX.slideIn(d,'y','100%'); } else if(!open&&!d.hidden){ FX.slideOut(d,'y','100%',()=>{ d.hidden=true; }); } document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
+function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); document.body.classList.toggle('detail-full',!!open); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } if(open&&d.hidden){ d.hidden=false; FX.slideIn(d,'y','100%'); } else if(!open&&!d.hidden){ FX.slideOut(d,'y','100%',()=>{ d.hidden=true; }); } document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
 let convDismissed=false, forYouOpen=false, sheetPref=null; // sheetPref : choix explicite Carte / Infos sur mobile (null = automatique)
 function syncDetailSheet(){ const auto=!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed)); setDetailOpen(sheetPref===null?auto:sheetPref); }
 function closeDetailSheet(){ sheetPref=null; forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }

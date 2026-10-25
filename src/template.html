@@ -261,7 +261,9 @@ ul.agenda .aorg{background:none;border:0;padding:0;color:var(--accent-ink);curso
   body.detail-full aside.detail{top:0;max-height:none;padding-top:0;border-radius:0;border-top:0;box-shadow:none}
   body.detail-full main::after{content:"";position:absolute;inset:0;background:var(--bg);z-index:6}
   body.detail-full aside.detail::before{display:none}
-  body.detail-full #closeDetailSheet{display:none}
+  body.detail-full #closeDetailSheet{position:fixed;top:calc(var(--header-h,58px) + 8px);right:12px;z-index:9;width:36px;height:36px;box-shadow:0 2px 8px rgba(40,25,15,.12)}
+  body.detail-full aside.detail:has(.dhead) #closeDetailSheet{display:none}
+  body.detail-full aside.detail .home{padding-top:6px}
   body.detail-full aside.detail .dhead{position:sticky;top:0;z-index:4;background:var(--surface);margin:0 -16px 10px;padding:14px 16px 10px;border-bottom:1px solid var(--line)}
   body.detail-full aside.detail .dhead .close{display:flex;position:absolute;top:10px;right:12px;width:36px;height:36px;align-items:center;justify-content:center;background:var(--surface2);border-radius:50%;font-size:20px;padding:0;margin:0;float:none}
   body.detail-full aside.detail .dhead .dhead-row{padding-right:44px;margin-top:0}
