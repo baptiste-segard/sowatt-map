@@ -338,9 +338,9 @@ function setView(mode){
   layout(); renderHint(); renderLegend(); applyState();
 }
 function resetView(){ focusGroup=null; if(selectedConv){ selectedConv=null; renderDetail(); } if(viewMode==='lieu') LIEU.home(); else (reduced?svg:svg.transition().duration(500)).call(zoom.transform,d3.zoomIdentity); renderHint(); applyState(); }
-function selectConv(c){ selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
+function selectConv(c){ if(c) sheetPref=null; selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
 function select(o){
-  selected=o; if(o) selectedConv=null; renderDetail();
+  if(o) sheetPref=null; selected=o; if(o) selectedConv=null; renderDetail();
   if(o){ if(viewMode==='lieu') LIEU.flyTo(o); else { const l=leafByOrg.get(o); if(l && l.parent && l.parent!==focusGroup){ focusGroup=l.parent; zoomTo(l.parent.x,l.parent.y,l.parent.r,650); renderHint(); } } }
   applyState(); if(!o&&viewMode!=='lieu') updateLabelVisibility(currentK);
 }
@@ -547,17 +547,21 @@ document.getElementById('viewClusters').onclick=()=>setView('clusters');
 document.getElementById('viewLieu').onclick=()=>setView('lieu');
 document.getElementById('viewConv').onclick=()=>setView('conv');
 document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); query=''; document.getElementById('search').value=''; selected=null; selectedConv=null; if(viewMode!=='clusters') setView('clusters'); startOnboarding(0); };
-function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
-function setDetailOpen(open){ const d=document.getElementById('detail'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(open){ d.scrollTop=0; setFiltersOpen(false); } }
-let convDismissed=false, forYouOpen=false;
-function syncDetailSheet(){ setDetailOpen(!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed))); }
-function closeDetailSheet(){ forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
+function setFiltersOpen(open){ const f=document.getElementById('filters'); f.hidden=!open; if(open&&narrowMQ.matches) sheetPref=null; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
+function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } d.hidden=!open; document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
+let convDismissed=false, forYouOpen=false, sheetPref=null; // sheetPref : choix explicite Carte / Infos sur mobile (null = automatique)
+function syncDetailSheet(){ const auto=!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed)); setDetailOpen(sheetPref===null?auto:sheetPref); }
+function closeDetailSheet(){ sheetPref=null; forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
+function toggleInfos(){ const d=document.getElementById('detail'); if(d.hidden){ sheetPref=true; renderDetail(); setDetailOpen(true); } else { sheetPref=false; setDetailOpen(false); } }
 document.getElementById('toggleFilters').onclick=()=>setFiltersOpen(document.getElementById('filters').hidden);
 document.getElementById('closeFilters').onclick=()=>setFiltersOpen(false);
 document.getElementById('burger').onclick=e=>{ e.stopPropagation(); setFiltersOpen(document.getElementById('filters').hidden); };
 document.addEventListener('pointerdown',e=>{ if(narrowMQ.matches) return; const f=document.getElementById('filters'); if(!f.hidden && !f.contains(e.target) && !e.target.closest('#burger')) setFiltersOpen(false); });
 function updateBurgerCount(){ const n=Object.values(active).reduce((a,s)=>a+s.size,0); const b=document.getElementById('burgerCount'); if(!b) return; b.hidden=!n; b.textContent=n; }
 document.getElementById('closeDetailSheet').onclick=closeDetailSheet;
+document.getElementById('toggleInfos').onclick=toggleInfos;
+// iOS Safari : pas de pinch-zoom de la page hors carte (la carte gère ses propres gestes)
+for(const ev of ['gesturestart','gesturechange']) document.addEventListener(ev,e=>{ if(!e.target.closest?.('svg.map, canvas.gl')) e.preventDefault(); },{passive:false});
 addEventListener('keydown',e=>{ if(e.key!=='Escape') return; if(!pop.hidden){ setPopover(false); return; } if(!narrowMQ.matches && !document.getElementById('filters').hidden){ setFiltersOpen(false); document.getElementById('burger').focus(); return; } if(narrowMQ.matches){ if(!document.getElementById('filters').hidden) setFiltersOpen(false); else if(!document.getElementById('detail').hidden && obStep<0) closeDetailSheet(); } else if(selected) select(null); else if(selectedConv) selectConv(null); });
 function placeViewSeg(){ const seg=document.getElementById('viewSeg'); if(narrowMQ.matches) document.getElementById('mobileBar').appendChild(seg); else document.querySelector('header.top').insertBefore(seg,document.querySelector('header.top .controls')); }
 function applyNarrow(){ placeViewSeg(); if(narrowMQ.matches){ setFiltersOpen(false); } else { setFiltersOpen(false); document.querySelector('header.top').classList.remove('search-open'); } syncDetailSheet(); renderPopover(); }
