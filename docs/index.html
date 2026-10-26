@@ -197,6 +197,9 @@ body.lieu svg.map{visibility:hidden}
 body.lieu .btn-lieu{background:var(--surface);color:var(--fg);border-color:var(--line-strong)}
 .lg{width:28px;height:28px;border-radius:7px;object-fit:contain;background:#fff;border:1px solid var(--line);flex:none;padding:2px;box-sizing:border-box}
 .lg-dot{width:28px;height:28px;border-radius:7px;border:0;padding:0;opacity:.85}
+.lg-ico{display:inline-flex;align-items:center;justify-content:center;font-size:17px;background:var(--surface2);border-color:transparent}
+.lg.big.lg-ico{font-size:34px}
+.lnk{background:none;border:0;padding:0;color:var(--accent-ink);font-weight:600;cursor:pointer;font-size:inherit}
 .lg.big{width:64px;height:64px;border-radius:14px;padding:5px}
 .lg.tip{width:22px;height:22px;border-radius:5px;padding:1px;vertical-align:middle;margin-right:6px}
 .rel li button .lg{width:24px;height:24px;border-radius:6px}
@@ -582,6 +585,32 @@ const DIMS = {
   conv:{label:'Convergences',key:'convTitles',multi:true},
   public:{label:'Publics',key:'publics',multi:true},
 };
+// ---------- espaces communs du lieu (source : livret d'accueil So Watt ! ; positions relevées sur les plans, certaines approximatives) ----------
+const COMMON=[
+  {id:'foyer',name:'Le Foyer',icon:'🎪',floor:'RDC',px:287,py:667,cap:'100 pers.',approx:false,desc:'Grand espace événementiel du rez-de-chaussée, privatisable (100 personnes max.) : événements, ateliers, rendez-vous des occupant·e·s. Sert aussi de réfectoire.'},
+  {id:'cuisine',name:'Cuisine commune',icon:'🍽️',floor:'RDC',px:220,py:727,cap:'',approx:true,desc:'Dans Le Foyer : 3 micro-ondes, 2 frigos, machine à café (gérée collectivement), bouilloire, vaisselle, 2 éviers. Le règlement intérieur y est affiché.'},
+  {id:'hall',name:'Hall d’accueil',icon:'🚪',floor:'RDC',px:300,py:887,cap:'',approx:false,desc:'Entrée du bâtiment A : tableau blanc des infos du mois, contacts et emplacements de toutes les structures. Les visiteurs y attendent qu’on vienne les chercher.'},
+  {id:'s012',name:'Salle 012',icon:'🪑',floor:'RDC',px:173,py:794,cap:'19 pers.',approx:false,desc:'Salle de réunion privatisable, gratuite pour les occupant·e·s (usage raisonnable), payante pour les externes. Réservation via le planning sur la porte, le drive commun ou Zoé (Intermède).'},
+  {id:'s011',name:'Salle 011',icon:'🪑',floor:'RDC',px:253,py:580,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'s010',name:'Salle 010',icon:'🪑',floor:'RDC',px:317,py:530,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'s009',name:'Salle 009',icon:'🪑',floor:'RDC',px:353,py:537,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'s008',name:'Salle 008',icon:'🪑',floor:'RDC',px:400,py:543,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'s013',name:'Salle 013',icon:'🪑',floor:'RDC',px:347,py:830,cap:'4 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'wc0',name:'Toilettes RDC',icon:'🚻',floor:'RDC',px:230,py:827,cap:'',approx:false,desc:'Sanitaires du rez-de-chaussée, à côté du hall d’accueil (dont un WC accessible).'},
+  {id:'terrasse',name:'Terrasse extérieure',icon:'☀️',floor:'RDC',px:373,py:954,cap:'',approx:true,desc:'Devant l’entrée côté parking du bâtiment A : pour déjeuner dehors. Espace fumeur à l’entrée principale.'},
+  {id:'velo-ext',name:'Parking vélos extérieur',icon:'🚲',floor:'RDC',px:400,py:987,cap:'',approx:true,desc:'Arceaux à proximité de l’entrée principale du bâtiment A.'},
+  {id:'poubelles',name:'Poubelles communes',icon:'🗑️',floor:'RDC',px:433,py:1080,cap:'',approx:true,desc:'À l’entrée du site : jaune = recyclables, noir = ordures ménagères. Encombrants → déchetterie (5 min en voiture).'},
+  {id:'s170',name:'Salle 170',icon:'🪑',floor:'R1',px:640,py:930,cap:'12 pers.',approx:false,desc:'Salle de réunion du 1er étage, privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'wc1',name:'Toilettes 1er',icon:'🚻',floor:'R1',px:340,py:533,cap:'',approx:false,desc:'Sanitaires du 1er étage, à la jonction des deux ailes.'},
+  {id:'wc1b',name:'Toilettes 1er (côté rue)',icon:'🚻',floor:'R1',px:577,py:1004,cap:'',approx:false,desc:'Sanitaires du 1er étage, aile sur rue, près de l’escalier.'},
+  {id:'wc2',name:'Toilettes 2e',icon:'🚻',floor:'R2',px:340,py:537,cap:'',approx:false,desc:'Sanitaires du 2e étage, à la jonction des deux ailes.'},
+  {id:'wc2b',name:'Toilettes 2e (côté rue)',icon:'🚻',floor:'R2',px:580,py:1020,cap:'',approx:false,desc:'Sanitaires du 2e étage, aile sur rue, près de l’escalier.'},
+  {id:'wc3',name:'Toilettes 3e',icon:'🚻',floor:'R3',px:347,py:527,cap:'',approx:false,desc:'Sanitaires du 3e étage, à la jonction des deux ailes.'},
+  {id:'velo-kademy',name:'Parking vélos couvert',icon:'🚲',floor:'B',px:864,py:14,cap:'',approx:true,desc:'Dans le bâtiment de La Kademy (bâtiment B), au bout de la cour. Impossible de garer une voiture autour de ce bâtiment.'},
+  {id:'carre',name:'Le Carré · restaurant',icon:'🍴',floor:'B',px:700,py:-120,cap:'',approx:true,desc:'Restaurant installé sur le parking : lundi–mercredi 9h–20h, jeudi–vendredi 9h–22h.'}
+];
+const commonById=new Map(COMMON.map(c=>[c.id,c]));
+const commonOnFloor=f=>COMMON.filter(c=>c.floor===f);
 const orgById=new Map(RAW.map(o=>[o.id,o]));
 const convById=new Map(CONV.map(c=>[c.id,c]));
 // convergences par structure (+ titres pour le filtre / le regroupement)
@@ -599,7 +628,7 @@ let groupBy = 'cat';
 let active = {cat:new Set(), theme:new Set(), floor:new Set(), conv:new Set(), public:new Set()};
 let viewMode = 'clusters'; // 'clusters' | 'lieu' | 'conv'
 let query = '';
-let selected = null, selectedConv=null, focusGroup = null;
+let selected = null, selectedConv=null, selectedSpace=null, focusGroup = null;
 let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ---------- FX : micro-animations GSAP (désactivées si prefers-reduced-motion ou si gsap absent) ----------
 const G=window.gsap; const fx=()=>!!G&&!reduced;
@@ -720,6 +749,8 @@ const SFIELDS=[
  ['convergence',2,o=>o.convs.map(x=>x.c.title+' '+(x.role||'')).join(' ')],
 ];
 RAW.forEach(o=>{ o._sx=SFIELDS.map(([lab,w,get])=>({lab,w,txt:get(o)||'',tk:[...new Set(toks(get(o)||''))]})); });
+COMMON.forEach(c=>{ c.floorLabel=FLOORLABEL[c.floor]||c.floor; c._sx=[['nom',10,c.name+' '+(c.id.startsWith('wc')?'wc toilettes sanitaires':c.id.startsWith('s0')||c.id==='s170'?'salle de réunion reunion':'')],['descriptif',3,c.desc],['bureau',4,c.floorLabel]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
+let spaceHits=[];
 CONV.forEach(c=>{ c._sx=[['',4,c.title],['',2,c.summary],['',2,c.potential],['',2,c.first_step||''],['',1,(c.members||[]).map(m=>m.role).join(' ')]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
 function tokScore(q,tk,fuzzy=true){ // meilleure correspondance d'un mot de la requête dans une liste de mots
   let best=0;
@@ -739,7 +770,7 @@ function scoreDoc(qts,sx){ let total=0, matched=0, why=null, whyScore=0;
   return {total,matched,why}; }
 let SEARCH=new Map(), searchLoose=false;
 function runSearch(){
-  SEARCH=new Map(); searchLoose=false; convHits=[];
+  SEARCH=new Map(); searchLoose=false; convHits=[]; spaceHits=[];
   if(!query) return;
   const qts=[...new Set(toks(rewriteNeeds(norm(query))))]; if(!qts.length) return;
   const nq=norm(query);
@@ -749,6 +780,7 @@ function runSearch(){
   if(!hits.length && qts.length>1){ searchLoose=true; const need=Math.ceil(qts.length/2); hits=all.filter(r=>r.matched>=need); }
   const top=Math.max(0,...hits.map(r=>r.base)); hits=hits.filter(r=>r.total>20||r.base>=Math.max(0.9,top*0.3));
   hits.forEach(r=>SEARCH.set(r.o.id,r));
+  spaceHits=COMMON.map(c=>({c,...score(c._sx,c.name)})).filter(r=>r.matched===qts.length).sort((a,b)=>b.total-a.total).map(r=>r.c);
   const ch=CONV.map(c=>({c,...score(c._sx,c.title)}));
   let cH=ch.filter(r=>r.matched===qts.length); if(!cH.length && qts.length>1){ const need=Math.ceil(qts.length/2); cH=ch.filter(r=>r.matched>=need); }
   const ctop=Math.max(0,...cH.map(r=>r.base)); convHits=cH.filter(r=>r.total>20||r.base>=Math.max(0.9,ctop*0.3)).sort((a,b)=>b.total-a.total).map(r=>r.c);
@@ -970,9 +1002,9 @@ function setView(mode){
   layout(); renderHint(); renderLegend(); applyState(); FX.fade(canvas);
 }
 function resetView(){ focusGroup=null; if(selectedConv){ selectedConv=null; renderDetail(); } if(viewMode==='lieu') LIEU.home(); else (reduced?svg:svg.transition().duration(500)).call(zoom.transform,d3.zoomIdentity); renderHint(); applyState(); }
-function selectConv(c){ if(c) sheetPref=null; selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
+function selectConv(c){ if(c){ sheetPref=null; selectedSpace=null; } selectedConv=c; selected=null; renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToConv(c); applyState(); }
 function select(o){
-  if(o) sheetPref=null; selected=o; if(o) selectedConv=null; renderDetail();
+  if(o){ sheetPref=null; selectedSpace=null; } selected=o; if(o) selectedConv=null; renderDetail();
   if(o){ if(viewMode==='lieu') LIEU.flyTo(o); else if(!listMode()) { const l=leafByOrg.get(o); if(l && l.parent && l.parent!==focusGroup){ focusGroup=l.parent; zoomTo(l.parent.x,l.parent.y,l.parent.r,650); renderHint(); } } }
   applyState(); if(!o&&viewMode!=='lieu') updateLabelVisibility(currentK);
 }
@@ -1053,7 +1085,9 @@ function convCard(c,compact){
 function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
 function orgHits(){ return query? RAW.filter(textMatch).sort((a,b)=>(SEARCH.get(b.id).total-SEARCH.get(a.id).total)||a.name.localeCompare(b.name,'fr')) : []; }
 function orgHitsHtml(){ if(!query) return ''; const h=orgHits(); return `<div class="ksec" style="margin:0 0 16px"><dt>Structures pour « ${esc(query)} » <span class="n">${h.length}${searchLoose?' · résultats approchants':''}</span></dt>${h.length?`<ul class="rel">${h.slice(0,12).map(o=>orgLi(o,whyLabel(o))).join('')}</ul>${h.length>12?`<p class="kempty">… et ${h.length-12} autres, en surbrillance sur la carte.</p>`:''}`:`<p class="kempty">Aucune structure ne correspond. Essayez un métier (céramique, photo, couture), un besoin (anniversaire, recrutement, logo) ou un étage (RDC, 2e).</p>`}</div>`; }
-function convHitsHtml(){ if(!query) return ''; if(!convHits.length) return orgHitsHtml(); return orgHitsHtml()+`<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
+function spaceLi(c,why){ return `<li><button data-space="${c.id}"><span class="lg lg-ico">${c.icon}</span><span class="nm">${esc(c.name)}</span><span class="why">${esc(why||c.floorLabel)}</span></button></li>`; }
+function spaceHitsHtml(){ if(!query||!spaceHits.length) return ''; return `<div class="ksec" style="margin:0 0 16px"><dt>Espaces communs pour « ${esc(query)} » <span class="n">${spaceHits.length}</span></dt><ul class="rel">${spaceHits.slice(0,8).map(c=>spaceLi(c)).join('')}</ul></div>`; }
+function convHitsHtml(){ if(!query) return ''; if(!convHits.length) return spaceHitsHtml()+orgHitsHtml(); return spaceHitsHtml()+orgHitsHtml()+`<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
 function profileBarHtml(compact){ if(!profile) return ''; const who=esc(profileWho()); const th=profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'; if(compact) return `<div class="profile-bar" style="padding:6px 10px;margin-right:28px"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${who} · ${th}</span><button id="editProfile">Modifier</button></div>`; return `<div class="profile-bar"><b>${who}</b><span style="color:var(--muted);font-size:12px">${th}${profile.wants?.length?' · '+profile.wants.length+' chantier'+(profile.wants.length>1?'s':''):''}</span><span style="margin-left:auto;display:flex;gap:10px"><button id="editProfile">Modifier</button><button id="showAll">Tout afficher</button></span></div>`; }
 function bindProfileBar(el){ el.querySelector('#editProfile')?.addEventListener('click',()=>startOnboarding(2)); el.querySelector('#showAll')?.addEventListener('click',()=>{ profile=null; saveProfile(); for(const d in active) active[d].clear(); applyState(); renderDetail(); renderPopover(); }); }
 function orgLi(x,why,title){ return `<li><button data-id="${x.id}"${title?` title="${esc(title)}"`:''}>${logoImg(x)}<span class="nm">${esc(x.name)}</span><span class="why">${esc(why)}</span></button></li>`; }
@@ -1068,7 +1102,9 @@ function conCard(o){ return `<button class="con" data-id="${o.id}"><span class="
 function cvRow(c){ return `<button class="cvrow" data-conv="${c.id}"><span class="cv-i">${FAMS[c.family].icon}</span><span class="cv-t">${esc(c.title)}</span><span class="cv-n">${c.members.length}</span></button>`; }
 function secHead(t,sub){ return `<header class="sec-h"><h3>${t}</h3>${sub?`<p>${sub}</p>`:''}</header>`; }
 function openConv(r){ if(!r) return; if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); }
+function spacesSection(){ const order=['RDC','R1','R2','R3','B']; const groups=order.map(f=>({f,list:commonOnFloor(f)})).filter(g=>g.list.length); return `<section class="sec">${secHead('Les espaces communs','Salles de réunion, cuisine, toilettes, vélos… où les trouver')}${groups.map(g=>`<div class="fam"><h4>${esc(FLOORLABEL[g.f]||g.f)}</h4><ul class="rel">${g.list.map(c=>spaceLi(c,c.cap||'')).join('')}</ul></div>`).join('')}</section>`; }
 function bindHome(el){
+  bindSpaces(el);
   el.querySelectorAll('.evc[data-id], .con[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
   el.querySelectorAll('.eco[data-conv], .cvrow[data-conv]').forEach(b=>b.onclick=()=>openConv(convById.get(b.dataset.conv)));
   el.querySelectorAll('[data-help]').forEach(b=>b.onclick=openHelp);
@@ -1083,6 +1119,7 @@ function homeHtml(){
     <section class="hero"><h2>Qui fait quoi au So Watt</h2><p>${RAW.length} structures sous un même toit, ${CONV.length} chantiers communs possibles${nEv?` et ${nEv} rendez-vous à venir`:''}. Touchez un point de la carte, ou explorez ci-dessous.</p>
       <div class="hero-a"><button class="btn-p" id="setupProfile">Personnaliser la carte</button><button class="btn-g" data-help>Comment lire la carte</button></div></section>
     ${agendaSection()}
+    ${spacesSection()}
     ${ecoSection(niches,'L’écosystème',`${niches.length} micro-systèmes : des petits chantiers précis entre voisin·e·s`)}
     <section class="sec">${secHead('Les connecteurs','Les structures qui relient le plus de mondes différents')}<div class="congrid">${acuList().map(conCard).join('')}</div></section>
     <section class="sec">${secHead('Grandes convergences',`${big.length} chantiers à l’échelle du lieu`)}${famBlocks}</section>
@@ -1098,9 +1135,17 @@ function helpHtml(){ return `<h2 id="helpT">Comment lire cette carte</h2><p>Chaq
 function openHelp(){ const d=document.getElementById('helpDlg'); document.getElementById('helpBody').innerHTML=helpHtml(); if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
 
 let detailKey='';
-function renderDetail(){ renderDetailInner(); const key=selectedConv?'c:'+selectedConv.id:selected?'o:'+selected.id:(profile&&forYouOpen)?'foryou':'home'; if(key!==detailKey){ detailKey=key; FX.content(document.getElementById('detailBody').firstElementChild?.classList.contains('home')?document.getElementById('detailBody').firstElementChild:document.getElementById('detailBody')); } }
+function renderDetail(){ renderDetailInner(); const key=selectedConv?'c:'+selectedConv.id:selected?'o:'+selected.id:selectedSpace?'s:'+selectedSpace.id:(profile&&forYouOpen)?'foryou':'home'; if(key!==detailKey){ detailKey=key; FX.content(document.getElementById('detailBody').firstElementChild?.classList.contains('home')?document.getElementById('detailBody').firstElementChild:document.getElementById('detailBody')); } }
 function renderDetailInner(){
   const el=document.getElementById('detailBody');
+  if(selectedSpace&&!selected&&!selectedConv){ const c=selectedSpace; const others=commonOnFloor(c.floor).filter(x=>x!==c); const here=RAW.filter(o=>o.floor===c.floor).length;
+    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="dhead-row"><span class="lg big lg-ico">${c.icon}</span><div style="min-width:0"><span class="pill">Espace commun</span>${c.cap?` <span class="pill">${esc(c.cap)}</span>`:''}<h2>${esc(c.name)}</h2></div></div></div>
+      <div style="font-size:12.5px;margin-top:6px"><span class="chip">📍 ${esc(c.floorLabel)}</span> <button class="btn btn-lieu" id="goLieuSpace">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${c.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
+      <p style="margin-top:12px">${esc(c.desc)}</p>
+      ${others.length?`<div class="ksec"><dt>Aussi à ce niveau</dt><ul class="rel">${others.map(x=>spaceLi(x,x.cap)).join('')}</ul></div>`:''}
+      ${here?`<p style="color:var(--muted);font-size:12.5px">${here} structure${here>1?'s':''} à ce niveau.</p>`:''}
+      <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : livret d'accueil So Watt ! (Intermède). Réservation des salles : planning sur la porte, drive commun ou zoe.ducrocq@intermede.co.</p>`;
+    el.querySelector('#closeDetail').onclick=()=>selectSpace(null); el.querySelector('#goLieuSpace').onclick=()=>{ const keep=c; if(viewMode!=='lieu') setView('lieu'); selectedSpace=keep; LIEU.flyToSpace(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; bindSpaces(el); syncDetailSheet(); return; }
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
     el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${FAMS[c.family].icon} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2><button class="btn btn-lieu" id="goLieuConv">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button></div><ul class="reslist">${convCard(c,false)}</ul>
     ${acus.length?`<div class="ksec"><dt>Connecteurs dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
@@ -1133,6 +1178,7 @@ function renderDetailInner(){
     <div class="dhead-row">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Connecteur n°${o.acu.rank} : relie le plus de mondes différents">◌ connecteur n°${o.acu.rank}</span>`:''}
     <h2>${esc(o.name)}</h2></div></div></div>
     ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
+    ${commonOnFloor(o.floor).length?`<div style="font-size:12px;color:var(--muted);margin-top:6px">À ce niveau : ${commonOnFloor(o.floor).map(c=>`<button class="lnk" data-space="${c.id}">${c.icon} ${esc(c.name)}</button>`).join(' · ')}</div>`:''}
     <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button> <button class="btn btn-lieu" id="goLieu">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
     ${o.offre?`<div class="offer"><dt>Ce qu'elle propose</dt><p>${esc(o.offre)}</p>${o.formats?`<p class="fmt">${esc(o.formats)}</p>`:''}${o.publicsDetail?`<p class="fmt">Pour : ${esc(o.publicsDetail)}</p>`:''}</div>`:''}
@@ -1149,7 +1195,7 @@ function renderDetailInner(){
     <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : ${esc(o.source)}.</p>`;
   el.querySelector('#closeDetail').onclick=()=>select(null); bindProfileBar(el);
   const goLieu=()=>{ const keep=selected; if(viewMode!=='lieu') setView('lieu'); selected=keep; LIEU.flyTo(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } };
-  el.querySelector('#goRoom').onclick=goLieu; el.querySelector('#goLieu').onclick=goLieu;
+  el.querySelector('#goRoom').onclick=goLieu; el.querySelector('#goLieu').onclick=goLieu; bindSpaces(el);
   el.querySelectorAll('.meta .chip').forEach(b=>b.onclick=()=>{ const d=b.dataset.dim,v=b.dataset.val; active[d].has(v)?active[d].delete(v):active[d].add(v); applyState(); renderDetail(); });
   el.querySelectorAll('.rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
   bindConvCards(el);
@@ -1185,8 +1231,10 @@ document.getElementById('brandHome').onclick=()=>{ profile=null; saveProfile(); 
 function setFiltersOpen(open){ const f=document.getElementById('filters'); if(open&&f.hidden){ f.hidden=false; FX.slideIn(f,'x','-100%'); } else if(!open&&!f.hidden){ FX.slideOut(f,'x','-100%',()=>{ f.hidden=true; }); } if(open&&narrowMQ.matches) sheetPref=null; document.getElementById('toggleFilters').setAttribute('aria-pressed',String(open)); document.getElementById('burger').setAttribute('aria-expanded',String(open)); if(open && narrowMQ.matches) setDetailOpen(false); }
 function setDetailOpen(open){ const d=document.getElementById('detail'); const ti=document.getElementById('toggleInfos'); document.body.classList.toggle('detail-full',!!open); if(!narrowMQ.matches){ d.hidden=false; document.body.classList.remove('detail-open'); return; } if(open&&d.hidden){ d.hidden=false; FX.slideIn(d,'y','100%'); } else if(!open&&!d.hidden){ FX.slideOut(d,'y','100%',()=>{ d.hidden=true; }); } document.body.classList.toggle('detail-open',open); if(ti){ ti.setAttribute('aria-pressed',String(open)); ti.setAttribute('aria-label',open?'Revenir à la carte':'Afficher les infos'); } if(open){ d.scrollTop=0; setFiltersOpen(false); } }
 let convDismissed=false, forYouOpen=false, sheetPref=null; // sheetPref : choix explicite Carte / Infos sur mobile (null = automatique)
-function syncDetailSheet(){ const auto=!!(selected||selectedConv||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length)&&!convDismissed)); setDetailOpen(sheetPref===null?auto:sheetPref); }
-function closeDetailSheet(){ sheetPref=null; forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else setDetailOpen(false); }
+function syncDetailSheet(){ const auto=!!(selected||selectedConv||selectedSpace||(profile&&forYouOpen)||(query&&(convHits.length||orgHits().length||spaceHits.length)&&!convDismissed)); setDetailOpen(sheetPref===null?auto:sheetPref); }
+function closeDetailSheet(){ sheetPref=null; forYouOpen=false; convDismissed=true; if(selected) select(null); else if(selectedConv) selectConv(null); else if(selectedSpace) selectSpace(null); else setDetailOpen(false); }
+function selectSpace(c){ selectedSpace=c; if(c){ selected=null; selectedConv=null; sheetPref=null; } renderDetail(); if(c&&viewMode==='lieu') LIEU.flyToSpace(c); applyState(); }
+function bindSpaces(el){ el.querySelectorAll('[data-space]').forEach(b=>b.onclick=()=>{ const c=commonById.get(b.dataset.space); if(c) selectSpace(c); }); }
 function toggleInfos(){ const d=document.getElementById('detail'); if(d.hidden){ sheetPref=true; renderDetail(); setDetailOpen(true); } else { sheetPref=false; setDetailOpen(false); } }
 document.getElementById('toggleFilters').onclick=()=>setFiltersOpen(document.getElementById('filters').hidden);
 document.getElementById('closeFilters').onclick=()=>setFiltersOpen(false);
@@ -1222,6 +1270,8 @@ const LIEU=(()=>{
   const homeTarget=()=>new THREE.Vector3(0,GAP*1.3,0);
   const floorY=F=>F.y*GAP;
   const local=o=>{ const h=HORS[o.id]; const f=h?h[2]:o.floor; const F=FLOORS.find(x=>x.id===f)||FLOORS[1]; const px=h?h[0]:(o.px??421), py=h?h[1]:(o.py??595); return {x:px-GEO.pcx, z:py-GEO.pcy, F, dy:(h&&h[3])||0}; };
+  const localSpace=c=>{ const F=FLOORS.find(x=>x.id===c.floor)||FLOORS[1]; return {x:c.px-GEO.pcx, z:c.py-GEO.pcy, F, dy:c.floor==='B'?ANNEX.h:0}; };
+  const worldSpace=c=>{ const p=localSpace(c); const v=new THREE.Vector3(p.x,floorY(p.F)+p.dy+10,p.z); building.localToWorld(v); return v; };
   const worldPos=o=>{ const p=local(o); const v=new THREE.Vector3(p.x,floorY(p.F)+p.dy+LIFT,p.z); building.localToWorld(v); return v; };
   function circleTex(o){
     const S=128, c=document.createElement('canvas'); c.width=c.height=S; const g=c.getContext('2d');
@@ -1274,6 +1324,7 @@ const LIEU=(()=>{
       const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
       const sp=new THREE.Sprite(mat); sp.position.set(p.x,p.dy+LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
     });
+    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(`${c.icon} ${c.name}`,{size:15,color:'#5F5850',bg:'rgba(255,255,255,.82)',weight:500}); const sp=screenSprite(t,0.42); sp.position.set(p.x,p.dy+6,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
     const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#EC644B'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
@@ -1333,12 +1384,13 @@ const LIEU=(()=>{
   function setPreset(p){ if(!PRESETS[p]) return; preset=p; const P=PRESETS[p]; if(gapMode!==P.gap) setGap(P.gap); floor=null; flyTarget(homeTarget(),homeR()*P.k,P.th,P.ph); setState(); }
   function home(){ floor=null; const P=PRESETS[preset]; flyTarget(homeTarget(),homeR()*P.k,P.th,P.ph); setState(); }
   function flyTo(o){ if(!nodes.get(o.id)) return; const fl=(HORS[o.id]?HORS[o.id][2]:o.floor); if(floor&&floor!==fl){ floor=null; renderHint(); } flyTarget(worldPos(o),Math.min(sph.r,1400)); setState(); }
+  function flyToSpace(c){ const fl=c.floor==='B'?'RDC':c.floor; if(floor&&floor!==fl){ floor=null; renderHint(); } flyTarget(worldSpace(c),Math.min(sph.r,1200)); setState(); }
   function flyToConv(c){ const pts=c.members.map(m=>orgById.get(m.id)).filter(Boolean).map(o=>worldPos(o)); if(!pts.length) return; const ctr=new THREE.Vector3(); pts.forEach(p=>ctr.add(p)); ctr.multiplyScalar(1/pts.length); let far=0; pts.forEach(p=>far=Math.max(far,p.distanceTo(ctr))); floor=null; flyTarget(ctr,Math.max(1200,far*2.4)); }
   function setFloor(f){ floor=f; if(f){ const F=FLOORS.find(x=>x.id===f); flyTarget(new THREE.Vector3(0,floorY(F),0),1500,sph.theta,0.75); } else home(); setState(); }
   function dolly(k){ sph.r=Math.max(250,Math.min(9000,sph.r*k)); updateCamera(); }
   function show(){ init(); lieuOn=true; resize(); if(!shown){ shown=true; sph.r=homeR(); target.copy(homeTarget()); } setState(); updateCamera(); }
   function hide(){ lieuOn=false; hideTip(); }
-  return {show,hide,resize,render:request,setState,flyTo,flyToConv,home,setFloor,setGap,setPreset,dolly,get floor(){return floor;},get gap(){return gapMode;},get preset(){return preset;}};
+  return {show,hide,resize,render:request,setState,flyTo,flyToConv,flyToSpace,home,setFloor,setGap,setPreset,dolly,get floor(){return floor;},get gap(){return gapMode;},get preset(){return preset;}};
 })();
 
 // ---------- onboarding (repris d'eco-map) : les structures sont les particules, chaque écran les réorganise ----------
