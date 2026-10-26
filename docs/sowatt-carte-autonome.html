@@ -1133,10 +1133,10 @@ function homeHtml(){
     <section class="hero"><h2>Qui fait quoi au So Watt</h2><p>${RAW.length} structures sous un même toit, ${CONV.length} chantiers communs possibles${nEv?` et ${nEv} rendez-vous à venir`:''}. Touchez un point de la carte, ou explorez ci-dessous.</p>
       <div class="hero-a"><button class="btn-p" id="setupProfile">Personnaliser la carte</button><button class="btn-g" data-help>Comment lire la carte</button></div></section>
     ${agendaSection()}
-    ${spacesSection()}
     ${ecoSection(niches,'L’écosystème',`${niches.length} micro-systèmes : des petits chantiers précis entre voisin·e·s`)}
     <section class="sec">${secHead('Les connecteurs','Les structures qui relient le plus de mondes différents')}<div class="congrid">${acuList().map(conCard).join('')}</div></section>
     <section class="sec">${secHead('Grandes convergences',`${big.length} chantiers à l’échelle du lieu`)}${famBlocks}</section>
+    ${spacesSection()}
     <p class="help-foot"><button data-help>Aide : comment lire cette carte</button></p></div>`;
 }
 function helpHtml(){ return `<h2 id="helpT">Comment lire cette carte</h2><p>Chaque point est une structure du So Watt, colorée selon sa famille de métier. ${RAW.length} structures, ${CONV.length} convergences.</p>
