@@ -823,8 +823,10 @@ function startOnboarding(step){
   setTimeout(()=>{ layout(); goStep(step); },30);
 }
 function goStep(i){
+  const same=obStep===Math.max(0,Math.min(STEPS.length-1,i)); const keepScroll=same?(onbCard.querySelector('.choices')?.scrollTop||0):0;
   obStep=Math.max(0,Math.min(STEPS.length-1,i)); const s=STEPS[obStep];
   onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">${TOUCH?'Balayez ← → pour avancer':'Molette ou flèches ← → pour avancer'}</div>`;
+  if(keepScroll){ const ch=onbCard.querySelector('.choices'); if(ch) ch.scrollTop=keepScroll; }
   s.enter(); if(obPrev!==obStep) FX.content(onbCard,10); obPrev=obStep;
   onbCard.querySelector('[data-next]')?.addEventListener('click',()=>goStep(obStep+1));
   onbCard.querySelector('[data-prev]')?.addEventListener('click',()=>goStep(obStep-1));

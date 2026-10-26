@@ -36,8 +36,9 @@ html = f"""<!doctype html>
 </html>
 """
 open(os.path.join(DOCS, 'index.html'), 'w', encoding='utf-8').write(html)
-chk = os.path.join(ROOT, '..', '.check.mjs'); open(chk, 'w').write(open('app.mjs').read())
-r = subprocess.run(['node', '--check', chk], capture_output=True, text=True); os.remove(chk)
+import tempfile
+chk = os.path.join(tempfile.gettempdir(), 'sowatt-check.mjs'); open(chk, 'w').write(open('app.mjs').read())
+r = subprocess.run(['node', '--check', chk], capture_output=True, text=True)
 print('syntaxe', 'ok' if r.returncode == 0 else r.stderr[:600])
 # version autonome
 def b64(p, mime): return f'data:{mime};base64,' + base64.b64encode(open(p, 'rb').read()).decode()

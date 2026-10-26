@@ -354,6 +354,8 @@ body.onboarding .canvas::before{opacity:1}
 .onb h2{font:600 clamp(24px,4vw,34px)/1.1 var(--font-display);margin:0 0 12px;letter-spacing:-.02em;text-wrap:balance}
 .onb p{color:var(--muted);margin:0 auto 18px;max-width:48ch;font-size:15px}
 .onb .choices{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:18px;max-height:34vh;overflow:auto;padding:2px}
+/* ombres de défilement : apparaissent seulement quand il reste du contenu au-dessus / en dessous */
+.onb .choices{--sbg:color-mix(in srgb,var(--surface) 88%,transparent);padding:8px 2px;background:linear-gradient(var(--sbg) 30%,transparent) center top,linear-gradient(transparent,var(--sbg) 70%) center bottom,radial-gradient(farthest-side at 50% 0,rgba(40,25,15,.22),transparent) center top,radial-gradient(farthest-side at 50% 100%,rgba(40,25,15,.22),transparent) center bottom;background-repeat:no-repeat;background-size:100% 28px,100% 28px,100% 12px,100% 12px;background-attachment:local,local,scroll,scroll}
 .onb .chip{font-size:13px;padding:6px 12px}
 .onb .choices-lab{width:100%;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 0 2px;text-align:left}
 .onb .choices-lab:first-child{margin-top:0}
@@ -378,7 +380,7 @@ body.onboarding .canvas::before{opacity:1}
 .pop-actions .btn{padding:5px 11px;font-size:12.5px}
 .popover details summary{cursor:pointer;font:500 10.5px var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .btn.has-profile{background:var(--accent-soft);border-color:var(--accent)}
-@media (max-width:980px){ body.onboarding svg.map{visibility:hidden} .onb{justify-content:flex-start;padding-block:12px;box-sizing:border-box;background:var(--bg)} .onb .card{max-width:none;height:100%;max-height:none;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none;border:0;padding:12px 6px 8px;display:flex;flex-direction:column;justify-content:center} }
+@media (max-width:980px){ body.onboarding svg.map{visibility:hidden} .onb{justify-content:flex-start;padding-block:12px;box-sizing:border-box;background:var(--bg)} .onb .card{max-width:none;height:100%;max-height:none;border-radius:0;background:transparent;backdrop-filter:none;box-shadow:none;border:0;padding:12px 6px 8px;display:flex;flex-direction:column;justify-content:center} .onb .choices{--sbg:var(--bg);max-height:40vh} }
 @media (max-height:500px){ .onb{padding-block:8px} .onb .card{padding:14px 18px 12px;border-radius:16px} .onb h2{font-size:22px;margin-bottom:6px} .onb p{font-size:13.5px;margin-bottom:10px} .onb .big{font-size:38px} .onb .choices{max-height:none;margin-bottom:10px} .onb .nav{position:sticky;bottom:-12px;padding:8px 0;background:color-mix(in srgb,var(--surface) 94%,transparent)} .onb .dots{margin-top:10px} .onb .kbd{display:none} }
 /* ---- tactile : cibles d'au moins ~36-44 px ---- */
 @media (pointer:coarse){
@@ -1402,8 +1404,10 @@ function startOnboarding(step){
   setTimeout(()=>{ layout(); goStep(step); },30);
 }
 function goStep(i){
+  const same=obStep===Math.max(0,Math.min(STEPS.length-1,i)); const keepScroll=same?(onbCard.querySelector('.choices')?.scrollTop||0):0;
   obStep=Math.max(0,Math.min(STEPS.length-1,i)); const s=STEPS[obStep];
   onbCard.innerHTML=s.render()+`<div class="dots">${STEPS.map((_,k)=>`<i class="${k===obStep?'on':''}"></i>`).join('')}</div><div class="kbd">${TOUCH?'Balayez ← → pour avancer':'Molette ou flèches ← → pour avancer'}</div>`;
+  if(keepScroll){ const ch=onbCard.querySelector('.choices'); if(ch) ch.scrollTop=keepScroll; }
   s.enter(); if(obPrev!==obStep) FX.content(onbCard,10); obPrev=obStep;
   onbCard.querySelector('[data-next]')?.addEventListener('click',()=>goStep(obStep+1));
   onbCard.querySelector('[data-prev]')?.addEventListener('click',()=>goStep(obStep-1));
