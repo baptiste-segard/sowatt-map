@@ -497,6 +497,80 @@ aside.detail{font-size:14.5px;line-height:1.5}
 .team .av img{width:100%;height:100%;object-fit:cover}
 .team figcaption{font-size:11px;line-height:1.25;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .team .team-more{font-size:12px;color:var(--muted);align-self:center;padding:0 4px}
+.book-dlg{border:0;border-radius:20px;padding:0;max-width:920px;width:calc(100% - 32px);max-height:calc(100dvh - 48px);box-shadow:0 30px 80px rgba(40,25,15,.25);color:var(--fg);background:var(--surface)}
+.book-dlg::backdrop{background:rgba(31,27,23,.35)}
+.book-dlg .bk-x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--surface2);font-size:20px;cursor:pointer;z-index:2}
+#bookBody{padding:26px 28px 28px;overflow:auto;max-height:calc(100dvh - 48px)}
+.bk-head h2{font:650 24px/1.2 var(--font-display);margin:0 40px 4px 0;letter-spacing:-.02em}
+.bk-head p{margin:0;color:var(--muted);font-size:13px}
+.bk-head .bk-load{color:var(--accent-ink);margin-top:6px}
+.bk-rooms{display:flex;flex-wrap:wrap;gap:8px;padding:16px 0 4px}
+.bk-room{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 13px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer;text-align:left}
+.bk-room .bk-rn{font:600 14px var(--font-display)}
+.bk-room .bk-rc{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.bk-room[aria-checked="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.bk-main{margin-top:14px}
+.bk-cols{display:grid;grid-template-columns:minmax(260px,320px) 1fr;gap:28px;align-items:start}
+.bk-calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.bk-calh b{font:600 15px var(--font-display);text-transform:capitalize}
+.bk-nav{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:18px;cursor:pointer}
+.bk-nav:disabled{opacity:.3;cursor:default}
+.bk-dow,.bk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.bk-dow span{font-size:11px;color:var(--muted);padding:2px 0}
+.bk-d{aspect-ratio:1;border-radius:50%;border:0;background:transparent;font:500 14px var(--font-ui);cursor:pointer;position:relative;color:var(--fg)}
+.bk-d:not(:disabled):not([aria-pressed="true"]):hover{box-shadow:inset 0 0 0 2px var(--accent)}
+.bk-d:disabled{color:var(--dim);cursor:default}
+.bk-d.free{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.bk-d.unknown{background:var(--surface2);font-weight:600}
+.bk-d.part{background:color-mix(in srgb,var(--accent-soft) 55%,#fff);color:var(--accent-ink)}
+.bk-d.part::after{content:"";position:absolute;bottom:5px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
+.bk-d.full{color:var(--dim);text-decoration:line-through}
+.bk-d[aria-pressed="true"]{background:var(--accent);color:#fff}
+.bk-leg{font-size:11.5px;color:var(--muted);margin:10px 0 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bk-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:-6px}
+.bk-leg i.free{background:var(--accent-soft)} .bk-leg i.part{background:color-mix(in srgb,var(--accent-soft) 55%,#fff);box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px var(--accent)} .bk-leg i.full{background:var(--line)}
+.bk-dayt{font:600 16px var(--font-display);margin:0 0 10px;text-transform:capitalize}
+.bk-slots{display:flex;flex-direction:column;gap:8px}
+.bk-slot{display:grid;grid-template-columns:1fr auto;grid-template-areas:"l s" "h s" "b b";gap:2px 10px;text-align:left;padding:11px 14px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);cursor:pointer}
+.bk-slot .bk-sl{grid-area:l;font:600 15px var(--font-display)}
+.bk-slot .bk-sh{grid-area:h;font-size:12.5px;color:var(--muted)}
+.bk-slot .bk-ss{grid-area:s;align-self:center;font-size:12px;color:var(--accent-ink)}
+.bk-slot .bk-bar{grid-area:b;position:relative;height:6px;border-radius:3px;background:var(--accent-soft);margin-top:6px;overflow:hidden}
+.bk-slot .bk-bar i{position:absolute;top:0;bottom:0;background:var(--dim)}
+.bk-slot.unknown .bk-bar{display:none}
+.bk-slot.full{opacity:.55;cursor:default}
+.bk-slot.full .bk-ss{color:var(--muted)}
+.bk-slot[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.bk-hours{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.bk-hours label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.bk-hours select{font:500 16px var(--font-ui);padding:8px 10px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg)}
+.bk-hours .btn-p{margin-left:auto}
+.bk-hint{color:var(--muted);font-size:14px;margin:8px 0}
+.bk-note{color:var(--muted);font-size:12.5px;margin:6px 0}
+.bk-err{color:#B4432F;background:#FCE9E5;border-radius:10px;padding:8px 12px;font-size:13px;margin:8px 0}
+.bk-back{background:none;border:0;color:var(--accent-ink);cursor:pointer;padding:0;font-size:13px}
+.bk-recap{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px}
+.bk-form{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;max-width:620px}
+.bk-form label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.bk-form label .opt{color:var(--dim)}
+.bk-form input:not([type=checkbox]){font:16px var(--font-ui);padding:9px 11px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg)}
+.bk-form .bk-check{flex-direction:row;align-items:center;gap:8px;grid-column:1/-1;font-size:13.5px;color:var(--fg)}
+.bk-form .bk-check input{width:18px;height:18px;accent-color:var(--accent)}
+.bk-form .btn-p,.bk-form .bk-err,.bk-form .bk-note{grid-column:1/-1;justify-self:start}
+.bk-done{text-align:center;padding:24px 0 8px}
+.bk-done .bk-ok{width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;font-size:28px;display:grid;place-items:center;margin:0 auto 10px}
+.bk-done h3{font:650 22px var(--font-display);margin:0 0 6px}
+.btn-book{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;border:0;border-radius:999px;font-weight:600;font-size:12.5px;padding:7px 13px;cursor:pointer}
+.btn-book:hover{background:#D9553D}
+@media (max-width:979px){
+  .book-dlg{width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border-radius:0}
+  #bookBody{max-height:100dvh;padding:20px 16px 32px}
+  .bk-rooms{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:16px 16px 4px;scrollbar-width:none}
+  .book-dlg .bk-x{position:fixed;background:var(--surface);box-shadow:0 2px 10px rgba(31,27,23,.18)}
+  .bk-cols{grid-template-columns:1fr;gap:18px}
+  .bk-form{grid-template-columns:1fr}
+  .bk-hours .btn-p{margin-left:0;width:100%;justify-content:center}
+}
 .famico{display:inline-block;vertical-align:-0.15em;flex:none}
 .cv-i{display:inline-flex;align-items:center;justify-content:center;font-size:16px}
 .fam h4 .famico,.dsec .ico .famico{color:var(--accent)}
@@ -571,6 +645,7 @@ aside.detail{font-size:14.5px;line-height:1.5}
   <aside class="detail" id="detail"><button class="sheet-close" id="closeDetailSheet" aria-label="Fermer" >×</button><div id="detailBody"></div></aside>
 </main>
 
+<dialog id="bookDlg" class="book-dlg" aria-labelledby="bookT"><button class="bk-x" id="bookClose" aria-label="Fermer">×</button><div id="bookBody"></div></dialog>
 <dialog id="helpDlg" class="help-dlg" aria-labelledby="helpT"><button class="help-x" id="helpClose" aria-label="Fermer l’aide">×</button><div id="helpBody"></div></dialog>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
 <script src="vendor/d3.min.js"></script>
@@ -601,7 +676,7 @@ const COMMON=[
   {id:'foyer',name:'Le Foyer',icon:'🎪',floor:'RDC',px:287,py:667,cap:'100 pers.',approx:false,desc:'Grand espace événementiel du rez-de-chaussée, privatisable (100 personnes max.) : événements, ateliers, rendez-vous des occupant·e·s. Sert aussi de réfectoire.'},
   {id:'cuisine',name:'Cuisine commune',icon:'🍽️',floor:'RDC',px:220,py:727,cap:'',approx:true,desc:'Dans Le Foyer : 3 micro-ondes, 2 frigos, machine à café (gérée collectivement), bouilloire, vaisselle, 2 éviers. Le règlement intérieur y est affiché.'},
   {id:'hall',name:'Hall d’accueil',icon:'🚪',floor:'RDC',px:300,py:887,cap:'',approx:false,desc:'Entrée du bâtiment A : tableau blanc des infos du mois, contacts et emplacements de toutes les structures. Les visiteurs y attendent qu’on vienne les chercher.'},
-  {id:'s012',name:'Salle 012',icon:'🪑',floor:'RDC',px:173,py:794,cap:'19 pers.',approx:false,desc:'Salle de réunion privatisable, gratuite pour les occupant·e·s (usage raisonnable), payante pour les externes. Réservation via le planning sur la porte, le drive commun ou Zoé (Intermède).'},
+  {id:'s012',name:'Salle 012',icon:'🪑',floor:'RDC',px:173,py:794,cap:'20 pers.',approx:false,desc:'Salle de réunion privatisable, gratuite pour les occupant·e·s (usage raisonnable), payante pour les externes. Réservation via le planning sur la porte, le drive commun ou Zoé (Intermède).'},
   {id:'s011',name:'Salle 011',icon:'🪑',floor:'RDC',px:253,py:580,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
   {id:'s010',name:'Salle 010',icon:'🪑',floor:'RDC',px:317,py:530,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
   {id:'s009',name:'Salle 009',icon:'🪑',floor:'RDC',px:353,py:537,cap:'6 pers.',approx:false,desc:'Petite salle de réunion privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
@@ -611,7 +686,7 @@ const COMMON=[
   {id:'terrasse',name:'Terrasse extérieure',icon:'☀️',floor:'RDC',px:373,py:954,cap:'',approx:true,desc:'Devant l’entrée côté parking du bâtiment A : pour déjeuner dehors. Espace fumeur à l’entrée principale.'},
   {id:'velo-ext',name:'Parking vélos extérieur',icon:'🚲',floor:'RDC',px:400,py:987,cap:'',approx:true,desc:'Arceaux à proximité de l’entrée principale du bâtiment A.'},
   {id:'poubelles',name:'Poubelles communes',icon:'🗑️',floor:'RDC',px:433,py:1080,cap:'',approx:true,desc:'À l’entrée du site : jaune = recyclables, noir = ordures ménagères. Encombrants → déchetterie (5 min en voiture).'},
-  {id:'s170',name:'Salle 170',icon:'🪑',floor:'R1',px:640,py:930,cap:'12 pers.',approx:false,desc:'Salle de réunion du 1er étage, privatisable (réservation : planning sur la porte, drive commun ou Zoé).'},
+  {id:'s171',name:'Salle 171',icon:'🪑',floor:'R1',px:640,py:930,cap:'12 pers.',approx:false,desc:'Salle de réunion du 1er étage, réservée aux occupant·e·s. Réservation en ligne depuis la carte ou via le planning d’Intermède.'},
   {id:'wc1',name:'Toilettes 1er',icon:'🚻',floor:'R1',px:340,py:533,cap:'',approx:false,desc:'Sanitaires du 1er étage, à la jonction des deux ailes.'},
   {id:'wc1b',name:'Toilettes 1er (côté rue)',icon:'🚻',floor:'R1',px:577,py:1004,cap:'',approx:false,desc:'Sanitaires du 1er étage, aile sur rue, près de l’escalier.'},
   {id:'wc2',name:'Toilettes 2e',icon:'🚻',floor:'R2',px:340,py:537,cap:'',approx:false,desc:'Sanitaires du 2e étage, à la jonction des deux ailes.'},
@@ -643,6 +718,112 @@ function teamHtml(o){ const {names,team}=parsePeople(o.people); if(!names.length
   return `<div class="team">${names.map(n=>{ const ph=PORTRAITS[slugify(n)]; return `<figure class="face" title="${esc(n)}"><span class="av" style="--c:${catColor(o.cat)}">${ph?`<img src="${ph}" alt="" loading="lazy">`:esc(initials(n))}</span><figcaption>${esc(n)}</figcaption></figure>`; }).join('')}${team?`<span class="team-more">+ l'équipe</span>`:''}</div>`; }
 const commonById=new Map(COMMON.map(c=>[c.id,c]));
 const commonOnFloor=f=>COMMON.filter(c=>c.floor===f);
+// ---------- réservation des salles (planning Google Sheet d'Intermède) ----------
+// BOOK_API : URL de l'application Web Apps Script déployée par Intermède (voir booking/LISEZMOI.md).
+// Vide → la page affiche les créneaux sans disponibilité et la demande part par mail à Zoé.
+const BOOK_API='';
+const BOOK_MAIL='zoe.ducrocq@intermede.co';
+const ROOMS=[
+  {key:'foyer',space:'foyer',name:'Le Foyer',floor:'RDC',cap:'200 debout · 50 assis',note:'Événements de plus de 50 personnes : prévenir Zoé.'},
+  {key:'s012',space:'s012',name:'Salle 012',floor:'RDC',cap:'20 places'},
+  {key:'s011',space:'s011',name:'Salle 011',floor:'RDC',cap:'6 places'},
+  {key:'s010',space:'s010',name:'Salle 010',floor:'RDC',cap:'6 places'},
+  {key:'s009',space:'s009',name:'Salle 009',floor:'RDC',cap:'6 places'},
+  {key:'s008',space:'s008',name:'Salle 008',floor:'RDC',cap:'6 places'},
+  {key:'s013',space:'s013',name:'Salle 013',floor:'RDC',cap:'4 places'},
+  {key:'s171',space:'s171',name:'Salle 171',floor:'1er étage',cap:'12 places',occ:true},
+  {key:'video',space:null,name:'Salle vidéo',floor:'',cap:'10 places',occ:true},
+];
+const roomBySpace=new Map(ROOMS.filter(r=>r.space).map(r=>[r.space,r]));
+const SLOTDEF=[{id:'matin',label:'Matin',from:8,to:12},{id:'aprem',label:'Après-midi',from:13,to:18},{id:'soir',label:'Soir',from:18,to:22}];
+const BOOK=(()=>{
+  const dlg=document.getElementById('bookDlg'), body=document.getElementById('bookBody');
+  const MONTHS=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const DOW=['lun.','mar.','mer.','jeu.','ven.','sam.','dim.'];
+  let st={room:null,month:null,date:null,slot:null,from:null,to:null,step:'pick',sending:false,msg:null};
+  let busy=null, months=null, loading=false, loadErr=null;
+  const pad=n=>String(n).padStart(2,'0');
+  const isoD=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const today=()=>{ const d=new Date(); d.setHours(0,0,0,0); return d; };
+  const hh=x=>{ const h=Math.floor(x), m=Math.round((x-h)*60); return h+'h'+(m?pad(m):''); };
+  const fmtDay=s=>{ const d=new Date(s+'T12:00'); return `${['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'][d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`; };
+  async function load(){ if(!BOOK_API||busy||loading) return; loading=true; loadErr=null; render();
+    try{ const from=isoD(today()), t=new Date(); t.setMonth(t.getMonth()+6); const r=await fetch(`${BOOK_API}?action=dispo&from=${from}&to=${isoD(t)}`); const j=await r.json(); if(!j.ok) throw new Error(j.error||'erreur'); busy=new Map(); j.busy.forEach(b=>{ const k=`${b.room}|${b.date}|${b.slot}`; busy.set(k,b); }); months=j.months; }
+    catch(e){ loadErr='Le planning n’a pas pu être chargé. Vous pouvez quand même envoyer une demande par mail.'; }
+    loading=false; render(); }
+  // état d'un créneau : 'free' | 'part' (plages prises) | 'full' | 'unknown'
+  function slotState(room,date,slot){ if(!busy) return {s:'unknown',ranges:[]}; const b=busy.get(`${room}|${date}|${slot}`); if(!b) return {s:'free',ranges:[]}; if(b.whole) return {s:'full',ranges:[]}; const def=SLOTDEF.find(x=>x.id===slot); const free=freeSteps(def,b.ranges); return {s:free.length?'part':'full',ranges:b.ranges}; }
+  function freeSteps(def,rs){ const out=[]; for(let t=def.from;t<def.to;t+=.5){ if(!rs.some(r=>t<r[1]&&t+.5>r[0])) out.push(t); } return out; }
+  function dayState(room,date){ if(!busy) return 'unknown'; const ss=SLOTDEF.map(s=>slotState(room,date,s.id).s); if(ss.every(s=>s==='full')) return 'full'; if(ss.some(s=>s!=='free')) return 'part'; return 'free'; }
+  function open(roomKey){ st={room:ROOMS.find(r=>r.key===roomKey)||null,month:null,date:null,slot:null,from:null,to:null,step:'pick',sending:false,msg:null}; const t=today(); st.month=new Date(t.getFullYear(),t.getMonth(),1); render(); if(!dlg.open) dlg.showModal(); FX.content?.(body); load(); }
+  function close(){ dlg.close(); }
+  function roomsHtml(){ return `<div class="bk-rooms" role="radiogroup" aria-label="Salle">${ROOMS.map(r=>`<button class="bk-room" role="radio" aria-checked="${st.room===r}" data-room="${r.key}"><span class="bk-rn">${esc(r.name)}</span><span class="bk-rc">${esc(r.cap)}${r.floor?' · '+esc(r.floor):''}${r.occ?' · occupant·e·s':''}</span></button>`).join('')}</div>`; }
+  function calHtml(){ const m=st.month, y=m.getFullYear(), mo=m.getMonth(); const first=new Date(y,mo,1), lead=(first.getDay()+6)%7, n=new Date(y,mo+1,0).getDate(); const t=today(); const max=new Date(t); max.setMonth(max.getMonth()+6);
+    const cells=[]; for(let i=0;i<lead;i++) cells.push('<span></span>');
+    for(let d=1;d<=n;d++){ const dt=new Date(y,mo,d), s=isoD(dt), past=dt<t||dt>max; const ds=st.room&&!past?dayState(st.room.key,s):'';
+      cells.push(`<button class="bk-d ${ds}" data-date="${s}" ${past?'disabled':''} aria-pressed="${st.date===s}" aria-label="${fmtDay(s)}${ds==='full'?' (complet)':''}">${d}</button>`); }
+    const prevOk=new Date(y,mo,1)>new Date(t.getFullYear(),t.getMonth(),1), nextOk=new Date(y,mo+1,1)<=max;
+    return `<div class="bk-cal"><div class="bk-calh"><button class="bk-nav" data-mon="-1" ${prevOk?'':'disabled'} aria-label="Mois précédent">‹</button><b>${MONTHS[mo]} ${y}</b><button class="bk-nav" data-mon="1" ${nextOk?'':'disabled'} aria-label="Mois suivant">›</button></div><div class="bk-dow">${DOW.map(x=>`<span>${x}</span>`).join('')}</div><div class="bk-grid">${cells.join('')}</div>${busy?`<p class="bk-leg"><i class="free"></i>libre <i class="part"></i>en partie pris <i class="full"></i>complet</p>`:''}</div>`; }
+  function barHtml(def,ranges){ const span=def.to-def.from; return `<span class="bk-bar">${ranges.map(r=>{ const a=Math.max(r[0],def.from), b=Math.min(r[1],def.to); return b>a?`<i style="left:${(a-def.from)/span*100}%;width:${(b-a)/span*100}%"></i>`:''; }).join('')}</span>`; }
+  function slotsHtml(){ if(!st.date) return `<p class="bk-hint">Choisissez un jour dans le calendrier.</p>`; const r=st.room;
+    return `<h4 class="bk-dayt">${esc(fmtDay(st.date))}</h4><div class="bk-slots">${SLOTDEF.map(def=>{ const ss=slotState(r.key,st.date,def.id); const lab=ss.s==='full'?'Complet':ss.s==='part'?'En partie pris':ss.s==='free'?'Libre':''; return `<button class="bk-slot ${ss.s}" data-slot="${def.id}" ${ss.s==='full'?'disabled':''} aria-pressed="${st.slot===def.id}"><span class="bk-sl">${def.label}</span><span class="bk-sh">${hh(def.from)} – ${hh(def.to)}</span>${barHtml(def,ss.ranges)}${lab?`<span class="bk-ss">${lab}</span>`:''}</button>`; }).join('')}</div>${st.slot?hoursHtml():''}`; }
+  function hoursHtml(){ const def=SLOTDEF.find(x=>x.id===st.slot); const ss=slotState(st.room.key,st.date,def.id); const freeS=freeSteps(def,ss.ranges); const opt=(v,sel,dis)=>`<option value="${v}" ${sel?'selected':''} ${dis?'disabled':''}>${hh(v)}</option>`;
+    if(st.from==null||!freeS.includes(st.from)){ st.from=freeS[0]; st.to=null; }
+    let maxTo=st.from; while(maxTo<def.to && freeS.includes(maxTo)) maxTo+=.5; if(st.to==null||st.to>maxTo||st.to<=st.from) st.to=maxTo;
+    const froms=[]; for(let t=def.from;t<def.to;t+=.5) froms.push(opt(t,t===st.from,!freeS.includes(t)));
+    const tos=[]; for(let t=st.from+.5;t<=maxTo;t+=.5) tos.push(opt(t,t===st.to,false));
+    return `<div class="bk-hours"><label>De <select id="bkFrom">${froms.join('')}</select></label><label>à <select id="bkTo">${tos.join('')}</select></label><button class="btn-p" id="bkNext">Continuer <span aria-hidden="true">→</span></button></div>`; }
+  function formHtml(){ const r=st.room; const names=RAW.map(o=>o.name).sort((a,b)=>a.localeCompare(b,'fr'));
+    return `<button class="bk-back" id="bkBack">← Modifier le créneau</button>
+      <div class="bk-recap"><b>${esc(r.name)}</b> · ${esc(fmtDay(st.date))} · ${hh(st.from)} – ${hh(st.to)}</div>
+      <form class="bk-form" id="bkForm" novalidate>
+        <label>Votre structure<input name="structure" list="bkOrgs" required autocomplete="organization" placeholder="ex. Studio CAD"></label><datalist id="bkOrgs">${names.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+        <label>Votre nom<input name="who" required autocomplete="name"></label>
+        <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="pour recevoir la confirmation"></label>
+        <label><span>Objet <span class="opt">(facultatif)</span></span><input name="object" placeholder="réunion, atelier, formation…"></label>
+        <label class="bk-check"><input type="checkbox" name="external"> Accueille du public extérieur au So Watt !</label>
+        ${BOOK_API?`<label>Code occupant·e<input name="code" required autocomplete="off" placeholder="communiqué par Intermède"></label>`:''}
+        ${st.msg?`<p class="bk-err" role="alert">${esc(st.msg)}</p>`:''}
+        <button class="btn-p" type="submit" ${st.sending?'disabled':''}>${BOOK_API?(st.sending?'Réservation…':'Réserver'):'Envoyer la demande à Zoé'}</button>
+        ${BOOK_API?'':`<p class="bk-note">Le planning n’est pas encore relié à cette page : la demande s’ouvre dans votre messagerie, adressée à Zoé (Intermède), qui la reporte dans le tableur.</p>`}
+      </form>`; }
+  function doneHtml(){ return `<div class="bk-done"><div class="bk-ok" aria-hidden="true">✓</div><h3>C’est réservé</h3><p><b>${esc(st.room.name)}</b><br>${esc(fmtDay(st.date))} · ${hh(st.from)} – ${hh(st.to)}</p><p class="bk-note">La réservation est inscrite dans le planning d’Intermède. Pour l’annuler, prévenez Zoé (${BOOK_MAIL}).</p><button class="btn-g" id="bkAgain">Réserver un autre créneau</button></div>`; }
+  function render(){
+    const r=st.room;
+    let main;
+    if(st.step==='done') main=doneHtml();
+    else if(st.step==='form') main=formHtml();
+    else main=`${r?`${r.note?`<p class="bk-note">${esc(r.note)}</p>`:''}${r.occ?`<p class="bk-note">Réservée aux occupant·e·s.</p>`:''}<div class="bk-cols">${calHtml()}<div class="bk-right">${slotsHtml()}</div></div>`:`<p class="bk-hint">Choisissez une salle.</p>`}`;
+    body.innerHTML=`<header class="bk-head"><h2 id="bookT">Réserver une salle</h2><p>Gratuit pour les occupant·e·s · usage professionnel uniquement · créneaux du planning d’Intermède</p>${BOOK_API&&loading?'<p class="bk-load">Chargement du planning…</p>':''}${loadErr?`<p class="bk-err">${esc(loadErr)}</p>`:''}</header>
+      ${st.step==='pick'?roomsHtml():''}<div class="bk-main">${main}</div>`;
+    bind(); const sel=body.querySelector('.bk-room[aria-checked="true"]'); if(sel){ const rr=sel.parentElement; rr.scrollLeft+=sel.getBoundingClientRect().left-rr.getBoundingClientRect().left-rr.clientWidth/2+sel.clientWidth/2; } }
+  function bind(){
+    body.querySelectorAll('[data-room]').forEach(b=>b.onclick=()=>{ st.room=ROOMS.find(r=>r.key===b.dataset.room); st.slot=null; st.from=st.to=null; render(); });
+    body.querySelectorAll('[data-mon]').forEach(b=>b.onclick=()=>{ st.month=new Date(st.month.getFullYear(),st.month.getMonth()+(+b.dataset.mon),1); render(); });
+    body.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{ st.date=b.dataset.date; st.slot=null; st.from=st.to=null; render(); body.querySelector('.bk-right')?.scrollIntoView({block:'nearest',behavior:'smooth'}); });
+    body.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{ st.slot=b.dataset.slot; st.from=st.to=null; render(); body.querySelector('.bk-hours')?.scrollIntoView({block:'nearest',behavior:'smooth'}); });
+    const f=body.querySelector('#bkFrom'), t=body.querySelector('#bkTo');
+    if(f) f.onchange=()=>{ st.from=+f.value; st.to=null; render(); };
+    if(t) t.onchange=()=>{ st.to=+t.value; };
+    const nx=body.querySelector('#bkNext'); if(nx) nx.onclick=()=>{ st.step='form'; st.msg=null; render(); body.querySelector('input[name=structure]')?.focus(); };
+    const bk=body.querySelector('#bkBack'); if(bk) bk.onclick=()=>{ st.step='pick'; render(); };
+    const ag=body.querySelector('#bkAgain'); if(ag) ag.onclick=()=>{ st.step='pick'; st.slot=null; st.from=st.to=null; render(); };
+    const fm=body.querySelector('#bkForm'); if(fm) fm.onsubmit=async e=>{ e.preventDefault(); const d=Object.fromEntries(new FormData(fm)); d.external=!!d.external;
+      if(!String(d.structure||'').trim()||!String(d.who||'').trim()){ st.msg='Indiquez votre structure et votre nom.'; render(); return; }
+      const slotLab=SLOTDEF.find(x=>x.id===st.slot).label;
+      if(!BOOK_API){ const subj=`Réservation ${st.room.name} – ${fmtDay(st.date)} ${hh(st.from)}-${hh(st.to)}`; const txt=`Bonjour Zoé,\n\nPourriez-vous réserver pour nous :\n- ${st.room.name}\n- ${fmtDay(st.date)} (${slotLab}), de ${hh(st.from)} à ${hh(st.to)}\n- Structure : ${d.structure}\n- Contact : ${d.who}${d.email?' · '+d.email:''}${d.object?'\n- Objet : '+d.object:''}\n- Public extérieur : ${d.external?'oui':'non'}\n\nMerci !`; location.href=`mailto:${BOOK_MAIL}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(txt)}`; return; }
+      st.sending=true; st.msg=null; render();
+      try{ const res=await fetch(BOOK_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({room:st.room.key,date:st.date,slot:st.slot,from:st.from,to:st.to,...d})}); const j=await res.json(); st.sending=false;
+        if(j.ok){ st.step='done'; const k=`${st.room.key}|${st.date}|${st.slot}`; const prev=busy?.get(k); busy?.set(k,{room:st.room.key,date:st.date,slot:st.slot,whole:false,ranges:[...(prev?.ranges||[]),[st.from,st.to]]}); }
+        else st.msg=j.error||'La réservation a échoué.'; }
+      catch(err){ st.sending=false; st.msg='Connexion au planning impossible. Réessayez, ou écrivez à '+BOOK_MAIL+'.'; }
+      render(); };
+  }
+  document.getElementById('bookClose').onclick=close;
+  dlg.addEventListener('click',e=>{ if(e.target===dlg) close(); });
+  return {open,close,roomBySpace};
+})();
+
 const orgById=new Map(RAW.map(o=>[o.id,o]));
 const convById=new Map(CONV.map(c=>[c.id,c]));
 // convergences par structure (+ titres pour le filtre / le regroupement)
@@ -781,7 +962,7 @@ const SFIELDS=[
  ['convergence',2,o=>o.convs.map(x=>x.c.title+' '+(x.role||'')).join(' ')],
 ];
 RAW.forEach(o=>{ o._sx=SFIELDS.map(([lab,w,get])=>({lab,w,txt:get(o)||'',tk:[...new Set(toks(get(o)||''))]})); });
-COMMON.forEach(c=>{ c.floorLabel=FLOORLABEL[c.floor]||c.floor; c._sx=[['nom',10,c.name+' '+(c.id.startsWith('wc')?'wc toilettes sanitaires':c.id.startsWith('s0')||c.id==='s170'?'salle de réunion reunion':'')],['descriptif',3,c.desc],['bureau',4,c.floorLabel]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
+COMMON.forEach(c=>{ c.floorLabel=FLOORLABEL[c.floor]||c.floor; c._sx=[['nom',10,c.name+' '+(c.id.startsWith('wc')?'wc toilettes sanitaires':c.id.startsWith('s0')||c.id==='s171'?'salle de réunion reunion':'')],['descriptif',3,c.desc],['bureau',4,c.floorLabel]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
 let spaceHits=[];
 CONV.forEach(c=>{ c._sx=[['',4,c.title],['',2,c.summary],['',2,c.potential],['',2,c.first_step||''],['',1,(c.members||[]).map(m=>m.role).join(' ')]].map(([lab,w,t])=>({lab,w,txt:t,tk:[...new Set(toks(t))]})); });
 function tokScore(q,tk,fuzzy=true){ // meilleure correspondance d'un mot de la requête dans une liste de mots
@@ -1140,9 +1321,10 @@ function conCard(o){ return `<button class="con" data-id="${o.id}"><span class="
 function cvRow(c){ return `<button class="cvrow" data-conv="${c.id}"><span class="cv-i">${famIco(c.family)}</span><span class="cv-t">${esc(c.title)}</span><span class="cv-n">${c.members.length}</span></button>`; }
 function secHead(t,sub){ return `<header class="sec-h"><h3>${t}</h3>${sub?`<p>${sub}</p>`:''}</header>`; }
 function openConv(r){ if(!r) return; if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); }
-function spacesSection(){ const order=['RDC','R1','R2','R3','B']; const groups=order.map(f=>({f,list:commonOnFloor(f)})).filter(g=>g.list.length); return `<section class="sec">${secHead('Les espaces communs','Salles de réunion, cuisine, toilettes, vélos… où les trouver')}${groups.map(g=>`<div class="fam"><h4>${esc(FLOORLABEL[g.f]||g.f)}</h4><ul class="rel">${g.list.map(c=>spaceLi(c,c.cap||'')).join('')}</ul></div>`).join('')}</section>`; }
+function spacesSection(){ const order=['RDC','R1','R2','R3','B']; const groups=order.map(f=>({f,list:commonOnFloor(f)})).filter(g=>g.list.length); return `<section class="sec">${secHead('Les espaces communs','Salles de réunion, cuisine, toilettes, vélos… où les trouver')}<p style="margin:0 0 12px"><button class="btn-book" data-book>Réserver une salle de réunion <span aria-hidden="true">→</span></button></p>${groups.map(g=>`<div class="fam"><h4>${esc(FLOORLABEL[g.f]||g.f)}</h4><ul class="rel">${g.list.map(c=>spaceLi(c,c.cap||'')).join('')}</ul></div>`).join('')}</section>`; }
 function bindHome(el){
   bindSpaces(el);
+  el.querySelectorAll('[data-book]').forEach(b=>b.onclick=()=>BOOK.open());
   el.querySelectorAll('.evc[data-id], .con[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); });
   el.querySelectorAll('.eco[data-conv], .cvrow[data-conv]').forEach(b=>b.onclick=()=>openConv(convById.get(b.dataset.conv)));
   el.querySelectorAll('[data-help]').forEach(b=>b.onclick=openHelp);
@@ -1178,12 +1360,12 @@ function renderDetailInner(){
   const el=document.getElementById('detailBody');
   if(selectedSpace&&!selected&&!selectedConv){ const c=selectedSpace; const others=commonOnFloor(c.floor).filter(x=>x!==c); const here=RAW.filter(o=>o.floor===c.floor).length;
     el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="dhead-row"><span class="lg big lg-ico">${c.icon}</span><div style="min-width:0"><span class="pill">Espace commun</span>${c.cap?` <span class="pill">${esc(c.cap)}</span>`:''}<h2>${esc(c.name)}</h2></div></div></div>
-      <div style="font-size:12.5px;margin-top:6px"><span class="chip">📍 ${esc(c.floorLabel)}</span> <button class="btn btn-lieu" id="goLieuSpace">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${c.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
+      <div style="font-size:12.5px;margin-top:6px"><span class="chip">📍 ${esc(c.floorLabel)}</span> <button class="btn btn-lieu" id="goLieuSpace">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${roomBySpace.has(c.id)?` <button class="btn-book" id="bookSpace">Réserver <span aria-hidden="true">→</span></button>`:''}${c.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
       <p style="margin-top:12px">${esc(c.desc)}</p>
       ${others.length?`<div class="ksec"><dt>Aussi à ce niveau</dt><ul class="rel">${others.map(x=>spaceLi(x,x.cap)).join('')}</ul></div>`:''}
       ${here?`<p style="color:var(--muted);font-size:12.5px">${here} structure${here>1?'s':''} à ce niveau.</p>`:''}
-      <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : livret d'accueil So Watt ! (Intermède). Réservation des salles : planning sur la porte, drive commun ou zoe.ducrocq@intermede.co.</p>`;
-    el.querySelector('#closeDetail').onclick=()=>selectSpace(null); el.querySelector('#goLieuSpace').onclick=()=>{ const keep=c; if(viewMode!=='lieu') setView('lieu'); selectedSpace=keep; LIEU.flyToSpace(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; bindSpaces(el); syncDetailSheet(); return; }
+      <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : livret d'accueil et planning des espaces communs (Intermède).</p>`;
+    el.querySelector('#bookSpace')?.addEventListener('click',()=>BOOK.open(roomBySpace.get(c.id).key)); el.querySelector('#closeDetail').onclick=()=>selectSpace(null); el.querySelector('#goLieuSpace').onclick=()=>{ const keep=c; if(viewMode!=='lieu') setView('lieu'); selectedSpace=keep; LIEU.flyToSpace(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; bindSpaces(el); syncDetailSheet(); return; }
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
     el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${famIco(c.family)} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2><button class="btn btn-lieu" id="goLieuConv">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button></div><ul class="reslist">${convCard(c,false)}</ul>
     ${acus.length?`<div class="ksec"><dt>Connecteurs dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
