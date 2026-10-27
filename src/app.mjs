@@ -39,6 +39,15 @@ const COMMON=[
   {id:'velo-kademy',name:'Parking vélos couvert',icon:'🚲',floor:'B',px:864,py:14,cap:'',approx:true,desc:'Dans le bâtiment de La Kademy (bâtiment B), au bout de la cour. Impossible de garer une voiture autour de ce bâtiment.'},
   {id:'carre',name:'Le Carré · restaurant',icon:'🍴',floor:'B',px:700,py:-120,cap:'',approx:true,desc:'Restaurant installé sur le parking : lundi–mercredi 9h–20h, jeudi–vendredi 9h–22h.'}
 ];
+// pictos des familles de convergences (SVG au trait, couleur héritée) — remplacent les glyphes Unicode dans les listes
+const FAMSVG={
+  faire:'<path d="M12 2.5v5M12 16.5v5M2.5 12h5M16.5 12h5M5.3 5.3l3.2 3.2M15.5 15.5l3.2 3.2M5.3 18.7l3.2-3.2M15.5 8.5l3.2-3.2"/>',
+  public:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.8 14.2c2.9.4 5.2 2.8 5.2 5.8"/>',
+  transition:'<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.6 3.4v3.8h-3.8M5.4 20.6v-3.8h3.8"/>',
+  lieu:'<path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-5h4v5"/>',
+  niche:'<circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.6l7.9-1.2M7 9l3.9 7M16.9 8l-3.8 8"/>'
+};
+const famIco=f=>FAMSVG[f]?`<svg class="famico" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${FAMSVG[f]}</svg>`:(FAMS[f]?.icon||'');
 const commonById=new Map(COMMON.map(c=>[c.id,c]));
 const commonOnFloor=f=>COMMON.filter(c=>c.floor===f);
 const orgById=new Map(RAW.map(o=>[o.id,o]));
@@ -403,7 +412,7 @@ function renderList(force){
   let body=''; el.classList.toggle('has-sec',viewMode==='conv');
   if(viewMode==='conv'){
     const fams=Object.keys(FAMS).map(fm=>{ const cs=CONV.filter(c=>c.family===fm).map(c=>{ const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o&&pool.includes(x.o)); return {c,ms}; }).filter(x=>x.ms.length); return {fm,cs,n:cs.reduce((a,x)=>a+x.ms.length,0)}; }).filter(x=>x.cs.length);
-    body=fams.map(({fm,cs,n})=>`<div class="dsec"><span class="ico">${FAMS[fm].icon}</span><span>${esc(FAMS[fm].label)}</span><span class="cnt">${cs.length} conv. · ${n} structures</span></div>`+cs.map(({c,ms})=>dirGroup('conv:'+c.id, `<ul class="rel">${ms.map(x=>dirRow(x.o,x.role)).join('')}</ul>`, c.title, ms.length, '')).join('')).join('');
+    body=fams.map(({fm,cs,n})=>`<div class="dsec"><span class="ico">${famIco(fm)}</span><span>${esc(FAMS[fm].label)}</span><span class="cnt">${cs.length} conv. · ${n} structures</span></div>`+cs.map(({c,ms})=>dirGroup('conv:'+c.id, `<ul class="rel">${ms.map(x=>dirRow(x.o,x.role)).join('')}</ul>`, c.title, ms.length, '')).join('')).join('');
     el.innerHTML=`<p class="dsum">Touchez une convergence pour voir ses membres${f?` · <button data-openfilters>filtrées</button>`:''}</p>${body||`<p class="dempty">Aucune convergence ne correspond aux filtres.<br><button data-clear>Effacer les filtres</button></p>`}`;
   } else {
     const key=DIMS[groupBy].key; const m=new Map();
@@ -510,7 +519,7 @@ function agendaLi(a,o){ return `<li><span class="adate">${esc(a.label)}</span><s
 function agendaAll(limit=10){ const all=[]; RAW.forEach(o=>upcoming(o).forEach(a=>all.push({a,o}))); all.sort((x,y)=>(x.a.end<y.a.end?-1:1)); return all.slice(0,limit); }
 function convCard(c,compact){
   const ms=c.members.map(m=>({o:orgById.get(m.id),role:m.role})).filter(x=>x.o);
-  return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${FAMS[c.family].icon}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>${c.first_step?`<p class="rstep"><b>Premier pas ·</b> ${esc(c.first_step)}</p>`:''}${c.evidence?`<p class="rev">Repéré sur : ${esc(c.evidence)}</p>`:''}`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
+  return `<li class="rescard" data-conv="${c.id}"><div class="rt"><span class="ri">${famIco(c.family)}</span><span>${esc(FAMS[c.family].label)} · ${ms.length} structures</span></div><div class="rtitle">${esc(c.title)}</div>${compact?'':`<p class="rsum">${esc(c.summary)}</p><p class="rpot"><b>Ce que ça pourrait devenir ·</b> ${esc(c.potential)}</p>${c.first_step?`<p class="rstep"><b>Premier pas ·</b> ${esc(c.first_step)}</p>`:''}${c.evidence?`<p class="rev">Repéré sur : ${esc(c.evidence)}</p>`:''}`}<div class="rorgs">${ms.map(x=>`<button class="chip" data-id="${x.o.id}" title="${esc(x.role)}">${logoImg(x.o,'lg tip')}${esc(x.o.name)}${x.role?` <span class="n">${esc(x.role)}</span>`:''}</button>`).join('')}</div></li>`;
 }
 function bindConvCards(el){ el.querySelectorAll('.rescard').forEach(c=>{ c.querySelector('.rtitle').onclick=()=>{ const r=convById.get(c.dataset.conv); if(r){ if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); } }; c.querySelectorAll('.rorgs .chip[data-id]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); const t=orgById.get(b.dataset.id); if(t) select(t); }); }); }
 function orgHits(){ return query? RAW.filter(textMatch).sort((a,b)=>(SEARCH.get(b.id).total-SEARCH.get(a.id).total)||a.name.localeCompare(b.name,'fr')) : []; }
@@ -529,7 +538,7 @@ function evCard(a,o,showOrg=true){ const d=evDate(a); const here=/so ?watt/i.tes
 function stack(c,n=5){ const ms=c.members.map(m=>orgById.get(m.id)).filter(Boolean); return `<span class="stack">${ms.slice(0,n).map(o=>logoImg(o)).join('')}${ms.length>n?`<span class="more">+${ms.length-n}</span>`:''}</span>`; }
 function ecoCard(c){ return `<button class="eco" data-conv="${c.id}"><span class="eco-t">${esc(c.title)}</span><span class="eco-s">${esc(c.summary)}</span><span class="eco-f">${stack(c)}<span class="eco-n">${c.members.length} structures</span></span></button>`; }
 function conCard(o){ return `<button class="con" data-id="${o.id}"><span class="con-r">${o.acu.rank}</span>${logoImg(o,'lg')}<span class="con-n">${esc(o.name)}</span><span class="con-m">${o.acu.n} chantiers, ${o.acu.cats} métiers</span></button>`; }
-function cvRow(c){ return `<button class="cvrow" data-conv="${c.id}"><span class="cv-i">${FAMS[c.family].icon}</span><span class="cv-t">${esc(c.title)}</span><span class="cv-n">${c.members.length}</span></button>`; }
+function cvRow(c){ return `<button class="cvrow" data-conv="${c.id}"><span class="cv-i">${famIco(c.family)}</span><span class="cv-t">${esc(c.title)}</span><span class="cv-n">${c.members.length}</span></button>`; }
 function secHead(t,sub){ return `<header class="sec-h"><h3>${t}</h3>${sub?`<p>${sub}</p>`:''}</header>`; }
 function openConv(r){ if(!r) return; if(viewMode==='clusters') setView('conv'); selectConv(r); const g=groups.find(g=>g.data.conv===r); if(g&&viewMode==='conv') focusOn(g); }
 function spacesSection(){ const order=['RDC','R1','R2','R3','B']; const groups=order.map(f=>({f,list:commonOnFloor(f)})).filter(g=>g.list.length); return `<section class="sec">${secHead('Les espaces communs','Salles de réunion, cuisine, toilettes, vélos… où les trouver')}${groups.map(g=>`<div class="fam"><h4>${esc(FLOORLABEL[g.f]||g.f)}</h4><ul class="rel">${g.list.map(c=>spaceLi(c,c.cap||'')).join('')}</ul></div>`).join('')}</section>`; }
@@ -544,7 +553,7 @@ function agendaSection(limit=4,filter){ const all=agendaAll(200).filter(x=>!filt
 function ecoSection(list,title,sub,limit=6,id='ecoMore'){ if(!list.length) return ''; return `<section class="sec">${secHead(title,sub)}<div class="ecogrid" id="${id}">${list.map((c,i)=>`<div class="${i>=limit?'xtra':''}">${ecoCard(c)}</div>`).join('')}</div>${list.length>limit?`<button class="more-btn" data-more="${id}">Voir les ${list.length-limit} autres</button>`:''}</section>`; }
 function homeHtml(){
   const niches=CONV.filter(c=>c.family==='niche'); const big=CONV.filter(c=>c.family!=='niche'); const nEv=agendaAll(200).length;
-  const famBlocks=Object.keys(FAMS).filter(f=>f!=='niche').map(f=>{ const cs=big.filter(c=>c.family===f); return cs.length?`<div class="fam"><h4>${FAMS[f].icon} ${esc(FAMS[f].label)}</h4>${cs.map(cvRow).join('')}</div>`:''; }).join('');
+  const famBlocks=Object.keys(FAMS).filter(f=>f!=='niche').map(f=>{ const cs=big.filter(c=>c.family===f); return cs.length?`<div class="fam"><h4>${famIco(f)} ${esc(FAMS[f].label)}</h4>${cs.map(cvRow).join('')}</div>`:''; }).join('');
   return `<div class="home">
     <section class="hero"><h2>Qui fait quoi au So Watt</h2><p>${RAW.length} structures sous un même toit, ${CONV.length} chantiers communs possibles${nEv?` et ${nEv} rendez-vous à venir`:''}. Touchez un point de la carte, ou explorez ci-dessous.</p>
       <div class="hero-a"><button class="btn-p" id="setupProfile">Personnaliser la carte</button><button class="btn-g" data-help>Comment lire la carte</button></div></section>
@@ -577,7 +586,7 @@ function renderDetailInner(){
       <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Source : livret d'accueil So Watt ! (Intermède). Réservation des salles : planning sur la porte, drive commun ou zoe.ducrocq@intermede.co.</p>`;
     el.querySelector('#closeDetail').onclick=()=>selectSpace(null); el.querySelector('#goLieuSpace').onclick=()=>{ const keep=c; if(viewMode!=='lieu') setView('lieu'); selectedSpace=keep; LIEU.flyToSpace(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; bindSpaces(el); syncDetailSheet(); return; }
   if(selectedConv){ const c=selectedConv; const acus=c.members.map(m=>orgById.get(m.id)).filter(o=>o&&ACU.has(o.id)).sort((a,b)=>a.acu.rank-b.acu.rank);
-    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${FAMS[c.family].icon} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2><button class="btn btn-lieu" id="goLieuConv">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button></div><ul class="reslist">${convCard(c,false)}</ul>
+    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="eyebrow" style="color:var(--accent-ink)">${famIco(c.family)} Convergence · ${esc(FAMS[c.family].label)}</div><h2 class="dhead-title">${esc(c.title)}</h2><button class="btn btn-lieu" id="goLieuConv">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button></div><ul class="reslist">${convCard(c,false)}</ul>
     ${acus.length?`<div class="ksec"><dt>Connecteurs dans cette convergence</dt><ul class="rel acu-list">${acus.map(o=>orgLi(o,o.acu.n+' convergences')).join('')}</ul></div>`:''}
     <p style="color:var(--muted);font-size:11.5px;margin-top:12px">Convergences et rôles ont été déduits des descriptifs ; à faire valider et enrichir par les occupant·e·s.</p>`;
     el.querySelector('#closeDetail').onclick=()=>selectConv(null); el.querySelector('#goLieuConv').onclick=()=>{ const keep=selectedConv; if(viewMode!=='lieu') setView('lieu'); selectedConv=keep; LIEU.flyToConv(keep); applyState(); if(narrowMQ.matches){ sheetPref=false; setDetailOpen(false); } }; el.querySelectorAll('.rorgs .chip[data-id], .rel button[data-id]').forEach(b=>b.onclick=()=>{ const t=orgById.get(b.dataset.id); if(t) select(t); }); syncDetailSheet(); return; }
@@ -688,7 +697,7 @@ const LIEU=(()=>{
   const PW=842.25, PH=1190.25, LIFT=22, PPM=GEO.ptsPerM;  // 1 m ≈ 12,3 points de plan
   const GAPS={compact:3.6*PPM*1.25, eclate:11*PPM}; let gapMode='eclate'; let GAP=GAPS[gapMode];
   // bâtiment B (Family Forme) : le bâtiment gris au bord du parking, relevé sur l'orthophoto IGN (coordonnées en points de plan RDC, approximatives)
-  const ANNEX={pts:[[965.8,271.2],[704.7,165.9],[769.3,-166.1],[1018.1,-214.4]],cx:864,cy:14,h:5.5*PPM,label:'Bâtiment B'}; // volume plein de 5,5 m, Family Forme posé sur le toit
+  const ANNEX={pts:[[965.8,271.2],[704.7,165.9],[769.3,-166.1],[1018.1,-214.4]],cx:864,cy:14,h:5.5*PPM,label:'Bâtiment B'}; // murs translucides de 5,5 m comme le bâtiment A, Family Forme posé au niveau du toit
   const HORS={bonallure:[560,700,'RDC'],familyforme:[ANNEX.cx,ANNEX.cy,'RDC',ANNEX.h],enluminance:[300,540,'SS'],kpro:[420,620,'SS'],madeleine:[540,540,'SS']};
   const el=document.getElementById('gl');
   let renderer, scene, camera, ray=new THREE.Raycaster(), inited=false, lieuOn=false, needs=true, raf=0, shown=false;
@@ -722,7 +731,10 @@ const LIEU=(()=>{
   function footprintShape(){ const sh=new THREE.Shape(); GEO.footprint.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
   function annexShape(){ const sh=new THREE.Shape(); ANNEX.pts.forEach(([x,y],i)=>{ const X=x-GEO.pcx, Y=y-GEO.pcy; i?sh.lineTo(X,Y):sh.moveTo(X,Y); }); sh.closePath(); return sh; }
   function addWalls(grp,shape,wallH,opacity){ const geo=new THREE.ExtrudeGeometry(shape,{depth:wallH,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,wallH,0); const walls=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity,side:THREE.DoubleSide,depthWrite:false})); walls.renderOrder=5; walls.userData.wall=true; grp.add(walls); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.4})); edges.userData.edge=true; grp.add(edges); }
-  function buildAnnex(grp){ const A=ANNEX; const geo=new THREE.ExtrudeGeometry(annexShape(),{depth:A.h,bevelEnabled:false}); geo.rotateX(Math.PI/2); geo.translate(0,A.h,0); const box=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xD8D3CB,transparent:true,opacity:0.95,depthWrite:true})); box.renderOrder=8; grp.add(box); const roof=new THREE.Mesh(new THREE.ShapeGeometry(annexShape()).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xC9C3BA,side:THREE.DoubleSide})); roof.position.y=A.h+0.3; roof.renderOrder=9; grp.add(roof); const edges=new THREE.LineSegments(new THREE.EdgesGeometry(geo,20),new THREE.LineBasicMaterial({color:0x8B8178,transparent:true,opacity:0.6})); edges.renderOrder=10; grp.add(edges); const t=textTex(A.label,{size:18,color:'#8B8178',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(A.pts[1][0]-GEO.pcx-10,A.h+6,A.pts[1][1]-GEO.pcy-10); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp); }
+  function buildAnnex(grp){ const A=ANNEX; // même traitement que le bâtiment principal : dalle claire + murs translucides et arêtes
+    const slab=new THREE.Mesh(new THREE.ShapeGeometry(annexShape()).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xF4F1EC,transparent:true,opacity:0.85,side:THREE.DoubleSide,depthWrite:false})); slab.position.y=0.5; slab.renderOrder=10; slab.userData.annex=true; grp.add(slab);
+    const n=grp.children.length; addWalls(grp,annexShape(),A.h,0.22); grp.children.slice(n).forEach(ch=>{ ch.userData.wall=false; ch.userData.edge=false; ch.userData.annex=true; });
+    const t=textTex(A.label,{size:18,color:'#8B8178',bg:'rgba(255,255,255,.9)'}); const sp=screenSprite(t,0.5); sp.position.set(A.pts[1][0]-GEO.pcx-10,A.h+6,A.pts[1][1]-GEO.pcy-10); sp.renderOrder=60; sp.userData.floorText=true; grp.add(sp); }
   function buildFloors(){
     const loader=new THREE.TextureLoader();
     FLOORS.forEach(F=>{
@@ -753,7 +765,7 @@ const LIEU=(()=>{
       const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
       const sp=new THREE.Sprite(mat); sp.position.set(p.x,p.dy+LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
     });
-    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(`${c.icon} ${c.name}`,{size:15,color:'#5F5850',bg:'rgba(255,255,255,.82)',weight:500}); const sp=screenSprite(t,0.42); sp.position.set(p.x,p.dy+6,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
+    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(c.icon,{size:20,color:'#5F5850',bg:'rgba(255,255,255,.88)',weight:500}); const sp=screenSprite(t,0.42); sp.position.set(p.x,p.dy+6,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
     const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#EC644B'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
@@ -795,7 +807,7 @@ const LIEU=(()=>{
   function setState(){
     if(!inited) return;
     nodes.forEach((sp,id)=>{ const o=sp.userData.org; const fl=(HORS[id]?HORS[id][2]:o.floor); const floorOk=!floor||fl===floor; sp.material.opacity=dimFor(o)*(floorOk?1:0.08); const s=o===selected?40:(relSet.has(o)?34:30); sp.scale.set(s,s,1); });
-    floorGroups.forEach((grp,id)=>{ const on=!floor||id===floor; grp.children.forEach(ch=>{ if(ch.userData.slab) ch.material.opacity=on?1:0.1; else if(ch.userData.wall) ch.material.opacity=on?0.22:0.04; else if(ch.userData.edge) ch.material.opacity=on?0.55:0.1; else if(ch.userData.floorText) ch.material.opacity=on?1:0.3; }); });
+    floorGroups.forEach((grp,id)=>{ const on=!floor||id===floor; grp.children.forEach(ch=>{ if(ch.userData.slab) ch.material.opacity=on?1:0.1; else if(ch.userData.wall) ch.material.opacity=on?0.22:0.04; else if(ch.userData.edge) ch.material.opacity=on?0.55:0.1; else if(ch.userData.annex) ch.material.opacity=ch.isLineSegments?(on?0.55:0.1):ch.isMesh&&ch.geometry.type==='ShapeGeometry'?(on?0.85:0.1):(on?0.22:0.04); else if(ch.userData.floorText) ch.material.opacity=on?1:0.3; }); });
     if(pins) pins.material.opacity=floor?0.25:0.7;
     labels.forEach(sp=>scene.remove(sp)); labels.clear();
     const show=new Set(); if(selected) show.add(selected); relSet.forEach(o=>show.add(o));
@@ -859,7 +871,7 @@ const STEPS=[
   {render:()=>{ const hasCtx=obDraft.cat||obDraft.themes.length;
      const score=c=>c.members.map(m=>orgById.get(m.id)).filter(o=>o&&((obDraft.cat&&o.cat===obDraft.cat)||o.themes.some(t=>obDraft.themes.includes(t)))).length;
      const cs=CONV.map(c=>({c,s:hasCtx?score(c):0})).sort((a,b)=>b.s-a.s||b.c.members.length-a.c.members.length); const near=cs.filter(x=>x.s>0), rest=cs.filter(x=>!x.s);
-     const chip=({c,s})=>`<button class="chip" data-want="${c.id}" aria-pressed="${obDraft.wants.includes(c.id)}"><span style="color:var(--accent);margin-right:4px">${FAMS[c.family].icon}</span>${esc(c.title)} <span class="n">${s?s+'/':''}${c.members.length}</span></button>`;
+     const chip=({c,s})=>`<button class="chip" data-want="${c.id}" aria-pressed="${obDraft.wants.includes(c.id)}"><span style="color:var(--accent);margin-right:4px">${famIco(c.family)}</span>${esc(c.title)} <span class="n">${s?s+'/':''}${c.members.length}</span></button>`;
      return `<div class="step">Personnaliser · 3 sur 3</div><h2>Quel chantier vous tente ?</h2><p>Les convergences sont des projets communs possibles entre structures de familles différentes.${hasCtx?' Ceux où votre famille et vos thèmes comptent sont en tête (structures concernées / membres).':' Choisissez ceux qui vous parlent.'}</p><div class="choices">${near.length?`<div class="choices-lab">Pour votre profil</div>${near.map(chip).join('')}<div class="choices-lab">Autres chantiers</div>`:''}${rest.map(chip).join('')}</div><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-next>Continuer</button><button class="ghost" data-skip>Passer</button></div>`; },
    enter:()=>{ profile={cat:obDraft.cat,themes:obDraft.themes.slice(),wants:obDraft.wants.slice()}; if(viewMode!=='conv') setView('conv'); applyState(); }},
   {render:()=>{ const n=orgs.filter(o=>profileMatch(o)).length; const kn=convsForProfile(50).length; const nc=obDraft.cat?RAW.filter(o=>o.cat===obDraft.cat).length:0; return `<div class="step">Votre vue</div><p class="big">${n}</p><h2>structures correspondent à votre profil${nc?`, dont ${nc} de votre famille de métier`:''}</h2><p>${kn} chantiers vous concernent. Vos structures restent devant ; le reste du lieu attend en arrière-plan jusqu'à ce que vous le demandiez. Changez de profil ou affichez tout à tout moment.</p><div class="nav"><button class="ghost" data-prev>Retour</button><button class="primary" data-finish>Ouvrir ma carte</button><button class="ghost" data-skip>Tout afficher plutôt</button></div>`; },
