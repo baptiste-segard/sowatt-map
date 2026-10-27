@@ -765,7 +765,7 @@ const LIEU=(()=>{
       const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
       const sp=new THREE.Sprite(mat); sp.position.set(p.x,p.dy+LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
     });
-    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(c.icon,{size:20,color:'#5F5850',bg:'rgba(255,255,255,.88)',weight:500}); const sp=screenSprite(t,0.42); sp.position.set(p.x,p.dy+6,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
+    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(c.icon,{size:20,color:'#5F5850',bg:'rgba(255,255,255,.88)',weight:500}); const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t.tex,transparent:true,depthTest:false})); const H=16; sp.scale.set(H*t.w/t.h,H,1); /* taille monde, comme les structures (30) : reste plus petit qu'elles à tous les zooms */ sp.position.set(p.x,p.dy+8,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
     const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#EC644B'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
