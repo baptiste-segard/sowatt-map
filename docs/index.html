@@ -791,10 +791,10 @@ const BOOK=(()=>{
         <label><span>Nom et contact <span class="opt">(facultatif)</span></span><input name="who" autocomplete="name"></label>
         <label><span>Objet <span class="opt">(facultatif)</span></span><input name="object" placeholder="réunion, atelier, formation…"></label>
         ${st.msg?`<p class="bk-err" role="alert">${esc(st.msg)}</p>`:''}
-        <button class="btn-p" type="submit">Réserver</button>
-        <p class="bk-note">Le formulaire de réservation d’Intermède s’ouvre déjà rempli : il ne reste qu’à cliquer sur « Envoyer ».</p>
+        <button class="btn-p" type="submit" ${st.sending?'disabled':''}>${st.sending?'Envoi…':'Valider la réservation'}</button>
+        <p class="bk-note">La demande est transmise directement à Intermède.</p>
       </form>`; }
-  function doneHtmlForm(){ return `<div class="bk-done"><div class="bk-ok" aria-hidden="true">→</div><h3>Dernière étape</h3><p><b>${esc(st.room.name)}</b><br>${esc(fmtDay(st.date))} · ${SLOTDEF.find(x=>x.id===st.slot).label}</p><p class="bk-note">Cliquez sur « Envoyer » dans le formulaire qui vient de s’ouvrir : la demande arrive chez Intermède. Rien ne s’est ouvert ? <a href="${esc(st.formUrl||'#')}" target="_blank" rel="noopener">Ouvrir le formulaire</a></p><button class="btn-g" id="bkAgain">Réserver un autre créneau</button></div>`; }
+  function doneHtmlForm(){ return `<div class="bk-done"><div class="bk-ok" aria-hidden="true">✓</div><h3>Demande envoyée</h3><p><b>${esc(st.room.name)}</b><br>${esc(fmtDay(st.date))} · ${SLOTDEF.find(x=>x.id===st.slot).label}</p><p class="bk-note">Intermède la reçoit dans son tableau des réservations. Pour annuler ou modifier, écrivez à Zoé (${BOOK_MAIL}).</p><button class="btn-g" id="bkAgain">Réserver un autre créneau</button></div>`; }
   function formHtml(){ if(!BOOK_API) return formHtmlForm(); const r=st.room; const names=RAW.map(o=>o.name).sort((a,b)=>a.localeCompare(b,'fr'));
     return `<button class="bk-back" id="bkBack">← Modifier le créneau</button>
       <div class="bk-recap"><b>${esc(r.name)}</b> · ${esc(fmtDay(st.date))} · ${hh(st.from)} – ${hh(st.to)}</div>
@@ -833,7 +833,16 @@ const BOOK=(()=>{
     const fm=body.querySelector('#bkForm'); if(fm) fm.onsubmit=async e=>{ e.preventDefault(); const d=Object.fromEntries(new FormData(fm)); d.external=!!d.external;
 
       const slotLab=SLOTDEF.find(x=>x.id===st.slot).label;
-      if(!BOOK_API){ if(!String(d.structure||'').trim()){ st.msg='Indiquez votre structure.'; render(); return; } const q=new URLSearchParams({usp:'pp_url'}); const E=BOOK_ENTRY; q.set('entry.'+E.room,st.room.name); q.set('entry.'+E.date,st.date); q.set('entry.'+E.slot,BOOK_SLOTLAB[st.slot]); q.set('entry.'+E.structure,d.structure.trim()); q.set('entry.'+E.type,d.type||'Interne'); if(d.who) q.set('entry.'+E.who,d.who.trim()); if(d.object) q.set('entry.'+E.object,d.object.trim()); st.formUrl=BOOK_FORM+'?'+q.toString(); window.open(st.formUrl,'_blank','noopener'); st.step='done'; render(); return; }
+      if(!BOOK_API){ if(!String(d.structure||'').trim()){ st.msg='Indiquez votre structure.'; render(); return; }
+        // envoi direct au Google Form (réponse opaque : no-cors) — la demande arrive dans la feuille de réponses d'Intermède
+        const E=BOOK_ENTRY, q=new URLSearchParams(), [Y,M,D]=st.date.split('-');
+        q.set('entry.'+E.room,st.room.name); q.set('entry.'+E.date+'_year',Y); q.set('entry.'+E.date+'_month',String(+M)); q.set('entry.'+E.date+'_day',String(+D));
+        q.set('entry.'+E.slot,BOOK_SLOTLAB[st.slot]); q.set('entry.'+E.structure,d.structure.trim()); q.set('entry.'+E.type,d.type||'Interne');
+        if(d.who) q.set('entry.'+E.who,d.who.trim()); if(d.object) q.set('entry.'+E.object,d.object.trim());
+        st.sending=true; st.msg=null; render();
+        try{ await fetch(BOOK_FORM.replace(/viewform$/,'formResponse'),{method:'POST',mode:'no-cors',body:q}); st.sending=false; st.step='done'; }
+        catch(err){ st.sending=false; st.msg='Envoi impossible (connexion ?). Réessayez, ou écrivez à '+BOOK_MAIL+'.'; }
+        render(); return; }
       if(!String(d.structure||'').trim()||!String(d.who||'').trim()){ st.msg='Indiquez votre structure et votre nom.'; render(); return; }
       st.sending=true; st.msg=null; render();
       try{ const res=await fetch(BOOK_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({room:st.room.key,date:st.date,slot:st.slot,from:st.from,to:st.to,...d})}); const j=await res.json(); st.sending=false;
