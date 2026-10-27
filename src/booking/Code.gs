@@ -10,10 +10,11 @@
  *         → écrit « 9h-11h : Structure (Nom) » dans la bonne case, si le créneau est libre.
  *
  * Réglages (Paramètres du projet → Propriétés du script) :
- *  - CODE   : code occupant·e à saisir pour réserver (obligatoire pour écrire)
+ *  - CODE   : code occupant·e à saisir pour réserver (à défaut : CODE_PAR_DEFAUT ci-dessous)
  *  - NOTIFY : adresse prévenue à chaque réservation (facultatif, ex. zoe.ducrocq@intermede.co)
  */
 
+var CODE_PAR_DEFAUT = 'sowatt-salles'; // à changer ici ou via la propriété CODE
 var MOIS = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE'];
 var SLOTS = { 'Matin': 'matin', 'Après-midi': 'aprem', 'Apres-midi': 'aprem', 'Soir': 'soir' };
 var SLOT_HOURS = { matin: [8, 12], aprem: [13, 18], soir: [18, 22] };
@@ -31,7 +32,7 @@ function roomKey(h) {
 
 /** Mois et année d'un onglet « NOVEMBRE 2026 ». */
 function sheetMonth(title) {
-  var t = String(title).toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  var t = String(title).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
   var m = t.match(/^([A-Z]+)\s+(\d{4})$/); if (!m) return null;
   var i = MOIS.indexOf(m[1]); return i < 0 ? null : { y: +m[2], m: i };
 }
@@ -126,7 +127,7 @@ function doGet(e) {
 function doPost(e) {
   var b; try { b = JSON.parse(e.postData.contents); } catch (err) { return json({ ok: false, error: 'Requête illisible.' }); }
   var props = PropertiesService.getScriptProperties();
-  var code = props.getProperty('CODE');
+  var code = props.getProperty('CODE') || CODE_PAR_DEFAUT;
   if (!code || String(b.code || '').trim().toLowerCase() !== code.trim().toLowerCase()) return json({ ok: false, error: 'Code occupant·e incorrect.' });
   if (!b.room || !/^\d{4}-\d{2}-\d{2}$/.test(b.date) || !SLOT_HOURS[b.slot]) return json({ ok: false, error: 'Salle, date ou créneau manquant.' });
   var from = +b.from, to = +b.to, lim = SLOT_HOURS[b.slot];

@@ -3,6 +3,10 @@
 // Vide → la page affiche les créneaux sans disponibilité et la demande part par mail à Zoé.
 const BOOK_API='';
 const BOOK_MAIL='zoe.ducrocq@intermede.co';
+// Google Form « Réservation des salles – So Watt ! » (réponses dans une feuille Google de Studio CAD, partagée avec Intermède)
+const BOOK_FORM='https://docs.google.com/forms/d/e/1FAIpQLSfYHW7wYopCS98etCApgv_Y_2YJx6Hv_HFtTNk6LNi5R5VKMQ/viewform';
+const BOOK_ENTRY={room:'2111525136',date:'488897799',slot:'898363043',structure:'1077501172',type:'475754270',who:'1241247988',object:'325723596'};
+const BOOK_SLOTLAB={matin:'Matin (8h-12h)',aprem:'Après-midi (13h-18h)',soir:'Soir (18h-22h)'};
 const ROOMS=[
   {key:'foyer',space:'foyer',name:'Le Foyer',floor:'RDC',cap:'200 debout · 50 assis',note:'Événements de plus de 50 personnes : prévenir Zoé.'},
   {key:'s012',space:'s012',name:'Salle 012',floor:'RDC',cap:'20 places'},
@@ -46,14 +50,27 @@ const BOOK=(()=>{
     return `<div class="bk-cal"><div class="bk-calh"><button class="bk-nav" data-mon="-1" ${prevOk?'':'disabled'} aria-label="Mois précédent">‹</button><b>${MONTHS[mo]} ${y}</b><button class="bk-nav" data-mon="1" ${nextOk?'':'disabled'} aria-label="Mois suivant">›</button></div><div class="bk-dow">${DOW.map(x=>`<span>${x}</span>`).join('')}</div><div class="bk-grid">${cells.join('')}</div>${busy?`<p class="bk-leg"><i class="free"></i>libre <i class="part"></i>en partie pris <i class="full"></i>complet</p>`:''}</div>`; }
   function barHtml(def,ranges){ const span=def.to-def.from; return `<span class="bk-bar">${ranges.map(r=>{ const a=Math.max(r[0],def.from), b=Math.min(r[1],def.to); return b>a?`<i style="left:${(a-def.from)/span*100}%;width:${(b-a)/span*100}%"></i>`:''; }).join('')}</span>`; }
   function slotsHtml(){ if(!st.date) return `<p class="bk-hint">Choisissez un jour dans le calendrier.</p>`; const r=st.room;
-    return `<h4 class="bk-dayt">${esc(fmtDay(st.date))}</h4><div class="bk-slots">${SLOTDEF.map(def=>{ const ss=slotState(r.key,st.date,def.id); const lab=ss.s==='full'?'Complet':ss.s==='part'?'En partie pris':ss.s==='free'?'Libre':''; return `<button class="bk-slot ${ss.s}" data-slot="${def.id}" ${ss.s==='full'?'disabled':''} aria-pressed="${st.slot===def.id}"><span class="bk-sl">${def.label}</span><span class="bk-sh">${hh(def.from)} – ${hh(def.to)}</span>${barHtml(def,ss.ranges)}${lab?`<span class="bk-ss">${lab}</span>`:''}</button>`; }).join('')}</div>${st.slot?hoursHtml():''}`; }
+    return `<h4 class="bk-dayt">${esc(fmtDay(st.date))}</h4><div class="bk-slots">${SLOTDEF.map(def=>{ const ss=slotState(r.key,st.date,def.id); const lab=ss.s==='full'?'Complet':ss.s==='part'?'En partie pris':ss.s==='free'?'Libre':''; return `<button class="bk-slot ${ss.s}" data-slot="${def.id}" ${ss.s==='full'?'disabled':''} aria-pressed="${st.slot===def.id}"><span class="bk-sl">${def.label}</span><span class="bk-sh">${hh(def.from)} – ${hh(def.to)}</span>${barHtml(def,ss.ranges)}${lab?`<span class="bk-ss">${lab}</span>`:''}</button>`; }).join('')}</div>${st.slot?(BOOK_API?hoursHtml():`<div class="bk-hours"><button class="btn-p" id="bkNext">Continuer <span aria-hidden="true">→</span></button></div>`):''}`; }
   function hoursHtml(){ const def=SLOTDEF.find(x=>x.id===st.slot); const ss=slotState(st.room.key,st.date,def.id); const freeS=freeSteps(def,ss.ranges); const opt=(v,sel,dis)=>`<option value="${v}" ${sel?'selected':''} ${dis?'disabled':''}>${hh(v)}</option>`;
     if(st.from==null||!freeS.includes(st.from)){ st.from=freeS[0]; st.to=null; }
     let maxTo=st.from; while(maxTo<def.to && freeS.includes(maxTo)) maxTo+=.5; if(st.to==null||st.to>maxTo||st.to<=st.from) st.to=maxTo;
     const froms=[]; for(let t=def.from;t<def.to;t+=.5) froms.push(opt(t,t===st.from,!freeS.includes(t)));
     const tos=[]; for(let t=st.from+.5;t<=maxTo;t+=.5) tos.push(opt(t,t===st.to,false));
     return `<div class="bk-hours"><label>De <select id="bkFrom">${froms.join('')}</select></label><label>à <select id="bkTo">${tos.join('')}</select></label><button class="btn-p" id="bkNext">Continuer <span aria-hidden="true">→</span></button></div>`; }
-  function formHtml(){ const r=st.room; const names=RAW.map(o=>o.name).sort((a,b)=>a.localeCompare(b,'fr'));
+  function formHtmlForm(){ const r=st.room, def=SLOTDEF.find(x=>x.id===st.slot); const names=RAW.map(o=>o.name).sort((a,b)=>a.localeCompare(b,'fr'));
+    return `<button class="bk-back" id="bkBack">← Modifier le créneau</button>
+      <div class="bk-recap"><b>${esc(r.name)}</b> · ${esc(fmtDay(st.date))} · ${def.label} (${hh(def.from)} – ${hh(def.to)})</div>
+      <form class="bk-form" id="bkForm" novalidate>
+        <label>Votre structure<input name="structure" list="bkOrgs" required autocomplete="organization" placeholder="ex. Studio CAD"></label><datalist id="bkOrgs">${names.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+        <fieldset class="bk-type"><legend>Type</legend><label class="bk-check"><input type="radio" name="type" value="Interne" checked> Interne</label><label class="bk-check"><input type="radio" name="type" value="Externe (public extérieur)"> Externe (public extérieur)</label></fieldset>
+        <label><span>Nom et contact <span class="opt">(facultatif)</span></span><input name="who" autocomplete="name"></label>
+        <label><span>Objet <span class="opt">(facultatif)</span></span><input name="object" placeholder="réunion, atelier, formation…"></label>
+        ${st.msg?`<p class="bk-err" role="alert">${esc(st.msg)}</p>`:''}
+        <button class="btn-p" type="submit">Réserver</button>
+        <p class="bk-note">Le formulaire de réservation d’Intermède s’ouvre déjà rempli : il ne reste qu’à cliquer sur « Envoyer ».</p>
+      </form>`; }
+  function doneHtmlForm(){ return `<div class="bk-done"><div class="bk-ok" aria-hidden="true">→</div><h3>Dernière étape</h3><p><b>${esc(st.room.name)}</b><br>${esc(fmtDay(st.date))} · ${SLOTDEF.find(x=>x.id===st.slot).label}</p><p class="bk-note">Cliquez sur « Envoyer » dans le formulaire qui vient de s’ouvrir : la demande arrive chez Intermède. Rien ne s’est ouvert ? <a href="${esc(st.formUrl||'#')}" target="_blank" rel="noopener">Ouvrir le formulaire</a></p><button class="btn-g" id="bkAgain">Réserver un autre créneau</button></div>`; }
+  function formHtml(){ if(!BOOK_API) return formHtmlForm(); const r=st.room; const names=RAW.map(o=>o.name).sort((a,b)=>a.localeCompare(b,'fr'));
     return `<button class="bk-back" id="bkBack">← Modifier le créneau</button>
       <div class="bk-recap"><b>${esc(r.name)}</b> · ${esc(fmtDay(st.date))} · ${hh(st.from)} – ${hh(st.to)}</div>
       <form class="bk-form" id="bkForm" novalidate>
@@ -71,10 +88,10 @@ const BOOK=(()=>{
   function render(){
     const r=st.room;
     let main;
-    if(st.step==='done') main=doneHtml();
+    if(st.step==='done') main=BOOK_API?doneHtml():doneHtmlForm();
     else if(st.step==='form') main=formHtml();
     else main=`${r?`${r.note?`<p class="bk-note">${esc(r.note)}</p>`:''}${r.occ?`<p class="bk-note">Réservée aux occupant·e·s.</p>`:''}<div class="bk-cols">${calHtml()}<div class="bk-right">${slotsHtml()}</div></div>`:`<p class="bk-hint">Choisissez une salle.</p>`}`;
-    body.innerHTML=`<header class="bk-head"><h2 id="bookT">Réserver une salle</h2><p>Gratuit pour les occupant·e·s · usage professionnel uniquement · créneaux du planning d’Intermède</p>${BOOK_API&&loading?'<p class="bk-load">Chargement du planning…</p>':''}${loadErr?`<p class="bk-err">${esc(loadErr)}</p>`:''}</header>
+    body.innerHTML=`<header class="bk-head"><h2 id="bookT">Réserver une salle</h2><p>Gratuit pour les occupant·e·s · usage professionnel uniquement · demande transmise à Intermède</p>${BOOK_API&&loading?'<p class="bk-load">Chargement du planning…</p>':''}${loadErr?`<p class="bk-err">${esc(loadErr)}</p>`:''}</header>
       ${st.step==='pick'?roomsHtml():''}<div class="bk-main">${main}</div>`;
     bind(); const sel=body.querySelector('.bk-room[aria-checked="true"]'); if(sel){ const rr=sel.parentElement; rr.scrollLeft+=sel.getBoundingClientRect().left-rr.getBoundingClientRect().left-rr.clientWidth/2+sel.clientWidth/2; } }
   function bind(){
@@ -89,9 +106,10 @@ const BOOK=(()=>{
     const bk=body.querySelector('#bkBack'); if(bk) bk.onclick=()=>{ st.step='pick'; render(); };
     const ag=body.querySelector('#bkAgain'); if(ag) ag.onclick=()=>{ st.step='pick'; st.slot=null; st.from=st.to=null; render(); };
     const fm=body.querySelector('#bkForm'); if(fm) fm.onsubmit=async e=>{ e.preventDefault(); const d=Object.fromEntries(new FormData(fm)); d.external=!!d.external;
-      if(!String(d.structure||'').trim()||!String(d.who||'').trim()){ st.msg='Indiquez votre structure et votre nom.'; render(); return; }
+
       const slotLab=SLOTDEF.find(x=>x.id===st.slot).label;
-      if(!BOOK_API){ const subj=`Réservation ${st.room.name} – ${fmtDay(st.date)} ${hh(st.from)}-${hh(st.to)}`; const txt=`Bonjour Zoé,\n\nPourriez-vous réserver pour nous :\n- ${st.room.name}\n- ${fmtDay(st.date)} (${slotLab}), de ${hh(st.from)} à ${hh(st.to)}\n- Structure : ${d.structure}\n- Contact : ${d.who}${d.email?' · '+d.email:''}${d.object?'\n- Objet : '+d.object:''}\n- Public extérieur : ${d.external?'oui':'non'}\n\nMerci !`; location.href=`mailto:${BOOK_MAIL}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(txt)}`; return; }
+      if(!BOOK_API){ if(!String(d.structure||'').trim()){ st.msg='Indiquez votre structure.'; render(); return; } const q=new URLSearchParams({usp:'pp_url'}); const E=BOOK_ENTRY; q.set('entry.'+E.room,st.room.name); q.set('entry.'+E.date,st.date); q.set('entry.'+E.slot,BOOK_SLOTLAB[st.slot]); q.set('entry.'+E.structure,d.structure.trim()); q.set('entry.'+E.type,d.type||'Interne'); if(d.who) q.set('entry.'+E.who,d.who.trim()); if(d.object) q.set('entry.'+E.object,d.object.trim()); st.formUrl=BOOK_FORM+'?'+q.toString(); window.open(st.formUrl,'_blank','noopener'); st.step='done'; render(); return; }
+      if(!String(d.structure||'').trim()||!String(d.who||'').trim()){ st.msg='Indiquez votre structure et votre nom.'; render(); return; }
       st.sending=true; st.msg=null; render();
       try{ const res=await fetch(BOOK_API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({room:st.room.key,date:st.date,slot:st.slot,from:st.from,to:st.to,...d})}); const j=await res.json(); st.sending=false;
         if(j.ok){ st.step='done'; const k=`${st.room.key}|${st.date}|${st.slot}`; const prev=busy?.get(k); busy?.set(k,{room:st.room.key,date:st.date,slot:st.slot,whole:false,ranges:[...(prev?.ranges||[]),[st.from,st.to]]}); }
