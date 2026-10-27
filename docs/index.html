@@ -576,6 +576,8 @@ aside.detail{font-size:14.5px;line-height:1.5}
   .bk-form{grid-template-columns:1fr}
   .bk-hours .btn-p{margin-left:0;width:100%;justify-content:center}
 }
+.lg-ico .ico-num{font:700 12px var(--font-display);color:var(--accent-ink);letter-spacing:-.02em}
+.lg.big.lg-ico .ico-num{font-size:17px}
 .famico{display:inline-block;vertical-align:-0.15em;flex:none}
 .cv-i{display:inline-flex;align-items:center;justify-content:center;font-size:16px}
 .fam h4 .famico,.dsec .ico .famico{color:var(--accent)}
@@ -721,6 +723,9 @@ function parsePeople(str){ if(!str) return {names:[],team:false}; let t=String(s
 const initials=n=>{ const w=n.split(/[\s-]+/).filter(Boolean); return ((w[0]?.[0]||'')+(w.length>1?w[w.length-1][0]:'')).toUpperCase(); };
 function teamHtml(o){ const {names,team}=parsePeople(o.people); if(!names.length&&!team) return ''; if(!names.length) return `<div class="team"><span class="team-more">${esc(o.people)}</span></div>`;
   return `<div class="team">${names.map(n=>{ const ph=PORTRAITS[slugify(n)]; return `<figure class="face" title="${esc(n)}"><span class="av" style="--c:${catColor(o.cat)}">${ph?`<img src="${ph}" alt="" loading="lazy">`:esc(initials(n))}</span><figcaption>${esc(n)}</figcaption></figure>`; }).join('')}${team?`<span class="team-more">+ l'équipe</span>`:''}</div>`; }
+// salles de réunion : leur numéro tient lieu de picto (012, 171…)
+const roomNum=c=>{ const m=c.id.match(/^s(\d{3})$/); return m?m[1]:null; };
+const spaceIco=c=>roomNum(c)?`<span class="ico-num">${roomNum(c)}</span>`:c.icon;
 const commonById=new Map(COMMON.map(c=>[c.id,c]));
 const commonOnFloor=f=>COMMON.filter(c=>c.floor===f);
 // ---------- réservation des salles (planning Google Sheet d'Intermède) ----------
@@ -1336,7 +1341,7 @@ const activeSig=()=>Object.entries(active).map(([d,x])=>d+':'+[...x].sort().join
 function filterHitsHtml(){ if(!chipsOn()) return ''; const labels=Object.values(active).flatMap(x=>[...x]); const h=RAW.filter(matches).sort((a,b)=>FLOOR_ORDER.indexOf(a.floor)-FLOOR_ORDER.indexOf(b.floor)||a.name.localeCompare(b.name,'fr'));
   const why=o=>active.floor.size?(o.room?'bureau '+o.room:o.catLabel):o.catLabel+' · '+(FLOORSHORT[o.floor]||'');
   return `<div class="ksec fhits" style="margin:0 0 16px"><dt>Résultats filtrés <span class="n">${h.length}</span></dt><p class="fh-tags">${labels.map(l=>`<span class="chip">${esc(l)}</span>`).join(' ')} <button class="fh-clear" data-fclear>Effacer les filtres</button></p>${h.length?`<ul class="rel">${h.map(o=>orgLi(o,why(o))).join('')}</ul>`:`<p class="kempty">Aucune structure ne correspond à ces filtres.</p>`}</div>`; }
-function spaceLi(c,why){ return `<li><button data-space="${c.id}"><span class="lg lg-ico">${c.icon}</span><span class="nm">${esc(c.name)}</span><span class="why">${esc(why||c.floorLabel)}</span></button></li>`; }
+function spaceLi(c,why){ return `<li><button data-space="${c.id}"><span class="lg lg-ico">${spaceIco(c)}</span><span class="nm">${esc(c.name)}</span><span class="why">${esc(why||c.floorLabel)}</span></button></li>`; }
 function spaceHitsHtml(){ if(!query||!spaceHits.length) return ''; return `<div class="ksec" style="margin:0 0 16px"><dt>Espaces communs pour « ${esc(query)} » <span class="n">${spaceHits.length}</span></dt><ul class="rel">${spaceHits.slice(0,8).map(c=>spaceLi(c)).join('')}</ul></div>`; }
 function convHitsHtml(){ if(!query) return ''; const oh=chipsOn()?'':orgHitsHtml(); if(!convHits.length) return spaceHitsHtml()+oh; return spaceHitsHtml()+oh+`<div class="ksec" style="margin:0 0 16px"><dt>Convergences pour « ${esc(query)} » <span class="n">${convHits.length}</span></dt><ul class="reslist">${convHits.slice(0,6).map(c=>convCard(c,true)).join('')}</ul></div>`; }
 function profileBarHtml(compact){ if(!profile) return ''; const who=esc(profileWho()); const th=profile.themes?.length?esc(profile.themes.join(' · ')):'tous les thèmes'; if(compact) return `<div class="profile-bar" style="padding:6px 10px;margin-right:28px"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${who} · ${th}</span><button id="editProfile">Modifier</button></div>`; return `<div class="profile-bar"><b>${who}</b><span style="color:var(--muted);font-size:12px">${th}${profile.wants?.length?' · '+profile.wants.length+' chantier'+(profile.wants.length>1?'s':''):''}</span><span style="margin-left:auto;display:flex;gap:10px"><button id="editProfile">Modifier</button><button id="showAll">Tout afficher</button></span></div>`; }
@@ -1391,7 +1396,7 @@ function renderDetail(){ renderDetailInner(); const key=selectedConv?'c:'+select
 function renderDetailInner(){
   const el=document.getElementById('detailBody');
   if(selectedSpace&&!selected&&!selectedConv){ const c=selectedSpace; const others=commonOnFloor(c.floor).filter(x=>x!==c); const here=RAW.filter(o=>o.floor===c.floor).length;
-    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="dhead-row"><span class="lg big lg-ico">${c.icon}</span><div style="min-width:0"><span class="pill">Espace commun</span>${c.cap?` <span class="pill">${esc(c.cap)}</span>`:''}<h2>${esc(c.name)}</h2></div></div></div>
+    el.innerHTML=`<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button><div class="dhead-row"><span class="lg big lg-ico">${spaceIco(c)}</span><div style="min-width:0"><span class="pill">Espace commun</span>${c.cap?` <span class="pill">${esc(c.cap)}</span>`:''}<h2>${esc(c.name)}</h2></div></div></div>
       <div style="font-size:12.5px;margin-top:6px"><span class="chip">📍 ${esc(c.floorLabel)}</span> <button class="btn btn-lieu" id="goLieuSpace">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${roomBySpace.has(c.id)?` <button class="btn-book" id="bookSpace">Réserver <span aria-hidden="true">→</span></button>`:''}${c.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
       <p style="margin-top:12px">${esc(c.desc)}</p>
       ${others.length?`<div class="ksec"><dt>Aussi à ce niveau</dt><ul class="rel">${others.map(x=>spaceLi(x,x.cap)).join('')}</ul></div>`:''}
@@ -1579,7 +1584,7 @@ const LIEU=(()=>{
       const p=local(o); const mat=new THREE.SpriteMaterial({map:circleTex(o),transparent:true,depthTest:true});
       const sp=new THREE.Sprite(mat); sp.position.set(p.x,p.dy+LIFT,p.z); sp.scale.set(30,30,1); sp.userData.org=o; sp.renderOrder=100; floorGroups.get(p.F.id).add(sp); nodes.set(o.id,sp);
     });
-    COMMON.forEach(c=>{ const p=localSpace(c); const t=textTex(c.icon,{size:20,color:'#5F5850',bg:'rgba(255,255,255,.88)',weight:500}); const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t.tex,transparent:true,depthTest:false})); const H=16; sp.scale.set(H*t.w/t.h,H,1); /* taille monde, comme les structures (30) : reste plus petit qu'elles à tous les zooms */ sp.position.set(p.x,p.dy+8,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
+    COMMON.forEach(c=>{ const p=localSpace(c); const t=roomNum(c)?textTex(roomNum(c),{size:17,color:'#B4432F',bg:'rgba(255,255,255,.92)',weight:700}):textTex(c.icon,{size:20,color:'#5F5850',bg:'rgba(255,255,255,.88)',weight:500}); const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t.tex,transparent:true,depthTest:false})); const H=16; sp.scale.set(H*t.w/t.h,H,1); /* taille monde, comme les structures (30) : reste plus petit qu'elles à tous les zooms */ sp.position.set(p.x,p.dy+8,p.z); sp.renderOrder=90; sp.userData.space=c; floorGroups.get(p.F.id).add(sp); });
     buildPins();
     linkGroup=new THREE.Group(); scene.add(linkGroup);
     const ht=(()=>{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d'); g.strokeStyle='#EC644B'; g.lineWidth=5; g.beginPath(); g.arc(64,64,56,0,Math.PI*2); g.stroke(); return new THREE.CanvasTexture(c); })();
