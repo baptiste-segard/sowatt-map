@@ -48,6 +48,18 @@ const FAMSVG={
   niche:'<circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8 7.6l7.9-1.2M7 9l3.9 7M16.9 8l-3.8 8"/>'
 };
 const famIco=f=>FAMSVG[f]?`<svg class="famico" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${FAMSVG[f]}</svg>`:(FAMS[f]?.icon||'');
+// ---------- équipes : visages ----------
+// Portraits publiés UNIQUEMENT avec l'accord de la personne : ajouter le fichier dans docs/portraits/<slug>.webp puis la clé ici.
+const PORTRAITS={ /* 'baptiste-segard':'portraits/baptiste-segard.webp' */ };
+const slugify=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function parsePeople(str){ if(!str) return {names:[],team:false}; let t=String(str).replace(/\([^)]*\)/g,' '); let team=/(son|toute son|leur) [ée]quipe/i.test(t); t=t.replace(/\s*(et\s+)?(toute\s+)?(son|leur)\s+[ée]quipe/ig,'');
+  if(/^\s*collectif\s*$/i.test(t)) return {names:[],team:true};
+  let parts=t.split(/\s*(?:,|;|\s[-–]\s|\set\s)\s*/).map(x=>x.trim()).filter(Boolean);
+  parts=parts.flatMap(x=>{ const w=x.split(/\s+/); return (w.length===4&&w.every(y=>/^[A-ZÀ-Ý]/.test(y)))?[w.slice(0,2).join(' '),w.slice(2).join(' ')]:[x]; });
+  return {names:parts,team}; }
+const initials=n=>{ const w=n.split(/[\s-]+/).filter(Boolean); return ((w[0]?.[0]||'')+(w.length>1?w[w.length-1][0]:'')).toUpperCase(); };
+function teamHtml(o){ const {names,team}=parsePeople(o.people); if(!names.length&&!team) return ''; if(!names.length) return `<div class="team"><span class="team-more">${esc(o.people)}</span></div>`;
+  return `<div class="team">${names.map(n=>{ const ph=PORTRAITS[slugify(n)]; return `<figure class="face" title="${esc(n)}"><span class="av" style="--c:${catColor(o.cat)}">${ph?`<img src="${ph}" alt="" loading="lazy">`:esc(initials(n))}</span><figcaption>${esc(n)}</figcaption></figure>`; }).join('')}${team?`<span class="team-more">+ l'équipe</span>`:''}</div>`; }
 const commonById=new Map(COMMON.map(c=>[c.id,c]));
 const commonOnFloor=f=>COMMON.filter(c=>c.floor===f);
 const orgById=new Map(RAW.map(o=>[o.id,o]));
@@ -623,7 +635,7 @@ function renderDetailInner(){
   el.innerHTML=`${profileBarHtml(true)}<div class="dhead"><button class="close" id="closeDetail" aria-label="Fermer">×</button>
     <div class="dhead-row">${logoImg(o,'lg big')}<div style="min-width:0"><span class="pill"><span class="sw" style="background:${catColor(o.cat)}"></span>${esc(o.catLabel)}</span>${ACU.has(o.id)?` <span class="pill acu" title="Connecteur n°${o.acu.rank} : relie le plus de mondes différents">◌ connecteur n°${o.acu.rank}</span>`:''}
     <h2>${esc(o.name)}</h2></div></div></div>
-    ${o.people?`<div style="font-size:13px">${esc(o.people)}</div>`:''}
+    ${teamHtml(o)}
     <div style="font-size:12.5px;margin-top:6px"><button class="chip" id="goRoom" title="Voir sur le plan 3D">📍 ${esc(o.floorLabel)}${o.room?' · bureau '+esc(o.room):''}</button> <button class="btn btn-lieu" id="goLieu">${viewMode==='lieu'?'Recentrer dans le lieu':'Afficher dans le lieu'} <span aria-hidden="true">→</span></button>${o.approx?' <span style="color:var(--muted);font-size:11.5px">position approximative</span>':''}</div>
     ${o.desc?`<p class="desc clamp" id="descText">${esc(o.desc)}</p><button class="readmore" id="readMore" aria-expanded="false" hidden>Lire la suite</button>`:'<p class="desc" style="color:var(--muted)">Pas de descriptif dans le tableur.</p>'}
     ${o.offre?`<div class="offer"><dt>Ce qu'elle propose</dt><p>${esc(o.offre)}</p>${o.formats?`<p class="fmt">${esc(o.formats)}</p>`:''}${o.publicsDetail?`<p class="fmt">Pour : ${esc(o.publicsDetail)}</p>`:''}</div>`:''}
